@@ -44,40 +44,20 @@ export default function Home() {
           className="w-[40%] h-full flex flex-col px-12 lg:px-16 sticky top-0"
           style={{ backgroundColor: colors.background2 }}
         >
-          {/* Logo at top */}
-          <div className="pt-8">
-            <div className="flex items-center gap-3">
-              {fixedSection.logo.image ? (
-                <img 
-                  src={fixedSection.logo.image} 
-                  alt={fixedSection.logo.text}
-                  className="h-16 w-auto"
-                />
-              ) : (
-                <span className="text-6xl">{fixedSection.logo.emoji}</span>
-              )}
-              <Text variant="h2" color="text1">
-                {fixedSection.logo.text}
-              </Text>
-            </div>
-          </div>
-
           {/* Centered content */}
           <div className="flex-1 flex flex-col justify-center space-y-6">
-            {/* Tagline */}
-            <Text variant="h1" color="text1">
-              {fixedSection.tagline}
-            </Text>
-
-            {/* Discover, Eat, Share - each on own line */}
+            {/* Crave, Discover, Eat, Share - each on own line */}
             <div className="space-y-2">
-              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: colors.accent1 }}>
+              <h2 className="text-7xl md:text-8xl font-bold" style={{ color: colors.text1 }}>
+                {fixedSection.logo.text}
+              </h2>
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#FEFF48' }}>
                 Discover
               </h2>
-              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: colors.accent2 }}>
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#FEFF48' }}>
                 Eat
               </h2>
-              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: colors.accent3 }}>
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#FEFF48' }}>
                 Share
               </h2>
             </div>
@@ -139,6 +119,22 @@ export default function Home() {
 
         {/* RIGHT SCROLLABLE SECTION - 60% */}
         <div className="w-[60%] h-full overflow-y-auto" style={{ backgroundColor: colors.background1 }}>
+          {/* Logo and Crave at top center */}
+          <div className="py-4 flex justify-center items-center gap-3 sticky top-0 z-10" style={{ backgroundColor: colors.background1 }}>
+            {fixedSection.logo.image ? (
+              <img 
+                src={fixedSection.logo.image} 
+                alt={fixedSection.logo.text}
+                className="h-12 w-auto"
+              />
+            ) : (
+              <span className="text-6xl">{fixedSection.logo.emoji}</span>
+            )}
+            <h2 className="text-4xl font-bold" style={{ color: colors.accent1 }}>
+              {fixedSection.logo.text}
+            </h2>
+          </div>
+
           {/* Hero Sections */}
           {heroSections.map((section) => (
             <section
@@ -244,40 +240,20 @@ export default function Home() {
           className="min-h-screen flex flex-col px-6 sm:px-12"
           style={{ backgroundColor: colors.background2 }}
         >
-          {/* Logo at top */}
-          <div className="pt-8">
-            <div className="flex items-center justify-center gap-3">
-              {fixedSection.logo.image ? (
-                <img 
-                  src={fixedSection.logo.image} 
-                  alt={fixedSection.logo.text}
-                  className="h-12 sm:h-16 w-auto"
-                />
-              ) : (
-                <span className="text-5xl sm:text-6xl">{fixedSection.logo.emoji}</span>
-              )}
-              <Text variant="h2" color="text1">
-                {fixedSection.logo.text}
-              </Text>
-            </div>
-          </div>
-
           {/* Centered content */}
           <div className="flex-1 flex flex-col justify-center space-y-6 max-w-2xl mx-auto py-12">
-            {/* Tagline */}
-            <Text variant="h1" color="text1" className="text-center">
-              {fixedSection.tagline}
-            </Text>
-
-            {/* Discover, Eat, Share - each on own line */}
+            {/* Crave, Discover, Eat, Share - each on own line */}
             <div className="space-y-2 text-center">
-              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: colors.accent1 }}>
+              <h2 className="text-6xl sm:text-7xl font-bold" style={{ color: colors.text1 }}>
+                {fixedSection.logo.text}
+              </h2>
+              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#FFB300' }}>
                 Discover
               </h2>
-              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: colors.accent2 }}>
+              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#FFB300' }}>
                 Eat
               </h2>
-              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: colors.accent3 }}>
+              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#FFB300' }}>
                 Share
               </h2>
             </div>
@@ -336,6 +312,22 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Logo and Crave at top center for mobile/tablet */}
+        <div className="py-4 flex justify-center items-center gap-3 sticky top-0 z-10 bg-white">
+          {fixedSection.logo.image ? (
+            <img 
+              src={fixedSection.logo.image} 
+              alt={fixedSection.logo.text}
+              className="h-12 sm:h-16 w-auto"
+            />
+          ) : (
+            <span className="text-5xl sm:text-6xl">{fixedSection.logo.emoji}</span>
+          )}
+          <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: colors.accent1 }}>
+            {fixedSection.logo.text}
+          </h2>
+        </div>
 
         {/* Hero Sections */}
         {heroSections.map((section) => (
