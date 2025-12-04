@@ -67,13 +67,6 @@ export default function Home() {
               {fixedSection.description}
             </Text>
 
-            {/* CTAs */}
-            <div className="flex flex-col gap-4 pt-4">
-              <Button variant="secondary" textColor="#ffffff" style={{ borderColor: '#ffffff' }}>
-                {fixedSection.cta.secondary}
-              </Button>
-            </div>
-
             {/* App Store Download */}
             <div className="pt-4 w-full">
               <div className="text-left mb-2">
@@ -184,7 +177,7 @@ export default function Home() {
                     >
                       <Button 
                         variant="primary" 
-                        href="#contact"
+                        href="/business"
                         className="text-xl px-12 py-6 rounded-full"
                       >
                         Learn More
@@ -262,13 +255,6 @@ export default function Home() {
             <Text variant="paragraph" color="text1" className="text-center" style={{ opacity: 0.9 }}>
               {fixedSection.description}
             </Text>
-
-            {/* CTAs */}
-            <div className="flex flex-col gap-4 pt-4 max-w-md mx-auto">
-              <Button variant="secondary" textColor="#ffffff" style={{ borderColor: '#ffffff' }}>
-                {fixedSection.cta.secondary}
-              </Button>
-            </div>
 
             {/* App Store Download */}
             <div className="pt-4 w-full">
