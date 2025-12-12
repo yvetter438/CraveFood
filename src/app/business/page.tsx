@@ -284,10 +284,10 @@ export default function BusinessPage() {
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">New Customers Find You</h3>
                     <p className="text-lg text-gray-600">Hungry locals discover your restaurant and show up ready to eat.</p>
                   </div>
-                </div>
-              </div>
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
           {/* Section 2: Pricing */}
           <section 
@@ -302,25 +302,25 @@ export default function BusinessPage() {
               </p>
               
               <div className="grid gap-6">
-                {PRICING_TIERS.map((tier) => (
-                  <div 
-                    key={tier.id}
+            {PRICING_TIERS.map((tier) => (
+              <div 
+                key={tier.id}
                     onClick={() => {
                       setSelectedTier(tier);
                       scrollToForm();
                     }}
                     className={`relative rounded-2xl p-8 cursor-pointer transition-all flex items-center gap-6 ${
-                      selectedTier.id === tier.id
+                  selectedTier.id === tier.id
                         ? 'border-3 border-orange-500 shadow-xl bg-orange-50'
                         : 'border-2 border-gray-200 hover:border-orange-300 hover:shadow-lg bg-white'
                     }`}
-                  >
-                    {tier.popular && (
+              >
+                {tier.popular && (
                       <div className="absolute -top-3 right-6 bg-orange-500 text-white text-sm font-bold px-4 py-1 rounded-full">
-                        Most Popular
-                      </div>
-                    )}
-                    
+                    Most Popular
+                  </div>
+                )}
+                
                     <div className="text-5xl">{tier.emoji}</div>
                     
                     <div className="flex-1">
@@ -328,12 +328,12 @@ export default function BusinessPage() {
                         <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">{tier.name}</h3>
                         <span className="text-gray-400">—</span>
                         <span className="text-lg lg:text-xl text-gray-600">{tier.description}</span>
-                      </div>
+                </div>
                       <p className="text-orange-600 font-semibold text-lg">
                         {tier.reach} people will see your restaurant
                       </p>
-                    </div>
-                    
+                </div>
+
                     <div className="text-right">
                       <span className="text-4xl lg:text-5xl font-bold text-gray-900">${tier.price}</span>
                       <p className="text-base text-gray-500">one-time</p>
@@ -365,27 +365,27 @@ export default function BusinessPage() {
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">Built for Discovery</h3>
                   <p className="text-lg text-gray-600">
                     Creators know exactly how to make content that TikTok and Instagram push to people looking for places to eat.
-                  </p>
-                </div>
-                
+              </p>
+            </div>
+            
                 <div className="bg-white rounded-2xl p-8 shadow-sm">
                   <div className="text-4xl mb-4">🎯</div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">Local Audience</h3>
                   <p className="text-lg text-gray-600">
                     Their followers are local foodies — people who actually live nearby and are looking for their next meal.
-                  </p>
-                </div>
-                
+              </p>
+            </div>
+            
                 <div className="bg-white rounded-2xl p-8 shadow-sm">
                   <div className="text-4xl mb-4">✨</div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">Authentic Content</h3>
                   <p className="text-lg text-gray-600">
                     Real people sharing real experiences. It is word-of-mouth at scale — far more trusted than traditional ads.
-                  </p>
-                </div>
-              </div>
+              </p>
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
           {/* Section 4: Get Started Form */}
           <section 
@@ -397,7 +397,7 @@ export default function BusinessPage() {
               <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Get Started</h2>
               <p className="text-xl text-gray-600 mb-10">
                 Tell us about your restaurant and we will match you with a creator.
-              </p>
+          </p>
           
           {error && (
             <div className="mb-6 bg-red-50 border border-red-300 text-red-800 px-4 py-3 rounded-lg">
@@ -408,91 +408,91 @@ export default function BusinessPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
             {/* Selected Tier Display */}
                 <div className="bg-orange-50 rounded-xl p-5 border-2 border-orange-400">
-                  <div className="flex items-center justify-between">
-                    <div>
+              <div className="flex items-center justify-between">
+                <div>
                       <p className="text-base text-gray-600">Selected Package</p>
                       <p className="text-2xl font-bold text-gray-900">
                         {selectedTier.emoji} {selectedTier.name} — ${selectedTier.price}
                       </p>
                       <p className="text-base text-orange-600">{selectedTier.reach} people will see it</p>
-                    </div>
-                    <a href="#pricing" className="text-orange-600 text-base font-semibold hover:underline">
-                      Change
-                    </a>
-                  </div>
                 </div>
+                    <a href="#pricing" className="text-orange-600 text-base font-semibold hover:underline">
+                  Change
+                </a>
+              </div>
+            </div>
 
-                {/* Restaurant Information */}
+            {/* Restaurant Information */}
                 <div className="space-y-5">
-                  <div>
+              <div>
                     <label className="block text-base font-medium text-gray-900 mb-2">Restaurant Name *</label>
-                    <input 
-                      type="text" 
-                      name="restaurantName"
-                      required
-                      value={formData.restaurantName}
-                      onChange={handleChange}
+                <input 
+                  type="text" 
+                  name="restaurantName"
+                  required
+                  value={formData.restaurantName}
+                  onChange={handleChange}
                       className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                      placeholder="Your Restaurant Name"
-                    />
-                  </div>
+                  placeholder="Your Restaurant Name"
+                />
+              </div>
 
-                  <div>
+              <div>
                     <label className="block text-base font-medium text-gray-900 mb-2">Restaurant Address *</label>
-                    <input 
-                      type="text"
-                      name="restaurantAddress"
-                      required
-                      value={formData.restaurantAddress}
-                      onChange={handleChange}
+                <input 
+                  type="text"
+                  name="restaurantAddress"
+                  required
+                  value={formData.restaurantAddress}
+                  onChange={handleChange}
                       className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                      placeholder="123 Main St, City, State 12345"
-                    />
-                  </div>
+                  placeholder="123 Main St, City, State 12345"
+                />
+              </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
+                <div>
                       <label className="block text-base font-medium text-gray-900 mb-2">Your Name *</label>
-                      <input 
-                        type="text" 
-                        name="contactName"
-                        required
-                        value={formData.contactName}
-                        onChange={handleChange}
+                  <input 
+                    type="text" 
+                    name="contactName"
+                    required
+                    value={formData.contactName}
+                    onChange={handleChange}
                         className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                        placeholder="Your Name"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-medium text-gray-900 mb-2">Phone</label>
-                      <input 
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                        placeholder="(555) 123-4567"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-base font-medium text-gray-900 mb-2">Email *</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                      placeholder="your@email.com"
-                    />
-                  </div>
+                    placeholder="Your Name"
+                  />
                 </div>
 
-                {/* Video Focus */}
-                <div className="space-y-3">
+                <div>
+                      <label className="block text-base font-medium text-gray-900 mb-2">Phone</label>
+                  <input 
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                        className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+              </div>
+
+              <div>
+                    <label className="block text-base font-medium text-gray-900 mb-2">Email *</label>
+                <input 
+                  type="email" 
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                      className="w-full px-5 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  placeholder="your@email.com"
+                />
+              </div>
+            </div>
+
+            {/* Video Focus */}
+            <div className="space-y-3">
                   <label className="block text-base font-medium text-gray-900">What should the video highlight? (optional)</label>
                   
                   <div className="flex gap-3">
@@ -505,45 +505,45 @@ export default function BusinessPage() {
                         key={option.id}
                         className={`flex items-center gap-3 px-5 py-4 rounded-xl cursor-pointer transition-all flex-1 justify-center ${
                           formData.videoFocus.includes(option.id) 
-                            ? 'bg-orange-100 border-2 border-orange-400' 
-                            : 'bg-gray-50 border-2 border-gray-200 hover:border-orange-300'
+                    ? 'bg-orange-100 border-2 border-orange-400' 
+                    : 'bg-gray-50 border-2 border-gray-200 hover:border-orange-300'
                         }`}
                       >
-                        <input
-                          type="checkbox"
+                  <input
+                    type="checkbox"
                           checked={formData.videoFocus.includes(option.id)}
                           onChange={() => handleCheckboxChange(option.id)}
-                          className="sr-only"
-                        />
+                    className="sr-only"
+                  />
                         <span className="text-2xl">{option.emoji}</span>
                         <span className="text-base font-medium">{option.label}</span>
-                      </label>
+                </label>
                     ))}
-                  </div>
-                </div>
+              </div>
+            </div>
 
-                {/* Terms Summary */}
+            {/* Terms Summary */}
                 <div className="bg-gray-50 rounded-xl p-5 text-base text-gray-600">
                   <p className="mb-3 font-medium text-gray-900">By continuing, you agree to:</p>
                   <ul className="space-y-2 text-base">
                     <li>• Provide a complimentary meal for the creator (up to $50 value)</li>
-                    <li>• Allow filming and content posting about your restaurant</li>
+                <li>• Allow filming and content posting about your restaurant</li>
                     <li>• Content will be posted within 2 weeks of the visit</li>
-                  </ul>
-                </div>
+              </ul>
+            </div>
 
-                {/* Submit Button */}
-                <button 
-                  type="submit"
-                  disabled={loading}
+            {/* Submit Button */}
+            <button 
+              type="submit"
+              disabled={loading}
                   className="w-full bg-orange-500 text-white py-5 px-6 rounded-xl font-bold text-xl hover:bg-orange-600 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02]"
-                >
+            >
                   {loading ? 'Processing...' : `Continue to Payment — $${selectedTier.price}`}
-                </button>
-                
+            </button>
+            
                 <p className="text-center text-sm text-gray-500">
-                  Secure payment powered by Stripe
-                </p>
+              Secure payment powered by Stripe
+            </p>
           </form>
         </div>
       </section>

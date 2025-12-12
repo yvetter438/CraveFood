@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
   try {
     const { bidData } = await request.json();
     
+    console.log('Received bidData:', bidData);
+    
     const {
       restaurantName,
       contactName,
@@ -27,6 +29,18 @@ export async function POST(request: NextRequest) {
       tierPrice,
       videoFocus,
     } = bidData;
+    
+    console.log('Extracted fields:', {
+      restaurantName,
+      contactName,
+      email,
+      phone,
+      restaurantAddress,
+      tier,
+      tierName,
+      tierPrice,
+      videoFocus,
+    });
 
     // Validate tier
     const validTier = TIER_CONFIG[tier as keyof typeof TIER_CONFIG];
@@ -39,6 +53,21 @@ export async function POST(request: NextRequest) {
 
     // Price is the tier price (platform fee is included, skimmed from the total)
     const amount = tierPrice * 100; // Convert to cents
+
+    // Prepare metadata
+    const metadata = {
+      restaurantName: restaurantName || '',
+      contactName: contactName || '',
+      email: email || '',
+      phone: phone || 'N/A',
+      restaurantAddress: restaurantAddress || '',
+      tier: tier || '',
+      tierName: tierName || '',
+      tierPrice: tierPrice?.toString() || '',
+      videoFocus: Array.isArray(videoFocus) ? videoFocus.join(', ') : '',
+    };
+    
+    console.log('Metadata to send to Stripe:', metadata);
 
     // Create a Checkout Session
     const session = await stripe.checkout.sessions.create({
@@ -59,19 +88,12 @@ export async function POST(request: NextRequest) {
       mode: 'payment',
       success_url: `${request.nextUrl.origin}/business/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.nextUrl.origin}/business?canceled=true`,
-      metadata: {
-        restaurantName,
-        contactName,
-        email,
-        phone: phone || 'N/A',
-        restaurantAddress,
-        tier,
-        tierName,
-        tierPrice: tierPrice.toString(),
-        videoFocus: Array.isArray(videoFocus) ? videoFocus.join(', ') : '',
-      },
+      metadata: metadata,
       customer_email: email,
     });
+    
+    console.log('Stripe session created:', session.id);
+    console.log('Session metadata:', session.metadata);
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error: any) {
