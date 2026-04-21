@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "echo 'Static site — no compile; output is ./public'",
     "dev": "serve public -l 3000",
     "start": "serve public -l 3000"
   },

@@ -38,4 +38,12 @@ If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove ol
 
 ## Deploy
 
-Point your host at **`public/`** as the static root (e.g. Vercel “Other” / static, Netlify, GitHub Pages, or upload the folder). No `npm build` required.
+### Vercel
+
+This repo includes **`vercel.json`**: **Framework = Other** (`framework: null`), **Output Directory = `public`**, and a no-op **`npm run build`** so Vercel does **not** run `next build`.
+
+After the first deploy, in the project **Settings → General → Framework Preset**, confirm it shows **Other** (or leave as overridden by `vercel.json`). If an old project was created as Next.js, redeploy after pushing `vercel.json`.
+
+### Other hosts
+
+Point your host at **`public/`** as the static root (Netlify, GitHub Pages, S3, etc.). No compile step.
