@@ -1,134 +1,41 @@
-# CraveFood Landing Page
+# CraveFood
 
-A beautiful, responsive landing page built with Next.js 14 and Tailwind CSS.
+## What lives where
 
-## 🚀 Getting Started
+| Location | Role |
+|----------|------|
+| **`public/`** | **The whole website.** Plain HTML, CSS, and client-side JS—what you open in a browser. Deploy *this folder’s contents* (or the repo with root = `public`) to any static host. |
+| **`docs/`** | Product / strategy docs only (`PRODUCT_VISION.md`). Not served as part of the site unless you copy them somewhere under `public/`. |
+| **`package.json`** | **Optional tooling** for local preview only: runs a static file server that serves `public/` on port 3000. **Not a backend**—no build step, no framework. |
 
-### Installation
+There is no `src/` app anymore: the marketing page, feed, creator page (`/c/`), recipe page (`/p/`), configs, and videos all live under **`public/`**.
+
+## Run locally
 
 ```bash
 npm install
-```
-
-### Development
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the landing page.
+Open [http://localhost:3000](http://localhost:3000) — you should see `index.html` at `/`.
 
-### Build for Production
+### Do **not** use `next dev`
 
-```bash
-npm run build
-npm start
-```
+This repo is **static files only** (there is no `src/app` / Next.js app router). If you run **`next dev`**, you’ll see errors like `ENOENT ... scandir '.../src/app'` and posts may return 500s. **Stop** that process and use `npm run dev` (the `serve` static server from this `package.json`) instead.
 
-## 🎨 Customization
+If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove old Next deps from `node_modules` (`rm -rf node_modules && npm install`).
 
-**All customization happens in one place:** `src/config/site.config.ts`
+## Edit the site
 
-### What You Can Edit:
+- **`public/index.html`** — landing copy and waitlist CTAs  
+- **`public/config.js`** — `window.CRAVE_WAITLIST_FORM_URL`  
+- **`public/creators-config.js`**, **`public/posts-config.js`** — creators, posts, video paths  
+- **`public/*.mp4`** — demo videos (paths must match `posts-config.js`)
 
-#### 1. **Typography**
-Control all text styles (H1, H2, H3, Paragraph, Links):
-```typescript
-typography: {
-  h1: {
-    className: "text-5xl md:text-6xl lg:text-7xl font-bold",
-  },
-  // ... more
-}
-```
+## Product context
 
-#### 2. **Colors**
-Edit all colors used throughout the site:
-```typescript
-colors: {
-  text1: "#1a1a1a",        // Primary text
-  text2: "#666666",        // Secondary text
-  background1: "#ffffff",  // Primary background
-  background2: "#f8f9fa",  // Secondary background
-  background3: "#e9ecef",  // Tertiary background
-  accent1: "#ff6b6b",      // Primary accent
-  accent2: "#4ecdc4",      // Secondary accent
-  accent3: "#ffe66d",      // Tertiary accent
-}
-```
+- **`docs/PRODUCT_VISION.md`** — vision, principles, and roadmap for onboarding or investors.
 
-#### 3. **Buttons**
-Customize button styles and App Store buttons:
-```typescript
-buttons: {
-  primary: {
-    className: "px-8 py-4 rounded-full ...",
-  },
-  appStore: {
-    // App Store button config
-  }
-}
-```
+## Deploy
 
-#### 4. **Icons**
-Change all icons (currently using emojis, easily replaceable with icon libraries):
-```typescript
-icons: {
-  apple: "🍎",
-  googlePlay: "📱",
-  // ... more
-}
-```
-
-#### 5. **Content**
-Edit all text content:
-- Fixed section (logo, tagline, description, CTAs)
-- 5 Hero sections (title, subtitle, description, icon, gradient)
-- Footer (copyright, links, social media)
-
-## 📱 Responsive Breakpoints
-
-- **Desktop** (1280px+): Split layout with fixed left section (40%) and scrollable right section (60%)
-- **Tablet** (800px-1279px): Stacked scrollable sections
-- **Mobile** (1px-799px): Stacked scrollable sections (narrower)
-
-## 🏗️ Project Structure
-
-```
-src/
-├── app/
-│   ├── page.tsx          # Main landing page
-│   ├── layout.tsx        # Root layout
-│   └── globals.css       # Global styles
-├── components/
-│   ├── ui/
-│   │   ├── Text.tsx      # Reusable text component
-│   │   ├── Button.tsx    # Reusable button components
-│   │   └── Icon.tsx      # Reusable icon component
-│   └── Footer.tsx        # Footer component
-└── config/
-    └── site.config.ts    # ⭐ EDIT THIS FILE FOR ALL CUSTOMIZATION
-```
-
-## 🎯 Key Features
-
-- ✅ Fully responsive design
-- ✅ Centralized configuration
-- ✅ Modern UI with smooth animations
-- ✅ Custom scrollbar (desktop)
-- ✅ App Store download buttons
-- ✅ Easy to customize colors, text, and styling
-- ✅ TypeScript for type safety
-- ✅ Tailwind CSS for utility-first styling
-
-## 💡 Tips
-
-1. **To change colors**: Edit `colors` in `site.config.ts`
-2. **To change text content**: Edit `fixedSection`, `heroSections`, or `footer` in `site.config.ts`
-3. **To add more hero sections**: Add objects to the `heroSections` array
-4. **To integrate icon libraries** (like react-icons): Install the library and replace emoji strings in the `icons` object
-
-## 📝 License
-
-All rights reserved.
-
+Point your host at **`public/`** as the static root (e.g. Vercel “Other” / static, Netlify, GitHub Pages, or upload the folder). No `npm build` required.
