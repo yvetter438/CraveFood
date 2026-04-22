@@ -26,28 +26,25 @@
     });
   }
 
-  // Pinned ESM build; ad blockers may still block
+  // Pinned ESM build; ad blockers may still block.
+  // Do not use `typeof import` here — in classic (non-module) scripts it is a syntax error.
   var moduleUrl = "https://esm.sh/posthog-js@1.216.0?bundle&target=es2020&deps=";
-  if (typeof import === "function") {
-    import(moduleUrl)
-      .then(function (m) {
-        var posthog = m.default;
-        if (!posthog || typeof posthog.init !== "function") return;
-        posthog.init(key.trim(), {
-          api_host: host,
-          person_profiles: "identified_only",
-          capture_pageview: true,
-          capture_pageleave: true,
-          disable_session_recording: true,
-          persistence: "localStorage+cookie",
-        });
-        registerContext(posthog);
-        window.posthog = posthog;
-      })
-      .catch(function (e) {
-        console.warn("PostHog failed to load", e);
+  import(moduleUrl)
+    .then(function (m) {
+      var posthog = m.default;
+      if (!posthog || typeof posthog.init !== "function") return;
+      posthog.init(key.trim(), {
+        api_host: host,
+        person_profiles: "identified_only",
+        capture_pageview: true,
+        capture_pageleave: true,
+        disable_session_recording: true,
+        persistence: "localStorage+cookie",
       });
-  } else {
-    console.warn("PostHog: dynamic import not supported; use a modern browser");
-  }
+      registerContext(posthog);
+      window.posthog = posthog;
+    })
+    .catch(function (e) {
+      console.warn("PostHog failed to load", e);
+    });
 })();
