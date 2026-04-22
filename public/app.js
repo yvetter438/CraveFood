@@ -280,7 +280,7 @@ function syncTimedPopup() {
   }
 }
 
-function addToCart(productId, qty = 1) {
+function addToCart(productId, qty = 1, source) {
   const p = PRODUCTS.find((x) => x.id === productId);
   if (!p) return;
   const key = cartLineKey(activePost.id, productId);
@@ -289,6 +289,16 @@ function addToCart(productId, qty = 1) {
   persistCart();
   renderCart();
   showToast(`Saved · ${p.name}`);
+  if (window.posthog) {
+    window.posthog.capture("ingredient_saved", {
+      product_id: productId,
+      product_name: p.name,
+      product_price: p.price,
+      post_id: activePost.id,
+      post_title: activePost.title,
+      source: source || "rail",
+    });
+  }
 }
 
 function openPrimaryShopUrl() {
@@ -316,6 +326,14 @@ function openSavedAffiliateLinks() {
   if (urls.length === 0) {
     showToast("Add affiliate links in config, or set recipe shop URLs");
     return;
+  }
+  if (window.posthog) {
+    window.posthog.capture("shop_now_clicked", {
+      post_id: activePost.id,
+      post_title: activePost.title,
+      saved_item_count: cartItemCount(),
+      affiliate_link_count: urls.length,
+    });
   }
   urls.forEach((url, i) => {
     setTimeout(() => window.open(url, "_blank", "noopener,noreferrer"), i * 450);
@@ -446,6 +464,13 @@ function openCart() {
   els.cartDrawer.hidden = false;
   els.cartTrigger.setAttribute("aria-expanded", "true");
   els.closeCart.focus();
+  if (window.posthog) {
+    window.posthog.capture("saved_items_drawer_opened", {
+      post_id: activePost.id,
+      post_title: activePost.title,
+      saved_item_count: cartItemCount(),
+    });
+  }
 }
 
 function closeCart() {
@@ -481,6 +506,13 @@ els.checkoutBtn.addEventListener("click", () => {
 });
 
 els.shopAllBtn.addEventListener("click", () => {
+  if (window.posthog) {
+    window.posthog.capture("shop_ingredients_clicked", {
+      post_id: activePost.id,
+      post_title: activePost.title,
+      has_shop_url: Boolean(activePost.shopUrl),
+    });
+  }
   if (activePost.shopUrl && openPrimaryShopUrl()) {
     showToast("Opening…");
     return;
@@ -500,7 +532,7 @@ els.ingredientPopupAdd.addEventListener("click", (e) => {
   e.stopPropagation();
   const id = els.ingredientPopupAdd.dataset.productId;
   if (id) {
-    addToCart(id);
+    addToCart(id, 1, "popup");
     pulseRailProduct(id);
   }
 });

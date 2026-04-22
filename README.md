@@ -5,7 +5,7 @@
 | Location | Role |
 |----------|------|
 | **`public/`** | **The whole website.** Plain HTML, CSS, and client-side JS—what you open in a browser. Deploy *this folder’s contents* (or the repo with root = `public`) to any static host. |
-| **`docs/`** | Product / strategy docs only (`PRODUCT_VISION.md`). Not served as part of the site unless you copy them somewhere under `public/`. |
+| **`docs/`** | Product / ops docs (`PRODUCT_VISION.md`, `DEMO_ROLLOUT.md`). Not part of the live site unless you put copies under `public/`. |
 | **`package.json`** | **Optional tooling** for local preview only: runs a static file server that serves `public/` on port 3000. **Not a backend**—no build step, no framework. |
 
 There is no `src/` app anymore: the marketing page, feed, creator page (`/c/`), recipe page (`/p/`), configs, and videos all live under **`public/`**.
@@ -35,6 +35,7 @@ If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove ol
 ## Product context
 
 - **`docs/PRODUCT_VISION.md`** — vision, principles, and roadmap for onboarding or investors.
+- **`docs/DEMO_ROLLOUT.md`** — creator URLs, PostHog, and a lightweight demo-creation + follow-up workflow.
 
 ## Deploy
 

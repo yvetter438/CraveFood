@@ -63,6 +63,16 @@ function renderFeed() {
     const video = li.querySelector(".feed-tile-video");
     const tile = li.querySelector(".feed-tile");
 
+    tile.addEventListener("click", () => {
+      if (window.posthog) {
+        window.posthog.capture("feed_tile_clicked", {
+          post_id: post.id,
+          post_title: post.title,
+          creator_id: post.creatorId || "",
+        });
+      }
+    });
+
     tile.addEventListener("mouseenter", () => {
       if (video && window.matchMedia("(hover: hover)").matches) {
         video.play().catch(() => {});

@@ -18,5 +18,8 @@ yarn-error.log*
 # host / deploy
 .vercel
 
+# built from env (Vercel / scripts/inject-analytics-config.mjs); use analytics-config.example.js as reference
+public/analytics-config.js
+
 # if Next was run locally by mistake
 .next
