@@ -1,5 +1,5 @@
 /**
- * Link-in-bio style grid — 3 posts per row, links to p/index.html?id=…
+ * Link-in-bio style grid — 3 posts per row, links to p/index.html?id=…&creator=… when filtered (creator page).
  * Optional: window.CRAVE_FEED_CREATOR_ID filters by post.creatorId (creator pages).
  * Optional: window.CRAVE_POST_LINK_PREFIX (e.g. "../" from /c/) prepends post links and video src paths.
  */
@@ -36,7 +36,13 @@ function renderFeed() {
     const li = document.createElement("li");
     li.className = "feed-cell";
     // Explicit p/index.html so static hosts (serve, Vercel static, etc.) resolve reliably
-    const href = `${postLinkPrefix}p/index.html?id=${encodeURIComponent(post.id)}`;
+    let href = `${postLinkPrefix}p/index.html?id=${encodeURIComponent(post.id)}`;
+    if (typeof window.CRAVE_FEED_CREATOR_ID === "string" && window.CRAVE_FEED_CREATOR_ID) {
+      const slug = post.creatorId || window.CRAVE_FEED_CREATOR_ID;
+      if (slug) {
+        href += `&creator=${encodeURIComponent(slug)}`;
+      }
+    }
     li.innerHTML = `
       <a class="feed-tile" href="${href}">
         <div class="feed-tile-media">

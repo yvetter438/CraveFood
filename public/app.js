@@ -6,11 +6,28 @@
 const params = new URLSearchParams(location.search);
 const requestedId = params.get("id");
 let activePost = requestedId ? getPostById(requestedId) : null;
+
+function postPageQueryStringFor(postId) {
+  const sp = new URLSearchParams();
+  sp.set("id", postId);
+  const fromCreator = params.get("creator");
+  if (fromCreator) {
+    sp.set("creator", fromCreator);
+  }
+  return sp.toString();
+}
+
 if (!activePost) {
   activePost = getDefaultPost();
   if (requestedId !== activePost.id) {
-    history.replaceState({}, "", `?id=${encodeURIComponent(activePost.id)}`);
+    history.replaceState({}, "", `?${postPageQueryStringFor(activePost.id)}`);
   }
+}
+
+const backFeedLink = document.querySelector(".back-feed-link");
+if (backFeedLink && params.get("creator") && activePost.creatorId) {
+  backFeedLink.href = "../c/index.html?slug=" + encodeURIComponent(activePost.creatorId);
+  backFeedLink.setAttribute("aria-label", "Back to creator");
 }
 
 const ASSET_PREFIX = typeof window.CRAVE_POST_ASSET_PREFIX === "string" ? window.CRAVE_POST_ASSET_PREFIX : "";
