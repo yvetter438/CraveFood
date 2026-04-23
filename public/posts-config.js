@@ -77,12 +77,12 @@ function cloneDemoProductsCount(n) {
   return DEMO_PRODUCTS.slice(0, n).map((p) => ({ ...p }));
 }
 
-/** Root-level videos in /public — keep `videoFile` in sync with these filenames. */
+/** Demo videos in /public/creatordemos/ — keep `videoFile` as path from site root. */
 const POSTS = [
   {
     id: "honey_chili_crisp",
     creatorId: "jalalsamfit",
-    videoFile: "jalalsamfit_honey_chili_crisp_chicken_bowl.mp4",
+    videoFile: "creatordemos/jalalsamfit_honey_chili_crisp_chicken_bowl.mp4",
     title: "Honey chili crisp chicken bowl",
     author: "@jalalsamfit",
     blurb:
@@ -94,7 +94,7 @@ const POSTS = [
   {
     id: "honey_garlic_chicken",
     creatorId: "jalalsamfit",
-    videoFile: "jalalsamfit_honey_garlic_chicken_bowl.mp4",
+    videoFile: "creatordemos/jalalsamfit_honey_garlic_chicken_bowl.mp4",
     title: "Honey garlic chicken bowl",
     author: "@jalalsamfit",
     blurb: "Sticky honey garlic glaze over crispy chicken — great over rice with greens.",
@@ -105,7 +105,7 @@ const POSTS = [
   {
     id: "cheesy_bbq_potatoes",
     creatorId: "jalalsamfit",
-    videoFile: "jalalsamfit_cheesy_BBQ_Chicken_Potatoes.mp4",
+    videoFile: "creatordemos/jalalsamfit_cheesy_BBQ_Chicken_Potatoes.mp4",
     title: "Cheesy BBQ chicken potatoes",
     author: "@jalalsamfit",
     blurb: "Loaded potatoes with BBQ chicken, melted cheese, and all the fixings.",
@@ -116,7 +116,7 @@ const POSTS = [
   {
     id: "crispy_cheesy_beef_tacos",
     creatorId: "jalalsamfit",
-    videoFile: "jalalsamfit_crispy_cheesy_beef_tacos.mp4",
+    videoFile: "creatordemos/jalalsamfit_crispy_cheesy_beef_tacos.mp4",
     title: "Crispy cheesy beef tacos",
     author: "@jalalsamfit",
     blurb: "Crispy shells, seasoned beef, and plenty of melt — weeknight taco night.",
