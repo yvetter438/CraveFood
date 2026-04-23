@@ -210,12 +210,18 @@ function isInScrollParent(el, scrollParent) {
   return er.bottom > pr.top + 4 && er.top < pr.bottom - 4;
 }
 
+/** True on layouts where auto-scrolling the rail to the active card would yank the whole page (mobile column). */
+function shouldScrollRailToCue() {
+  if (typeof window.matchMedia !== "function") return true;
+  return !window.matchMedia("(max-width: 768px)").matches;
+}
+
 /** Matches the on-video card — stays highlighted while that ingredient is in-frame */
 function setCueActiveHighlight(productId) {
   document.querySelectorAll(".product-card").forEach((card) => {
     card.classList.toggle("is-cue-active", Boolean(productId) && card.dataset.productId === productId);
   });
-  if (productId) {
+  if (productId && shouldScrollRailToCue()) {
     const card = document.querySelector(`[data-product-id="${productId}"]`);
     if (card && els.productList && !isInScrollParent(card, els.productList)) {
       card.scrollIntoView({ behavior: "auto", block: "nearest" });

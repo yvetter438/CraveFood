@@ -374,7 +374,8 @@ a.logo-link:hover {
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.25;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+  color: #fffaf5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 0, 0, 0.55);
 }
 
 .recipe-author {
@@ -839,8 +840,24 @@ a.logo-link:hover {
   .video-shell {
     max-width: none;
     width: 100%;
-    max-height: min(58dvh, 520px);
+    /* Taller, closer to full-screen feel; show full frame like native fullscreen (no crop) */
+    max-height: min(72dvh, 700px);
     border-radius: var(--radius-sm);
+  }
+
+  .video {
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  /* Soften bottom scrim: title was fighting a very black band; keep read legibility on .recipe-title */
+  .video-gradient {
+    background: linear-gradient(
+      180deg,
+      transparent 32%,
+      rgba(0, 0, 0, 0.28) 68%,
+      rgba(0, 0, 0, 0.52) 100%
+    );
   }
 
   .shop-rail {
@@ -857,7 +874,7 @@ a.logo-link:hover {
 /* Short viewports (e.g. split-screen, small phone): keep video readable without snap breakpoints — fluid caps only */
 @media (max-width: 768px) and (max-height: 560px) {
   .video-shell {
-    max-height: min(44dvh, 400px);
+    max-height: min(50dvh, 440px);
   }
 
   .shop-rail {
