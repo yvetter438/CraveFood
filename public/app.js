@@ -331,6 +331,18 @@ function openPrimaryShopUrl() {
   return true;
 }
 
+/** One product: `affiliateUrl` if set, else recipe `shopUrl` (same rule as cart line Shop). */
+function openProductShopUrl(productId) {
+  const p = PRODUCTS.find((x) => x.id === productId);
+  if (!p) return;
+  const url = p.affiliateUrl || activePost.shopUrl;
+  if (!url) {
+    showToast("No link for this product yet — add it in posts-config.js");
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 /** Per saved line: product affiliate URL, else that recipe’s shopUrl. Deduped across posts. */
 function openSavedAffiliateLinks() {
   const seen = new Set();
@@ -386,6 +398,7 @@ function renderProducts() {
     const li = document.createElement("li");
     li.className = "product-card";
     li.dataset.productId = p.id;
+    const canOpen = Boolean(p.affiliateUrl || activePost.shopUrl);
     li.innerHTML = `
       <img class="product-thumb" src="" alt="" width="52" height="52" loading="lazy" />
       <div class="product-body">
@@ -394,6 +407,9 @@ function renderProducts() {
         <p class="product-price">${formatMoney(p.price)}</p>
       </div>
       <div class="product-actions">
+        <button type="button" class="btn-link-open" data-open-link="${p.id}" ${
+      canOpen ? "" : "disabled"
+    }>Open link</button>
         <button type="button" class="btn-add" data-add="${p.id}">Save +</button>
       </div>
     `;
@@ -403,8 +419,15 @@ function renderProducts() {
 
   els.productList.querySelectorAll(".product-card").forEach((card) => {
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".btn-add")) return;
+      if (e.target.closest(".btn-add") || e.target.closest(".btn-link-open")) return;
       pulseRailProduct(card.dataset.productId);
+    });
+  });
+
+  els.productList.querySelectorAll(".btn-link-open").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openProductShopUrl(btn.dataset.openLink);
     });
   });
 

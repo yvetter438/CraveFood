@@ -1,11 +1,14 @@
 /**
  * All recipe posts — used by feed, creator pages, and /p/ recipe view.
  * creatorId matches creators-config.js (future: account id).
- * shopUrl — optional; primary affiliate link (e.g. shop list). "Shop ingredients" opens it; cart uses it when set.
- * products[].affiliateUrl — optional per-item link; shown on cards / saved list / batch open.
+ * shopUrl — optional recipe-level link: top "Shop now" and fallback when a product has no `affiliateUrl`. Opens in a new tab.
+ * products[].affiliateUrl — optional per-item link. If set, that row’s "Open link" and cart "Shop" use it. If omitted, row falls back to `shopUrl`.
+ * Batch "Shop now" in the cart: opens each unique URL among saved lines (staggered tabs). One saved item = one link.
+ * Demo: `public/affiliate-placeholder.html` is the in-repo stand-in; replace with real partner URLs for production.
  * Timed cues: [start, end) in seconds; app normalizes to video duration on load.
  *
  * Demo mode: generic placeholder items (numbered icons, no photos); beef tacos uses 4 rows, others use 5.
+ * `detail` is the subline under each product name — indicates that Save / Shop opens a per-item affiliate link (MVP copy).
  *
  * Videos: drop files under media/<creatorSlug>/01.mp4 … 09.mp4 (or any names), then set
  * videoFile to that path from site root, e.g. "media/jalalsamfit/01.mp4".
@@ -20,41 +23,48 @@ function demoIconDataUrl(n) {
   return "data:image/svg+xml," + encodeURIComponent(svg);
 }
 
+const AFFILIATE_PLACEHOLDER = "/affiliate-placeholder.html";
+
 const DEMO_PRODUCTS = [
   {
     id: "demo_item_1",
     name: "Item 1",
-    detail: "Example ingredient",
+    detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(1),
+    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_1&item=1`,
   },
   {
     id: "demo_item_2",
     name: "Item 2",
-    detail: "Example ingredient",
+    detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(2),
+    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_2&item=2`,
   },
   {
     id: "demo_item_3",
     name: "Item 3",
-    detail: "Example ingredient",
+    detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(3),
+    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_3&item=3`,
   },
   {
     id: "demo_item_4",
     name: "Item 4",
-    detail: "Example ingredient",
+    detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(4),
+    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_4&item=4`,
   },
   {
     id: "demo_item_5",
     name: "Item 5",
-    detail: "Example ingredient",
+    detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(5),
+    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_5&item=5`,
   },
 ];
 
@@ -78,7 +88,7 @@ const POSTS = [
     blurb:
       "Savoury, sweet, a little spice — crispy chicken, seasoned rice, pineapple avo salsa.",
     macros: "575 cal · 48g protein · 52g carbs · 19g fat · Serves 5",
-    shopUrl: "https://example.com/shop",
+    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=honey_chili_crisp`,
     products: cloneDemoProducts(),
   },
   {
@@ -89,7 +99,7 @@ const POSTS = [
     author: "@jalalsamfit",
     blurb: "Sticky honey garlic glaze over crispy chicken — great over rice with greens.",
     macros: "520 cal · 42g protein · 58g carbs · 14g fat · Serves 4",
-    shopUrl: "https://example.com/shop",
+    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=honey_garlic_chicken`,
     products: cloneDemoProducts(),
   },
   {
@@ -100,7 +110,7 @@ const POSTS = [
     author: "@jalalsamfit",
     blurb: "Loaded potatoes with BBQ chicken, melted cheese, and all the fixings.",
     macros: "640 cal · 35g protein · 48g carbs · 32g fat · Serves 4",
-    shopUrl: "https://example.com/shop",
+    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=cheesy_bbq_potatoes`,
     products: cloneDemoProducts(),
   },
   {
@@ -111,7 +121,7 @@ const POSTS = [
     author: "@jalalsamfit",
     blurb: "Crispy shells, seasoned beef, and plenty of melt — weeknight taco night.",
     macros: "580 cal · 28g protein · 38g carbs · 34g fat · Serves 4",
-    shopUrl: "https://example.com/shop",
+    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=crispy_cheesy_beef_tacos`,
     // Four timed on-screen ingredient highlights (matches 4 demo slots for this video).
     products: cloneDemoProductsCount(4),
   },

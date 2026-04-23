@@ -554,6 +554,30 @@ a.logo-link:hover {
   gap: 0.35rem;
 }
 
+.btn-link-open {
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-link-open:hover:not(:disabled) {
+  background: #fff;
+  border-color: rgba(255, 122, 92, 0.45);
+  color: #c44a32;
+}
+
+.btn-link-open:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .btn-add {
   padding: 0.4rem 0.65rem;
   border-radius: 999px;
