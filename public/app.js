@@ -157,6 +157,14 @@ const els = {
   recipeMacros: document.getElementById("recipeMacros"),
 };
 
+function forceCloseIngredientPopup() {
+  clearTimeout(hideIngredientPopup._t);
+  popupDisplayedProductId = null;
+  els.ingredientPopup.classList.remove("is-enter", "is-exit");
+  els.ingredientPopup.hidden = true;
+  els.ingredientPopup.setAttribute("aria-hidden", "true");
+}
+
 function applyPostMeta() {
   document.title = `${activePost.title} · Crave`;
   els.video.src = ASSET_PREFIX + activePost.videoFile;
@@ -166,11 +174,21 @@ function applyPostMeta() {
   els.recipeMacros.textContent = activePost.macros;
   els.shopAllBtn.textContent = activePost.shopUrl ? "Shop Now" : "Shop ingredients";
   els.ingredientPopupAdd.textContent = "Save";
+  forceCloseIngredientPopup();
+  els.ingredientPopupLabel.textContent = "";
+  els.ingredientPopupName.textContent = "";
+  els.ingredientPopupPrice.textContent = "";
+  els.ingredientPopupAdd.removeAttribute("data-product-id");
+  els.ingredientPopupThumb.removeAttribute("src");
+  els.ingredientPopupThumb.alt = "";
 }
 
 function rebuildTimedCues() {
   const d = els.video.duration;
-  if (!d || !isFinite(d)) return;
+  if (!d || !isFinite(d) || d < 0.1) {
+    TIMED_CUES = [];
+    return;
+  }
   TIMED_CUES = TIMED_CUES_SEC.map((c) => {
     const start = Math.min(1, Math.max(0, c.start / d));
     const end = Math.min(1, Math.max(0, c.end / d));
@@ -180,13 +198,14 @@ function rebuildTimedCues() {
 
 function updateIngredientPopupContent(productId) {
   const p = PRODUCTS.find((x) => x.id === productId);
-  if (!p) return;
+  if (!p) return false;
   setThumbnailWithFallback(els.ingredientPopupThumb, p.image);
   els.ingredientPopupThumb.alt = p.name;
   els.ingredientPopupLabel.textContent = "On screen now";
   els.ingredientPopupName.textContent = p.name;
   els.ingredientPopupPrice.textContent = formatMoney(p.price);
   els.ingredientPopupAdd.dataset.productId = productId;
+  return true;
 }
 
 function formatMoney(n) {
@@ -259,12 +278,19 @@ function hideIngredientPopup() {
   }, 220);
 }
 
-/** True when playback is between the first and last timed cue (gaps between ingredients). */
-function isBetweenRecipeCueBounds(t, d) {
+/**
+ * True only in *short gaps between consecutive cues* (not after the last cue, not before the first).
+ * A loose “before last segment end, after first start” test wrongly kept the last popup for the whole tail of the file.
+ */
+function isInInterIngredientGap(t, d) {
   if (!TIMED_CUES.length || !d || !isFinite(d)) return false;
-  const firstStart = TIMED_CUES[0].start * d;
-  const lastEnd = TIMED_CUES[TIMED_CUES.length - 1].end * d;
-  return t >= firstStart && t < lastEnd;
+  if (TIMED_CUES.some((c) => t >= c.start * d && t < c.end * d)) return false;
+  for (let i = 0; i < TIMED_CUES.length - 1; i += 1) {
+    const endI = TIMED_CUES[i].end * d;
+    const startNext = TIMED_CUES[i + 1].start * d;
+    if (t >= endI && t < startNext) return true;
+  }
+  return false;
 }
 
 function syncTimedPopup() {
@@ -278,10 +304,16 @@ function syncTimedPopup() {
 
   if (pid) {
     if (pid === popupDisplayedProductId) return;
+    if (!updateIngredientPopupContent(pid)) {
+      if (popupDisplayedProductId !== null) {
+        popupDisplayedProductId = null;
+        hideIngredientPopup();
+      }
+      return;
+    }
     clearTimeout(hideIngredientPopup._t);
     const wasVisible = popupDisplayedProductId !== null;
     popupDisplayedProductId = pid;
-    updateIngredientPopupContent(pid);
     els.ingredientPopup.hidden = false;
     els.ingredientPopup.setAttribute("aria-hidden", "false");
     els.ingredientPopup.classList.remove("is-exit");
@@ -293,7 +325,7 @@ function syncTimedPopup() {
     return;
   }
 
-  if (d && isFinite(d) && isBetweenRecipeCueBounds(t, d)) {
+  if (d && isFinite(d) && isInInterIngredientGap(t, d)) {
     return;
   }
 
@@ -598,6 +630,13 @@ function syncVideoCuesFromMetadata() {
 
 els.video.addEventListener("loadedmetadata", syncVideoCuesFromMetadata);
 els.video.addEventListener("loadeddata", syncVideoCuesFromMetadata);
+
+/* Loop / seek to start: clear popup so the exit animation does not race the next cue. */
+els.video.addEventListener("seeking", () => {
+  if (els.video.currentTime < 0.35) {
+    forceCloseIngredientPopup();
+  }
+});
 
 applyPostMeta();
 renderProducts();
