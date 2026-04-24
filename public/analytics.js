@@ -19,10 +19,32 @@
 
   function registerContext(p) {
     var q = new URLSearchParams(location.search);
+    var creator_slug = q.get("slug") || "";
+    if (!creator_slug) {
+      var cm = (location.pathname || "").match(/\/c\/([^/]+)\/?$/);
+      if (cm && cm[1] && cm[1] !== "index.html" && cm[1] !== "index") {
+        try {
+          creator_slug = decodeURIComponent(cm[1]);
+        } catch (e) {
+          creator_slug = cm[1];
+        }
+      }
+    }
+    var post_id = q.get("id") || "";
+    if (!post_id) {
+      var pm = (location.pathname || "").match(/\/p\/([^/]+)\/?$/);
+      if (pm && pm[1] && pm[1] !== "index.html" && pm[1] !== "index") {
+        try {
+          post_id = decodeURIComponent(pm[1]);
+        } catch (e2) {
+          post_id = pm[1];
+        }
+      }
+    }
     p.register({
       crave_page: inferPage(),
-      creator_slug: q.get("slug") || "",
-      post_id: q.get("id") || "",
+      creator_slug: creator_slug,
+      post_id: post_id,
     });
   }
 

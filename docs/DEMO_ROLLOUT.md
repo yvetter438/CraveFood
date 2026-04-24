@@ -6,12 +6,31 @@ This is a practical runbook for **sending one-off creator demos** and deciding *
 
 ## 1. Custom creator URLs (what works today)
 
+**Production site:** [https://crave.food](https://crave.food) — all examples below use this host.
+
 | Kind | Use in email / DMs | Notes |
 |------|--------------------|--------|
-| **Short creator hub** | `https://<your-domain>/c/<slug>` | e.g. `.../c/jalalsamfit` — Vercel **rewrites** to `c/index.html?slug=<slug>`. |
-| **Explicit (always works locally too)** | `https://<your-domain>/c/index.html?slug=<slug>` | Same page; `npm run dev` (static `serve`) has **no rewrites** — this form is safest for local testing. |
-| **Recipe post (short, production)** | `https://<your-domain>/p/<postId>` | e.g. `.../p/honey_chili_crisp` — rewrites to `p/index.html?id=...` on Vercel. |
-| **Recipe (universal)** | `.../p/index.html?id=<postId>` | What the in-app grid still links to so **local** preview works. |
+| **Short creator hub** | `https://crave.food/c/<slug>` | e.g. `https://crave.food/c/jalalsamfit` — Vercel **rewrites** to `c/index.html?slug=<slug>`. |
+| **Explicit (always works locally too)** | `https://crave.food/c/index.html?slug=<slug>` | Same page; `npm run dev` (static `serve`) has **no rewrites** — this form is safest for local testing. |
+| **Recipe post (short, production)** | `https://crave.food/p/<postId>` | e.g. `https://crave.food/p/honey_chili_crisp` — rewrites to `p/index.html?id=...` on Vercel. |
+| **Recipe (universal)** | `https://crave.food/p/index.html?id=<postId>` | What the in-app grid still links to so **local** preview works. |
+| **Default feed (jalalsamfit only)** | `https://crave.food/feed.html` | Static grid; shows three posts for `@jalalsamfit` only. |
+
+### Creator profile links (production)
+
+| Creator (slug) | Link |
+|----------------|------|
+| jalalsamfit | `https://crave.food/c/jalalsamfit` |
+| aussiefitness | `https://crave.food/c/aussiefitness` |
+| eitan | `https://crave.food/c/eitan` |
+| exercise4cheatmeals | `https://crave.food/c/exercise4cheatmeals` |
+| kennybfischer | `https://crave.food/c/kennybfischer` |
+| rahul_kamat | `https://crave.food/c/rahul_kamat` |
+| shredhappens | `https://crave.food/c/shredhappens` |
+| stealth_health_life | `https://crave.food/c/stealth_health_life` |
+| theflexibledietinglifestyle | `https://crave.food/c/theflexibledietinglifestyle` |
+
+Explicit query form (same pages): `https://crave.food/c/index.html?slug=<slug>`.
 
 **Adding a new creator** is a **data** change, not a new HTML file:
 
@@ -62,10 +81,10 @@ This is a practical runbook for **sending one-off creator demos** and deciding *
 You don’t *need* a single numeric threshold to “continue or stop.” A practical mix is:
 
 - **Low volume, high quality** — e.g. a few people opening the **creator** URL and at least one **post** in-session is already signal for a hand-built demo.  
-- **Waitlist** — form submissions in Google Form + (optional) PostHog for “came from which demo” by UTM on the form link.  
+- **Waitlist** — form submissions in Google Form; in PostHog, break down sessions by `creator_slug` / `crave_page` to see which demo they came from.  
 - **Replies** — if your thesis is *relationship* not *scale*, weight email replies and call-bookings over raw PV count.
 
-**Optional next step (later)** — UTM on links in email: `?slug=alex&utm_source=email&utm_campaign=demo-2026-04` and pass `utm_*` from `location.search` into PostHog with one extra `register` in `analytics.js`.
+**Attribution** — Rely on PostHog: `register`d person props (`creator_slug`, `post_id`, `crave_page`) plus custom events (e.g. `ingredient_saved`, `shop_now_clicked`, `waitlist_cta_clicked`). You can still add UTM query params to outbound links in email if a partner form needs them; the static site does not depend on that for analytics.
 
 ---
 
@@ -73,7 +92,7 @@ You don’t *need* a single numeric threshold to “continue or stop.” A pract
 
 1. Add creator + posts + video files; test locally.  
 2. Set PostHog env vars in Vercel; deploy.  
-3. **Email copy (example):** one line value prop + `https://yoursite.com/c/theirname` (or `?slug=theirname` if you prefer explicit).  
+3. **Email copy (example):** one line value prop + `https://crave.food/c/theirname` (or `c/index.html?slug=theirname` if you prefer explicit).  
 4. In PostHog, watch that slug’s pageviews and clicks for 7–14 days, combine with any reply / waitlist / call.  
 5. Iterate **copy** or **one recipe** in `posts-config.js` before you invest in product build-out.
 
@@ -93,4 +112,4 @@ You don’t *need* a single numeric threshold to “continue or stop.” A pract
 
 ---
 
-*Adjust thresholds and UTM as you get real reply volume; this is meant to stay light.*
+*Adjust thresholds as you get real reply volume; this is meant to stay light.*

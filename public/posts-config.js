@@ -8,7 +8,8 @@
  * Timed cues: [start, end) in seconds; app normalizes to video duration on load.
  *
  * Demo mode: generic placeholder items (numbered icons, no photos); five rows per post unless you override `products`.
- * `detail` is the subline under each product name — indicates that Save / Shop opens a per-item affiliate link (MVP copy).
+ * PostHog events carry post/product context — placeholder links are plain (no UTM/scope query strings).
+ * `detail` is the subline under each product name (MVP copy).
  *
  * Videos: drop files under media/<creatorSlug>/01.mp4 … 09.mp4 (or any names), then set
  * videoFile to that path from site root, e.g. "media/jalalsamfit/01.mp4".
@@ -32,7 +33,7 @@ const DEMO_PRODUCTS = [
     detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(1),
-    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_1&item=1`,
+    affiliateUrl: AFFILIATE_PLACEHOLDER,
   },
   {
     id: "demo_item_2",
@@ -40,7 +41,7 @@ const DEMO_PRODUCTS = [
     detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(2),
-    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_2&item=2`,
+    affiliateUrl: AFFILIATE_PLACEHOLDER,
   },
   {
     id: "demo_item_3",
@@ -48,7 +49,7 @@ const DEMO_PRODUCTS = [
     detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(3),
-    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_3&item=3`,
+    affiliateUrl: AFFILIATE_PLACEHOLDER,
   },
   {
     id: "demo_item_4",
@@ -56,7 +57,7 @@ const DEMO_PRODUCTS = [
     detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(4),
-    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_4&item=4`,
+    affiliateUrl: AFFILIATE_PLACEHOLDER,
   },
   {
     id: "demo_item_5",
@@ -64,7 +65,7 @@ const DEMO_PRODUCTS = [
     detail: "Affiliate link",
     price: 0,
     image: demoIconDataUrl(5),
-    affiliateUrl: `${AFFILIATE_PLACEHOLDER}?p=demo_item_5&item=5`,
+    affiliateUrl: AFFILIATE_PLACEHOLDER,
   },
 ];
 
@@ -75,7 +76,7 @@ function cloneDemoProducts() {
 /**
  * Three numbered videos per creator. Filenames: creatordemos/{filePrefix}_1..3.mp4
  * (filePrefix may include a leading underscore, e.g. _aussiefitness.)
- * idPrefix is the stable id segment for getPostById and affiliate links (e.g. aussiefitness, rahul_kamat).
+ * idPrefix is the stable id segment for getPostById (e.g. aussiefitness, rahul_kamat).
  */
 function threeNumberedCreatorPosts(creator) {
   const { creatorId, filePrefix, idPrefix, author } = creator;
@@ -87,7 +88,7 @@ function threeNumberedCreatorPosts(creator) {
     author,
     blurb: "Recipe demo with timed ingredients — save items and open affiliate links.",
     macros: "—",
-    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=${idPrefix}_${n}`,
+    shopUrl: AFFILIATE_PLACEHOLDER,
     products: cloneDemoProducts(),
   }));
 }
@@ -103,7 +104,7 @@ const POSTS = [
     blurb:
       "Savoury, sweet, a little spice — crispy chicken, seasoned rice, pineapple avo salsa.",
     macros: "575 cal · 48g protein · 52g carbs · 19g fat · Serves 5",
-    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=honey_chili_crisp`,
+    shopUrl: AFFILIATE_PLACEHOLDER,
     products: cloneDemoProducts(),
   },
   {
@@ -114,7 +115,7 @@ const POSTS = [
     author: "@jalalsamfit",
     blurb: "Sticky honey garlic glaze over crispy chicken — great over rice with greens.",
     macros: "520 cal · 42g protein · 58g carbs · 14g fat · Serves 4",
-    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=honey_garlic_chicken`,
+    shopUrl: AFFILIATE_PLACEHOLDER,
     products: cloneDemoProducts(),
   },
   {
@@ -125,7 +126,7 @@ const POSTS = [
     author: "@jalalsamfit",
     blurb: "Loaded potatoes with BBQ chicken, melted cheese, and all the fixings.",
     macros: "640 cal · 35g protein · 48g carbs · 32g fat · Serves 4",
-    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=cheesy_bbq_potatoes`,
+    shopUrl: AFFILIATE_PLACEHOLDER,
     products: cloneDemoProducts(),
   },
   ...threeNumberedCreatorPosts({

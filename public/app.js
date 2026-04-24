@@ -4,7 +4,20 @@
  */
 
 const params = new URLSearchParams(location.search);
-const requestedId = params.get("id");
+/** Same as /c/: on Vercel: /p/honey_… may have no ?id= in the address bar. */
+const requestedId = (function resolvePostIdFromUrl() {
+  const q = params.get("id");
+  if (q) return q;
+  const m = (location.pathname || "").match(/\/p\/([^/]+)\/?$/);
+  if (!m) return null;
+  const fromPath = m[1];
+  if (fromPath === "index" || fromPath === "index.html") return null;
+  try {
+    return decodeURIComponent(fromPath);
+  } catch (e) {
+    return fromPath;
+  }
+})();
 let activePost = requestedId ? getPostById(requestedId) : null;
 
 function postPageQueryStringFor(postId) {
@@ -20,13 +33,15 @@ function postPageQueryStringFor(postId) {
 if (!activePost) {
   activePost = getDefaultPost();
   if (requestedId !== activePost.id) {
-    history.replaceState({}, "", `?${postPageQueryStringFor(activePost.id)}`);
+    const cr = params.get("creator");
+    const path = `/p/${encodeURIComponent(activePost.id)}` + (cr ? `?creator=${encodeURIComponent(cr)}` : "");
+    history.replaceState({}, "", path);
   }
 }
 
 const backFeedLink = document.querySelector(".back-feed-link");
 if (backFeedLink && params.get("creator") && activePost.creatorId) {
-  backFeedLink.href = "../c/index.html?slug=" + encodeURIComponent(activePost.creatorId);
+  backFeedLink.href = "../c/" + encodeURIComponent(activePost.creatorId);
   backFeedLink.setAttribute("aria-label", "Back to creator");
 }
 

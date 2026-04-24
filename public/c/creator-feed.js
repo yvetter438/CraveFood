@@ -6,13 +6,28 @@
   const grid = document.getElementById("feedGrid");
   if (!grid || typeof POSTS === "undefined" || typeof getCreatorBySlug !== "function") return;
 
-  const params = new URLSearchParams(location.search);
-  let slug = params.get("slug");
+  /**
+   * Vercel rewrites /c/eitan to c/index.html?slug=eitan server-side, but the browser
+   * address bar often stays /c/eitan with no ?slug= — only parsing ?slug breaks and
+   * falls back to the default creator. Prefer the path segment, then the query.
+   */
+  const pathM = (location.pathname || "").match(/\/c\/([^/]+)\/?$/);
+  let slug = null;
+  if (pathM) {
+    const fromPath = decodeURIComponent(pathM[1]);
+    if (fromPath && fromPath !== "index" && fromPath !== "index.html") {
+      slug = fromPath;
+    }
+  }
+  if (!slug) {
+    slug = new URLSearchParams(location.search).get("slug");
+  }
+
   let creator = slug ? getCreatorBySlug(slug) : null;
   if (!creator) {
     creator = getDefaultCreator();
     if (!creator) return;
-    history.replaceState({}, "", `?slug=${encodeURIComponent(creator.id)}`);
+    history.replaceState({}, "", `/c/${encodeURIComponent(creator.id)}`);
   }
 
   window.CRAVE_FEED_CREATOR_ID = creator.id;

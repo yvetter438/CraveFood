@@ -10,6 +10,8 @@
 
 There is no `src/` app anymore: the marketing page, feed, creator page (`/c/`), recipe page (`/p/`), configs, and videos all live under **`public/`**.
 
+**Live site:** [https://crave.food](https://crave.food).
+
 ## Run locally
 
 ```bash
