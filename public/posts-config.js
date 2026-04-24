@@ -13,7 +13,13 @@
  *
  * Videos: drop files under media/<creatorSlug>/01.mp4 … 09.mp4 (or any names), then set
  * videoFile to that path from site root, e.g. "media/jalalsamfit/01.mp4".
+ *
+ * Optional `feedThumb` — path from site root to a JPEG/WebP (not SVG) for the feed grid;
+ * if omitted, `FEED_THUMB_DEFAULT` is used. The feed shows this image first, then the video.
  */
+
+/** Default feed tile image when `feedThumb` is not set (raster; Safari won’t show SVG under <video> well). */
+const FEED_THUMB_DEFAULT = "assets/feed-tile-fallback.jpg";
 
 /** Simple numbered tile — SVG data URL, no network fetch */
 function demoIconDataUrl(n) {
@@ -84,6 +90,7 @@ function threeNumberedCreatorPosts(creator) {
     id: `${idPrefix}_${n}`,
     creatorId,
     videoFile: `creatordemos/${filePrefix}_${n}.mp4`,
+    feedThumb: FEED_THUMB_DEFAULT,
     title: `Recipe ${n}`,
     author,
     blurb: "Recipe demo with timed ingredients — save items and open affiliate links.",
@@ -99,6 +106,7 @@ const POSTS = [
     id: "honey_chili_crisp",
     creatorId: "jalalsamfit",
     videoFile: "creatordemos/jalalsamfit_honey_chili_crisp_chicken_bowl.mp4",
+    feedThumb: FEED_THUMB_DEFAULT,
     title: "Honey chili crisp chicken bowl",
     author: "@jalalsamfit",
     blurb:
@@ -111,6 +119,7 @@ const POSTS = [
     id: "honey_garlic_chicken",
     creatorId: "jalalsamfit",
     videoFile: "creatordemos/jalalsamfit_honey_garlic_chicken_bowl.mp4",
+    feedThumb: FEED_THUMB_DEFAULT,
     title: "Honey garlic chicken bowl",
     author: "@jalalsamfit",
     blurb: "Sticky honey garlic glaze over crispy chicken — great over rice with greens.",
@@ -122,6 +131,7 @@ const POSTS = [
     id: "cheesy_bbq_potatoes",
     creatorId: "jalalsamfit",
     videoFile: "creatordemos/jalalsamfit_cheesy_BBQ_Chicken_Potatoes.mp4",
+    feedThumb: FEED_THUMB_DEFAULT,
     title: "Cheesy BBQ chicken potatoes",
     author: "@jalalsamfit",
     blurb: "Loaded potatoes with BBQ chicken, melted cheese, and all the fixings.",
