@@ -27,6 +27,9 @@ function renderFeed() {
   if (!grid || typeof POSTS === "undefined") return;
 
   const postLinkPrefix = typeof window.CRAVE_POST_LINK_PREFIX === "string" ? window.CRAVE_POST_LINK_PREFIX : "";
+  /* Touch: no <video src> until first press so tiles show the matting, not a black undecoded frame. */
+  const feedTouchLazy =
+    typeof window.matchMedia === "function" && window.matchMedia("(any-pointer: coarse)").matches;
 
   const posts = getPostsForFeed();
   grid.innerHTML = "";
@@ -46,16 +49,17 @@ function renderFeed() {
         href += `&creator=${encodeURIComponent(slug)}`;
       }
     }
+    const fileUrl = escapeHtml(postLinkPrefix + post.videoFile);
     li.innerHTML = `
       <a class="feed-tile" href="${href}">
         <div class="feed-tile-media">
           <video
-            class="feed-tile-video"
-            src="${escapeHtml(postLinkPrefix + post.videoFile)}"
+            class="feed-tile-video${feedTouchLazy ? " feed-tile-video--deferred" : ""}"
+            ${feedTouchLazy ? `data-feed-src="${fileUrl}"` : `src="${fileUrl}"`}
             muted
             playsinline
             loop
-            preload="metadata"
+            preload="${feedTouchLazy ? "none" : "metadata"}"
           ></video>
           <div class="feed-tile-shade" aria-hidden="true"></div>
           <span class="feed-tile-play" aria-hidden="true">
@@ -96,6 +100,40 @@ function renderFeed() {
         video.muted = true;
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
+        const deferredUrl = video.getAttribute("data-feed-src");
+        if (deferredUrl) {
+          video.removeAttribute("data-feed-src");
+          video.preload = "auto";
+          video.src = deferredUrl;
+          const onFirstFrameThenMaybePlay = () => {
+            const afterSeeked = () => {
+              try {
+                video.pause();
+              } catch (_a) {}
+              video.classList.remove("feed-tile-video--deferred");
+              if (pressPointerId == null) return;
+              video.play().catch(() => {});
+            };
+            try {
+              video.currentTime = THUMB_SEEK_S;
+              video.addEventListener("seeked", afterSeeked, { once: true });
+            } catch (_b) {
+              video.classList.remove("feed-tile-video--deferred");
+              if (pressPointerId != null) video.play().catch(() => {});
+            }
+          };
+          video.addEventListener(
+            "loadeddata",
+            () => {
+              onFirstFrameThenMaybePlay();
+            },
+            { once: true }
+          );
+          try {
+            video.load();
+          } catch (_c) {}
+          return;
+        }
         video.play().catch(() => {});
       };
       const endPress = (e) => {
@@ -106,9 +144,14 @@ function renderFeed() {
             media.releasePointerCapture(e.pointerId);
           } catch (_err) {}
         }
-        video.pause();
+        if (!video.getAttribute("src") && !video.currentSrc) return;
         try {
-          video.currentTime = THUMB_SEEK_S;
+          video.pause();
+        } catch (_d) {}
+        try {
+          if (Number.isFinite(video.duration) && video.duration > 0) {
+            video.currentTime = THUMB_SEEK_S;
+          }
         } catch (_e) {}
       };
       media.addEventListener("pointerdown", startPress);
@@ -117,8 +160,10 @@ function renderFeed() {
     }
   });
 
-  /* Still thumbnail in view, no autoplay. Press and hold to preview. */
-  initFeedThumbnails();
+  /* Desktop / fine pointer: still thumbnail in view, no playback until press. */
+  if (!feedTouchLazy) {
+    initFeedThumbnails();
+  }
 }
 
 function showStillThumbnailFrame(video) {
