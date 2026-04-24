@@ -92,9 +92,13 @@ body {
   grid-column: 2;
 }
 
-.top-bar .cart-trigger {
-  justify-self: end;
+.top-bar-actions {
   grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
 .back-feed-link {
@@ -922,8 +926,8 @@ body.feed-page {
 .feed-top {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.75rem 0;
   padding-top: max(0.75rem, env(safe-area-inset-top));
   position: sticky;
@@ -1273,6 +1277,28 @@ body.marketing-page .site-header .logo {
 .btn-marketing--nav:hover {
   transform: translateY(-1px);
   filter: brightness(1.08);
+}
+
+/* Feed + post: compact waitlist (same form URL as marketing site via config.js) */
+.btn-waitlist-sm.btn-marketing {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  box-shadow: 0 4px 16px rgba(120, 50, 80, 0.22);
+}
+
+.btn-waitlist-sm.btn-marketing:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+@media (max-width: 360px) {
+  .btn-waitlist-sm.btn-marketing {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.6875rem;
+  }
 }
 
 /* Primary hero + bottom CTA — largest */

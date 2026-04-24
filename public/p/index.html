@@ -21,18 +21,28 @@
           </svg>
         </a>
         <a href="../index.html" class="logo logo-link top-bar-logo">Crave</a>
-        <button type="button" class="cart-trigger" id="cartTrigger" aria-expanded="false" aria-controls="cartDrawer" aria-label="Saved items">
-          <span class="cart-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 6h15l-1.5 9h-12z" />
-              <circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none" />
-              <circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none" />
-              <path d="M6 6L5 3H2" />
-            </svg>
-          </span>
-          <span class="cart-label">Saved</span>
-          <span class="cart-badge" id="cartBadge" hidden>0</span>
-        </button>
+        <div class="top-bar-actions">
+          <a
+            class="btn-marketing btn-marketing--primary btn-waitlist-sm js-waitlist-cta"
+            data-cta-location="post_top_bar"
+            href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Join the waitlist</a
+          >
+          <button type="button" class="cart-trigger" id="cartTrigger" aria-expanded="false" aria-controls="cartDrawer" aria-label="Saved items">
+            <span class="cart-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6h15l-1.5 9h-12z" />
+                <circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none" />
+                <path d="M6 6L5 3H2" />
+              </svg>
+            </span>
+            <span class="cart-label">Saved</span>
+            <span class="cart-badge" id="cartBadge" hidden>0</span>
+          </button>
+        </div>
       </header>
 
       <main class="main">
@@ -122,9 +132,11 @@
     <script>
       window.CRAVE_POST_ASSET_PREFIX = "../";
     </script>
+    <script src="../config.js"></script>
     <script src="../posts-config.js"></script>
     <script src="../app.js"></script>
     <script src="../analytics-config.js"></script>
     <script src="../analytics.js"></script>
+    <script src="../waitlist-cta.js"></script>
   </body>
 </html>
