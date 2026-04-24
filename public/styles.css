@@ -1083,12 +1083,6 @@ body.feed-page {
   transition: opacity 0.2s ease;
 }
 
-/* Coarse pointer: <video> has no src until first press — show tile matting, not a black element. */
-.feed-tile-media .feed-tile-video--deferred {
-  opacity: 0;
-  pointer-events: auto;
-}
-
 .feed-tile-shade {
   position: absolute;
   inset: 0;

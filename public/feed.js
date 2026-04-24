@@ -1,7 +1,7 @@
 /**
  * Link-in-bio style grid — 3 posts per row, links to p/index.html?id=…&creator=… when filtered (creator page).
  * Optional: window.CRAVE_FEED_CREATOR_ID filters by post.creatorId (creator pages).
- * Optional: window.CRAVE_POST_LINK_PREFIX (e.g. "../" from /c/) prepends post links and video src paths.
+ * Optional: window.CRAVE_POST_LINK_PREFIX (e.g. "../" from /c/) prepends post links, poster, and video paths.
  */
 
 function escapeHtml(s) {
@@ -12,7 +12,7 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
-/** Seek past black first frame on many mobile decoders. */
+/** After decode, seek to a time that usually has picture (0s is often black on phones). */
 const THUMB_SEEK_S = 0.12;
 
 function getPostsForFeed() {
@@ -27,9 +27,7 @@ function renderFeed() {
   if (!grid || typeof POSTS === "undefined") return;
 
   const postLinkPrefix = typeof window.CRAVE_POST_LINK_PREFIX === "string" ? window.CRAVE_POST_LINK_PREFIX : "";
-  /* Touch: no <video src> until first press so tiles show the matting, not a black undecoded frame. */
-  const feedTouchLazy =
-    typeof window.matchMedia === "function" && window.matchMedia("(any-pointer: coarse)").matches;
+  const posterUrl = postLinkPrefix + "assets/feed-tile-poster.svg";
 
   const posts = getPostsForFeed();
   grid.innerHTML = "";
@@ -41,7 +39,6 @@ function renderFeed() {
   posts.forEach((post) => {
     const li = document.createElement("li");
     li.className = "feed-cell";
-    // Explicit p/index.html so static hosts (serve, Vercel static, etc.) resolve reliably
     let href = `${postLinkPrefix}p/index.html?id=${encodeURIComponent(post.id)}`;
     if (typeof window.CRAVE_FEED_CREATOR_ID === "string" && window.CRAVE_FEED_CREATOR_ID) {
       const slug = post.creatorId || window.CRAVE_FEED_CREATOR_ID;
@@ -50,16 +47,19 @@ function renderFeed() {
       }
     }
     const fileUrl = escapeHtml(postLinkPrefix + post.videoFile);
+    const posterEnc = escapeHtml(posterUrl);
     li.innerHTML = `
       <a class="feed-tile" href="${href}">
         <div class="feed-tile-media">
           <video
-            class="feed-tile-video${feedTouchLazy ? " feed-tile-video--deferred" : ""}"
-            ${feedTouchLazy ? `data-feed-src="${fileUrl}"` : `src="${fileUrl}"`}
+            class="feed-tile-video"
+            src="${fileUrl}"
+            poster="${posterEnc}"
             muted
+            defaultMuted
             playsinline
             loop
-            preload="${feedTouchLazy ? "none" : "metadata"}"
+            preload="auto"
           ></video>
           <div class="feed-tile-shade" aria-hidden="true"></div>
           <span class="feed-tile-play" aria-hidden="true">
@@ -76,6 +76,11 @@ function renderFeed() {
     const tile = li.querySelector(".feed-tile");
     const video = li.querySelector(".feed-tile-video");
     const media = li.querySelector(".feed-tile-media");
+    if (video) {
+      video.muted = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+    }
 
     tile.addEventListener("click", () => {
       if (window.posthog) {
@@ -100,40 +105,6 @@ function renderFeed() {
         video.muted = true;
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
-        const deferredUrl = video.getAttribute("data-feed-src");
-        if (deferredUrl) {
-          video.removeAttribute("data-feed-src");
-          video.preload = "auto";
-          video.src = deferredUrl;
-          const onFirstFrameThenMaybePlay = () => {
-            const afterSeeked = () => {
-              try {
-                video.pause();
-              } catch (_a) {}
-              video.classList.remove("feed-tile-video--deferred");
-              if (pressPointerId == null) return;
-              video.play().catch(() => {});
-            };
-            try {
-              video.currentTime = THUMB_SEEK_S;
-              video.addEventListener("seeked", afterSeeked, { once: true });
-            } catch (_b) {
-              video.classList.remove("feed-tile-video--deferred");
-              if (pressPointerId != null) video.play().catch(() => {});
-            }
-          };
-          video.addEventListener(
-            "loadeddata",
-            () => {
-              onFirstFrameThenMaybePlay();
-            },
-            { once: true }
-          );
-          try {
-            video.load();
-          } catch (_c) {}
-          return;
-        }
         video.play().catch(() => {});
       };
       const endPress = (e) => {
@@ -151,6 +122,8 @@ function renderFeed() {
         try {
           if (Number.isFinite(video.duration) && video.duration > 0) {
             video.currentTime = THUMB_SEEK_S;
+          } else {
+            video.currentTime = 0;
           }
         } catch (_e) {}
       };
@@ -160,68 +133,55 @@ function renderFeed() {
     }
   });
 
-  /* Desktop / fine pointer: still thumbnail in view, no playback until press. */
-  if (!feedTouchLazy) {
-    initFeedThumbnails();
-  }
+  primeFeedThumbnails();
 }
 
-function showStillThumbnailFrame(video) {
-  if (video.dataset.thumbFrame === "1" || !video) return;
-  const finish = () => {
-    try {
-      video.pause();
-    } catch (_a) {}
-    video.dataset.thumbFrame = "1";
-  };
-  const seek = () => {
-    video.addEventListener(
-      "seeked",
-      () => {
-        finish();
-      },
-      { once: true }
-    );
-    try {
-      video.currentTime = THUMB_SEEK_S;
-    } catch (_b) {
-      finish();
-    }
-  };
-  if (video.readyState >= 2) {
-    seek();
-  } else {
-    video.addEventListener("loadeddata", () => seek(), { once: true });
-  }
-}
-
-function initFeedThumbnails() {
+/**
+ * Mobile + desktop: load each mp4, seek to a still frame, pause.
+ * The static `poster` shows immediately so tiles are never a black void while bytes arrive.
+ */
+function primeFeedThumbnails() {
   const vids = document.querySelectorAll("#feedGrid .feed-tile-video");
-  if (vids.length === 0) return;
-
   vids.forEach((v) => {
     v.muted = true;
+    v.defaultMuted = true;
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
+
+    v.addEventListener("error", () => {
+      v.dataset.thumbReady = "1";
+    });
+
+    const runStill = () => {
+      if (v.dataset.stillArmed === "1" || v.dataset.thumbReady === "1") return;
+      v.dataset.stillArmed = "1";
+      v.addEventListener(
+        "seeked",
+        () => {
+          try {
+            v.pause();
+          } catch (_a) {}
+          v.dataset.thumbReady = "1";
+          try {
+            v.removeAttribute("poster");
+          } catch (_b) {}
+        },
+        { once: true }
+      );
+      try {
+        v.currentTime = THUMB_SEEK_S;
+      } catch (_c) {
+        v.dataset.thumbReady = "1";
+        v.removeAttribute("poster");
+      }
+    };
+
+    v.addEventListener("loadeddata", runStill, { once: true });
+    v.addEventListener("canplay", runStill, { once: true });
+    if (v.readyState >= 2) {
+      requestAnimationFrame(() => runStill());
+    }
   });
-
-  if (!("IntersectionObserver" in window)) {
-    vids.forEach((v) => showStillThumbnailFrame(v));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const v = entry.target;
-        showStillThumbnailFrame(v);
-        io.unobserve(v);
-      });
-    },
-    { root: null, rootMargin: "80px 0px", threshold: 0.01 }
-  );
-  vids.forEach((v) => io.observe(v));
 }
 
 if (!window.CRAVE_DEFER_FEED) {
