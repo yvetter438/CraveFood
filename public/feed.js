@@ -51,6 +51,7 @@ function renderFeed() {
     li.innerHTML = `
       <a class="feed-tile" href="${href}">
         <div class="feed-tile-media">
+          <div class="feed-tile-underlay" style="background-image: url('${posterEnc}');" aria-hidden="true"></div>
           <video
             class="feed-tile-video"
             src="${fileUrl}"
@@ -102,10 +103,18 @@ function renderFeed() {
             media.setPointerCapture(e.pointerId);
           } catch (_err) {}
         }
+        /* If page-load nudge did not get a frame (iOS), the first play() is what decodes; show <video> only once painting. */
+        const revealWhenPainting = () => {
+          media.classList.add("feed-tile-media--frame-ready");
+          video.removeEventListener("playing", revealWhenPainting);
+        };
+        video.addEventListener("playing", revealWhenPainting, { once: true });
         video.muted = true;
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
-        video.play().catch(() => {});
+        video.play().catch(() => {
+          video.removeEventListener("playing", revealWhenPainting);
+        });
       };
       const endPress = (e) => {
         if (e.pointerId !== pressPointerId) return;
@@ -137,8 +146,9 @@ function renderFeed() {
 }
 
 /**
- * Mobile + desktop: load each mp4, seek to a still frame, pause.
- * The static `poster` shows immediately so tiles are never a black void while bytes arrive.
+ * iOS WebKit: the video layer is often a black opaquesurface over the poster until a frame is decoded;
+ * a CSS underlay (see template) always shows. We keep `video` at opacity:0 until seek completes.
+ * Muted `play()` → `pause()` → `seek` is the usual nudge to start decoding before any user touch.
  */
 function primeFeedThumbnails() {
   const vids = document.querySelectorAll("#feedGrid .feed-tile-video");
@@ -152,36 +162,66 @@ function primeFeedThumbnails() {
       v.dataset.thumbReady = "1";
     });
 
-    const runStill = () => {
-      if (v.dataset.stillArmed === "1" || v.dataset.thumbReady === "1") return;
-      v.dataset.stillArmed = "1";
-      v.addEventListener(
-        "seeked",
-        () => {
-          try {
-            v.pause();
-          } catch (_a) {}
-          v.dataset.thumbReady = "1";
-          try {
-            v.removeAttribute("poster");
-          } catch (_b) {}
-        },
-        { once: true }
-      );
-      try {
-        v.currentTime = THUMB_SEEK_S;
-      } catch (_c) {
-        v.dataset.thumbReady = "1";
-        v.removeAttribute("poster");
-      }
-    };
-
-    v.addEventListener("loadeddata", runStill, { once: true });
-    v.addEventListener("canplay", runStill, { once: true });
+    const kick = () => nudgeVideoToStillFrame(v);
+    v.addEventListener("loadeddata", kick, { once: true });
+    v.addEventListener("canplay", kick, { once: true });
     if (v.readyState >= 2) {
-      requestAnimationFrame(() => runStill());
+      requestAnimationFrame(kick);
     }
   });
+}
+
+function nudgeVideoToStillFrame(v) {
+  if (v.dataset.stillKicked === "1" || v.dataset.thumbReady === "1") return;
+  /* HAVE_CURRENT_DATA: enough to decode; iOS can fire this late without a user gesture. */
+  if (v.readyState < 2) return;
+  const media = v.closest(".feed-tile-media");
+  if (!media) return;
+  v.dataset.stillKicked = "1";
+
+  const markReady = () => {
+    v.dataset.thumbReady = "1";
+    media.classList.add("feed-tile-media--frame-ready");
+    try {
+      v.removeAttribute("poster");
+    } catch (_a) {}
+  };
+
+  v.addEventListener(
+    "seeked",
+    () => {
+      try {
+        v.pause();
+      } catch (_b) {}
+      markReady();
+    },
+    { once: true }
+  );
+
+  v.muted = true;
+  const p = v.play();
+  const seekAfterDecode = () => {
+    try {
+      v.pause();
+    } catch (_c) {}
+    try {
+      v.currentTime = THUMB_SEEK_S;
+    } catch (_d) {
+      markReady();
+    }
+  };
+
+  if (p != null && typeof p.then === "function") {
+    p.then(seekAfterDecode).catch(() => {
+      try {
+        v.currentTime = THUMB_SEEK_S;
+      } catch (_e) {
+        v.dataset.stillKicked = "";
+      }
+    });
+  } else {
+    seekAfterDecode();
+  }
 }
 
 if (!window.CRAVE_DEFER_FEED) {

@@ -1068,9 +1068,24 @@ body.feed-page {
   overflow: hidden;
   /* Avoid passive scroll quirks; child <a> still receives navigations. */
   touch-action: manipulation;
+  isolation: isolate;
+}
+
+/* iOS: <video> often paints a black layer over the poster until a frame decodes. Underlay is always visible. */
+.feed-tile-underlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #1a1410;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
 }
 
 .feed-tile-video {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1081,17 +1096,26 @@ body.feed-page {
   backface-visibility: hidden;
   transform: translateZ(0);
   transition: opacity 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.feed-tile-media--frame-ready .feed-tile-video {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .feed-tile-shade {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
   pointer-events: none;
 }
 
 .feed-tile-play {
   position: absolute;
+  z-index: 2;
   bottom: 0.35rem;
   right: 0.35rem;
   width: 28px;
