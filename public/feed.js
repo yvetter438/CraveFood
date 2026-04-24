@@ -12,6 +12,9 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+/** Seek past black first frame on many mobile decoders. */
+const THUMB_SEEK_S = 0.12;
+
 function getPostsForFeed() {
   if (typeof window.CRAVE_FEED_CREATOR_ID === "string" && window.CRAVE_FEED_CREATOR_ID) {
     return POSTS.filter((p) => p.creatorId === window.CRAVE_FEED_CREATOR_ID);
@@ -66,8 +69,9 @@ function renderFeed() {
     `;
     grid.appendChild(li);
 
-    const video = li.querySelector(".feed-tile-video");
     const tile = li.querySelector(".feed-tile");
+    const video = li.querySelector(".feed-tile-video");
+    const media = li.querySelector(".feed-tile-media");
 
     tile.addEventListener("click", () => {
       if (window.posthog) {
@@ -79,20 +83,100 @@ function renderFeed() {
       }
     });
 
-    tile.addEventListener("mouseenter", () => {
-      if (video && window.matchMedia("(hover: hover)").matches) {
+    if (media && video) {
+      let pressPointerId = null;
+      const startPress = (e) => {
+        if (e.button > 0) return;
+        pressPointerId = e.pointerId;
+        if (media.setPointerCapture) {
+          try {
+            media.setPointerCapture(e.pointerId);
+          } catch (_err) {}
+        }
+        video.muted = true;
+        video.setAttribute("playsinline", "");
+        video.setAttribute("webkit-playsinline", "");
         video.play().catch(() => {});
-      }
-    });
-    tile.addEventListener("mouseleave", () => {
-      if (video) {
+      };
+      const endPress = (e) => {
+        if (e.pointerId !== pressPointerId) return;
+        pressPointerId = null;
+        if (media.releasePointerCapture) {
+          try {
+            media.releasePointerCapture(e.pointerId);
+          } catch (_err) {}
+        }
         video.pause();
         try {
-          video.currentTime = 0;
-        } catch (_) {}
-      }
-    });
+          video.currentTime = THUMB_SEEK_S;
+        } catch (_e) {}
+      };
+      media.addEventListener("pointerdown", startPress);
+      media.addEventListener("pointerup", endPress);
+      media.addEventListener("pointercancel", endPress);
+    }
   });
+
+  /* Still thumbnail in view, no autoplay. Press and hold to preview. */
+  initFeedThumbnails();
+}
+
+function showStillThumbnailFrame(video) {
+  if (video.dataset.thumbFrame === "1" || !video) return;
+  const finish = () => {
+    try {
+      video.pause();
+    } catch (_a) {}
+    video.dataset.thumbFrame = "1";
+  };
+  const seek = () => {
+    video.addEventListener(
+      "seeked",
+      () => {
+        finish();
+      },
+      { once: true }
+    );
+    try {
+      video.currentTime = THUMB_SEEK_S;
+    } catch (_b) {
+      finish();
+    }
+  };
+  if (video.readyState >= 2) {
+    seek();
+  } else {
+    video.addEventListener("loadeddata", () => seek(), { once: true });
+  }
+}
+
+function initFeedThumbnails() {
+  const vids = document.querySelectorAll("#feedGrid .feed-tile-video");
+  if (vids.length === 0) return;
+
+  vids.forEach((v) => {
+    v.muted = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    vids.forEach((v) => showStillThumbnailFrame(v));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const v = entry.target;
+        showStillThumbnailFrame(v);
+        io.unobserve(v);
+      });
+    },
+    { root: null, rootMargin: "80px 0px", threshold: 0.01 }
+  );
+  vids.forEach((v) => io.observe(v));
 }
 
 if (!window.CRAVE_DEFER_FEED) {

@@ -1066,14 +1066,20 @@ body.feed-page {
   aspect-ratio: 9 / 16;
   background: #1a1410;
   overflow: hidden;
+  /* Avoid passive scroll quirks; child <a> still receives navigations. */
+  touch-action: manipulation;
 }
 
 .feed-tile-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
-  vertical-align: middle;
+  /* Helps some mobile browsers actually paint the first decoded frame. */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .feed-tile-shade {
@@ -1298,6 +1304,58 @@ body.marketing-page .site-header .logo {
   .btn-waitlist-sm.btn-marketing {
     padding: 0.35rem 0.55rem;
     font-size: 0.6875rem;
+  }
+}
+
+/* Waitlist CTA: full phrase + shorter label (word is in .waitlist-cta__* per page) */
+.waitlist-cta__short {
+  display: none;
+}
+@media (max-width: 480px) {
+  body:not(.page-post) .waitlist-cta__long {
+    display: none;
+  }
+  body:not(.page-post) .waitlist-cta__short {
+    display: inline;
+  }
+}
+/* Recipe post: more chrome in the bar — use short link text on tablet & phone */
+@media (max-width: 768px) {
+  body.page-post .waitlist-cta__long {
+    display: none;
+  }
+  body.page-post .waitlist-cta__short {
+    display: inline;
+  }
+}
+
+/* Recipe post: keep logo and actions from colliding (waitlist + saved) */
+@media (max-width: 520px) {
+  body.page-post .top-bar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.25rem 0.3rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  body.page-post .back-feed-link--icon {
+    margin-left: -0.2rem;
+    padding: 0.35rem;
+  }
+  body.page-post .top-bar-logo {
+    min-width: 0;
+  }
+  body.page-post a.top-bar-logo.logo {
+    font-size: 0.95rem;
+  }
+  body.page-post .top-bar-actions {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  body.page-post .cart-label {
+    display: none;
+  }
+  body.page-post .cart-trigger {
+    padding: 0.4rem 0.55rem;
   }
 }
 

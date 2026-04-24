@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body>
+  <body class="page-post">
     <div class="app" id="app">
       <header class="top-bar">
         <a href="../feed.html" class="back-feed-link back-feed-link--icon" aria-label="Back to feed">
@@ -28,7 +28,9 @@
             href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
             target="_blank"
             rel="noopener noreferrer"
-            >Join the waitlist</a
+            aria-label="Join the waitlist"
+            ><span class="waitlist-cta__long">Join the waitlist</span
+            ><span class="waitlist-cta__short" aria-hidden="true">List</span></a
           >
           <button type="button" class="cart-trigger" id="cartTrigger" aria-expanded="false" aria-controls="cartDrawer" aria-label="Saved items">
             <span class="cart-icon" aria-hidden="true">
