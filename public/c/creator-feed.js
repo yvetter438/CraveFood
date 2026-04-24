@@ -1,5 +1,5 @@
 /**
- * Public creator demo: c/?slug=jalalsamfit
+ * Public creator demo: c/?slug=… e.g. jalalsamfit, kennybfischer (see creators-config.js)
  * Sets feed filters + profile copy, then renders the shared grid from feed.js.
  */
 (function initCreatorPage() {

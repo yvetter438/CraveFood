@@ -7,7 +7,7 @@
  * Demo: `public/affiliate-placeholder.html` is the in-repo stand-in; replace with real partner URLs for production.
  * Timed cues: [start, end) in seconds; app normalizes to video duration on load.
  *
- * Demo mode: generic placeholder items (numbered icons, no photos); beef tacos uses 4 rows, others use 5.
+ * Demo mode: generic placeholder items (numbered icons, no photos); five rows per post unless you override `products`.
  * `detail` is the subline under each product name — indicates that Save / Shop opens a per-item affiliate link (MVP copy).
  *
  * Videos: drop files under media/<creatorSlug>/01.mp4 … 09.mp4 (or any names), then set
@@ -72,12 +72,27 @@ function cloneDemoProducts() {
   return DEMO_PRODUCTS.map((p) => ({ ...p }));
 }
 
-/** Same demo rows as `cloneDemoProducts`, but only the first `n` (for timed-cue count). */
-function cloneDemoProductsCount(n) {
-  return DEMO_PRODUCTS.slice(0, n).map((p) => ({ ...p }));
+/**
+ * Three numbered videos per creator. Filenames: creatordemos/{filePrefix}_1..3.mp4
+ * (filePrefix may include a leading underscore, e.g. _aussiefitness.)
+ * idPrefix is the stable id segment for getPostById and affiliate links (e.g. aussiefitness, rahul_kamat).
+ */
+function threeNumberedCreatorPosts(creator) {
+  const { creatorId, filePrefix, idPrefix, author } = creator;
+  return [1, 2, 3].map((n) => ({
+    id: `${idPrefix}_${n}`,
+    creatorId,
+    videoFile: `creatordemos/${filePrefix}_${n}.mp4`,
+    title: `Recipe ${n}`,
+    author,
+    blurb: "Recipe demo with timed ingredients — save items and open affiliate links.",
+    macros: "—",
+    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=${idPrefix}_${n}`,
+    products: cloneDemoProducts(),
+  }));
 }
 
-/** Demo videos in /public/creatordemos/ — keep `videoFile` as path from site root. */
+/** Demo videos in /public/creatordemos/ — `videoFile` is path from site root. */
 const POSTS = [
   {
     id: "honey_chili_crisp",
@@ -113,18 +128,54 @@ const POSTS = [
     shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=cheesy_bbq_potatoes`,
     products: cloneDemoProducts(),
   },
-  {
-    id: "crispy_cheesy_beef_tacos",
-    creatorId: "jalalsamfit",
-    videoFile: "creatordemos/jalalsamfit_crispy_cheesy_beef_tacos.mp4",
-    title: "Crispy cheesy beef tacos",
-    author: "@jalalsamfit",
-    blurb: "Crispy shells, seasoned beef, and plenty of melt — weeknight taco night.",
-    macros: "580 cal · 28g protein · 38g carbs · 34g fat · Serves 4",
-    shopUrl: `${AFFILIATE_PLACEHOLDER}?scope=recipe&post=crispy_cheesy_beef_tacos`,
-    // Four timed on-screen ingredient highlights (matches 4 demo slots for this video).
-    products: cloneDemoProductsCount(4),
-  },
+  ...threeNumberedCreatorPosts({
+    creatorId: "aussiefitness",
+    filePrefix: "_aussiefitness",
+    idPrefix: "aussiefitness",
+    author: "@aussiefitness",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "eitan",
+    filePrefix: "eitan",
+    idPrefix: "eitan",
+    author: "@eitan",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "exercise4cheatmeals",
+    filePrefix: "exercise4cheatmeals",
+    idPrefix: "exercise4cheatmeals",
+    author: "@exercise4cheatmeals",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "kennybfischer",
+    filePrefix: "kennybfischer",
+    idPrefix: "kennybfischer",
+    author: "@kennybfischer",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "rahul_kamat",
+    filePrefix: "rahul__kamat",
+    idPrefix: "rahul_kamat",
+    author: "@rahul_kamat",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "shredhappens",
+    filePrefix: "shredhappens",
+    idPrefix: "shredhappens",
+    author: "@shredhappens",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "stealth_health_life",
+    filePrefix: "stealth_health_life",
+    idPrefix: "stealth_health_life",
+    author: "@stealth_health_life",
+  }),
+  ...threeNumberedCreatorPosts({
+    creatorId: "theflexibledietinglifestyle",
+    filePrefix: "theflexibledietinglifestyle",
+    idPrefix: "theflexibledietinglifestyle",
+    author: "@theflexibledietinglifestyle",
+  }),
 ];
 
 function buildTimedCuesSec(productIds) {
