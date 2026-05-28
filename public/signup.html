@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="Sign up for Crave — create your shoppable recipe page. Template form for future integration."
+    />
+    <title>Sign up · Crave</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="marketing-page">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html" class="logo logo-link">Crave</a>
+      </div>
+    </header>
+
+    <main class="marketing-main marketing-main--narrow">
+      <span class="template-badge">Signup template</span>
+      <h1 class="page-title">Create your Crave page</h1>
+      <p class="page-lede">
+        This is a placeholder signup form. Wire it to your auth provider or backend when you're ready to accept
+        registrations.
+      </p>
+
+      <div class="signup-card">
+        <form class="signup-form" action="#" method="post" novalidate>
+          <div class="form-field">
+            <label class="form-label" for="full-name">Full name</label>
+            <input
+              class="form-input"
+              type="text"
+              id="full-name"
+              name="full_name"
+              autocomplete="name"
+              placeholder="Alex Rivera"
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="email">Email</label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="handle">Creator handle</label>
+            <input
+              class="form-input"
+              type="text"
+              id="handle"
+              name="handle"
+              autocomplete="username"
+              placeholder="@yourhandle"
+              required
+            />
+            <p class="form-hint">This will be your public Crave URL slug.</p>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="platform">Primary platform</label>
+            <select class="form-select" id="platform" name="platform" required>
+              <option value="" disabled selected>Select a platform</option>
+              <option value="tiktok">TikTok</option>
+              <option value="instagram">Instagram</option>
+              <option value="youtube">YouTube</option>
+              <option value="facebook">Facebook</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="password">Password</label>
+            <input
+              class="form-input"
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              placeholder="Create a password"
+              minlength="8"
+              required
+            />
+            <p class="form-hint">At least 8 characters.</p>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="bio">Short bio <span class="form-hint">(optional)</span></label>
+            <textarea
+              class="form-textarea"
+              id="bio"
+              name="bio"
+              placeholder="Tell followers what you cook and where to find you."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-marketing btn-marketing--primary btn-marketing--block btn-marketing--large">
+            Create account
+          </button>
+
+          <p class="form-note">
+            By signing up, you agree to our terms and privacy policy. Replace this copy with your legal text.
+          </p>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="footer-brand">
+          <span class="logo">Crave</span>
+          <p class="footer-tagline">Shoppable recipe pages for creators</p>
+        </div>
+        <p class="footer-legal">© 2026 Crave · Early access</p>
+      </div>
+    </footer>
+    <script src="analytics-config.js"></script>
+    <script src="analytics.js"></script>
+    <script>
+      document.querySelector(".signup-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        alert("Signup template — connect this form to your backend or auth provider.");
+      });
+    </script>
+  </body>
+</html>
