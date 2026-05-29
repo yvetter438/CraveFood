@@ -58,14 +58,18 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
   return (
     <article className="p1-shorts-slide" data-post-id={post.id} aria-label={post.title}>
       <main className="main p1-shorts-slide-main">
-        <section className="stage" aria-label="Recipe video">
-          <div className="video-shell p1-video-shell p1-video-shell--short">
-            <div className="p1-yt-cover" aria-hidden="true">
+        <div className="p1-media-row">
+          <section className="stage p1-stage" aria-label="Recipe video">
+            <div className="video-shell p1-video-shell p1-video-shell--short">
+            <div className="p1-yt-cover">
               <YoutubePlayer
                 youtubeUrl={post.youtubeUrl}
                 variant="short"
                 playing={isActive}
                 muted={muted}
+                onShieldTap={() => {
+                  if (muted) onToast?.("Tap Unmute in the header for sound");
+                }}
                 onProgress={(t) => {
                   if (isActive) setCurrentTime(t);
                 }}
@@ -94,20 +98,21 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
                 View ingredients
               </button>
             </div>
-          </div>
-        </section>
+            </div>
+          </section>
 
-        <ProductRail
-          ref={railRef}
-          post={post}
-          isOpen={shopOpen}
-          activeProductId={isActive ? activeProductId : null}
-          pulseProductId={pulseProductId}
-          onAdd={handleAdd}
-          onOpenLink={openProductShopUrl}
-          onCardTap={pulseProduct}
-          railId={`shopRail-${post.id}`}
-        />
+          <ProductRail
+            ref={railRef}
+            post={post}
+            isOpen={shopOpen}
+            activeProductId={isActive ? activeProductId : null}
+            pulseProductId={pulseProductId}
+            onAdd={handleAdd}
+            onOpenLink={openProductShopUrl}
+            onCardTap={pulseProduct}
+            railId={`shopRail-${post.id}`}
+          />
+        </div>
       </main>
     </article>
   );

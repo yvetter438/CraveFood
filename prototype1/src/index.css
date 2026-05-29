@@ -59,13 +59,14 @@ body {
   height: 100% !important;
 }
 
-/* 9:16 Shorts frame — same aspect as YouTube Shorts, fills stage without letterboxing */
+/* 9:16 Shorts frame — matches YouTube Shorts aspect ratio */
 .p1-video-shell--short {
+  --p1-short-max-h: min(72dvh, 780px);
   aspect-ratio: 9 / 16;
-  width: auto;
-  height: 100%;
+  width: min(100%, 420px, calc(var(--p1-short-max-h) * 9 / 16));
+  height: auto;
+  max-height: var(--p1-short-max-h);
   max-width: 100%;
-  max-height: 100%;
   margin-inline: auto;
   background: #000;
   box-shadow: var(--shadow), var(--shadow-warm), 0 0 0 1px rgba(180, 100, 60, 0.12);
@@ -78,6 +79,23 @@ body {
   background: #000;
 }
 
+/* Block direct taps on the iframe so YouTube doesn’t show pause + giant title overlay */
+.p1-youtube-player--shielded iframe {
+  pointer-events: none !important;
+}
+
+.p1-yt-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* react-player defaults to 16:9 padding; Shorts need a vertical fill */
 .p1-video-shell--short .p1-youtube-player,
 .p1-video-shell--short .p1-youtube-player > div {
@@ -87,17 +105,18 @@ body {
 }
 
 /*
- * YouTube’s iframe is 16:9; Shorts video is 9:16 centered with side bars.
- * Scale width so the vertical video covers the 9:16 shell (object-fit: cover).
+ * YouTube iframe is 16:9; Shorts video is 9:16 inside it (side pillarbox).
+ * Fill shell height, let width overflow — clip sides, keep top/bottom (title UI not cropped).
  */
 .p1-video-shell--short .p1-youtube-player iframe {
   position: absolute !important;
-  top: 50% !important;
+  top: 0 !important;
   left: 50% !important;
-  width: 315% !important;
   height: 100% !important;
+  width: auto !important;
+  aspect-ratio: 16 / 9;
   max-width: none !important;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   border: 0;
 }
 
@@ -255,31 +274,49 @@ body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
 
 body.p1-shorts-mode .p1-shorts-slide-main {
   flex-direction: column;
+  padding-left: 0.65rem;
+  padding-right: 0.65rem;
 }
 
-body.p1-shorts-mode .p1-shorts-slide .stage {
+body.p1-shorts-mode .p1-media-row {
+  display: flex;
   flex: 1;
   min-height: 0;
   min-width: 0;
-  display: flex;
-  align-items: stretch;
+  width: 100%;
+  gap: 0.75rem;
+  align-items: flex-start;
   justify-content: center;
-  padding: 0 0.15rem;
+}
+
+body.p1-shorts-mode .p1-stage.stage {
+  flex: 0 1 auto;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+body.p1-shorts-mode .p1-shop-rail.shop-rail {
+  align-self: flex-start;
 }
 
 body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
-  flex: 0 1 auto;
-  align-self: center;
-  height: 100%;
-  max-height: 100%;
-  width: auto;
-  max-width: min(100%, 420px);
+  flex: none;
+  align-self: flex-start;
+  height: auto;
+  width: min(100%, 420px, calc(min(52dvh, 520px) * 9 / 16));
+  max-height: min(52dvh, 520px);
 }
 
 body.p1-shorts-mode .p1-shop-rail {
-  flex-shrink: 0;
+  flex: 0 1 auto;
+  align-self: flex-start;
+  width: 100%;
   max-height: min(34dvh, 300px);
-  margin-top: 0.5rem;
+  margin-top: 0;
 }
 
 body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
@@ -413,25 +450,31 @@ body.p1-shorts-mode .p1-video-shell--short .action-pill {
 }
 
 @media (min-width: 769px) {
-  body.p1-shorts-mode .p1-shorts-slide-main {
+  body.p1-shorts-mode .p1-media-row {
     flex-direction: row;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  body.p1-shorts-mode .p1-shorts-slide .stage {
-    flex: 1;
+    align-items: flex-start;
+    justify-content: center;
   }
 
   body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
-    height: 100%;
+    width: min(420px, calc(min(72dvh, 780px) * 9 / 16));
     max-height: min(72dvh, 780px);
-    max-width: min(100%, 420px);
   }
 
   body.p1-shorts-mode .p1-shop-rail {
-    max-height: min(70dvh, 720px);
-    margin-top: 0;
     width: var(--rail-width);
+    max-height: min(72dvh, 780px);
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body.p1-shorts-mode .p1-media-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
+    margin-top: 0.5rem;
   }
 }
