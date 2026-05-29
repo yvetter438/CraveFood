@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+prototype1/node_modules
 
 # misc
 .DS_Store

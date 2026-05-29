@@ -6,6 +6,10 @@
   "installCommand": "npm install",
   "rewrites": [
     { "source": "/c/:slug", "destination": "/c/index.html?slug=:slug" },
-    { "source": "/p/:id", "destination": "/p/index.html?id=:id" }
+    { "source": "/p/:id", "destination": "/p/index.html?id=:id" },
+    {
+      "source": "/prototype1/:path((?!assets/).*)",
+      "destination": "/prototype1/index.html"
+    }
   ]
 }

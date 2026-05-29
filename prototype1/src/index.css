@@ -1,0 +1,201 @@
+/* Prototype 1 overrides — main UI uses /styles.css from the site root. */
+
+body {
+  margin: 0;
+}
+
+.feed-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.p1-prototype-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.18rem 0.42rem;
+  border-radius: 6px;
+  background: rgba(255, 122, 92, 0.15);
+  color: #c44a32;
+  border: 1px solid rgba(255, 122, 92, 0.35);
+}
+
+.p1-youtube-link {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+}
+
+.p1-youtube-link a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.p1-youtube-link a:hover {
+  text-decoration: underline;
+}
+
+/* YouTube player fills the same shell as <video class="video"> */
+.p1-video-shell {
+  position: relative;
+}
+
+.p1-video-shell .p1-youtube-player {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto;
+}
+
+.p1-video-shell .p1-youtube-player > div,
+.p1-video-shell .p1-youtube-player iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.top-bar-actions .p1-prototype-badge {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .top-bar-actions .p1-prototype-badge {
+    display: inline;
+  }
+}
+
+.p1-mute-toggle {
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.p1-mute-toggle:hover {
+  border-color: var(--border-strong);
+}
+
+@media (max-width: 768px) {
+  body.page-post:not(.p1-shorts-mode) .p1-mute-toggle {
+    display: none;
+  }
+}
+
+/* ——— YouTube Shorts–style vertical feed between recipes ——— */
+
+body.p1-shorts-mode {
+  overflow: hidden;
+}
+
+.p1-shorts-app {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.p1-shorts-top {
+  flex-shrink: 0;
+  z-index: 40;
+  background: rgba(255, 251, 247, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.p1-shorts-hint {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 1rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+
+.p1-shorts-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.p1-shorts-slide-wrap {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100%;
+  min-height: 100%;
+}
+
+.p1-shorts-slide {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.p1-shorts-slide-main {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+body.p1-shorts-mode .p1-shorts-slide-main {
+  flex-direction: column;
+}
+
+body.p1-shorts-mode .p1-shorts-slide .stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.p1-shorts-mode .p1-shorts-slide .video-shell {
+  max-height: min(52dvh, 520px);
+  width: 100%;
+}
+
+body.p1-shorts-mode .p1-shorts-slide .shop-rail {
+  flex-shrink: 0;
+  max-height: min(34dvh, 300px);
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 769px) {
+  body.p1-shorts-mode .p1-shorts-slide-main {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  body.p1-shorts-mode .p1-shorts-slide .stage {
+    flex: 1;
+  }
+
+  body.p1-shorts-mode .p1-shorts-slide .video-shell {
+    max-height: min(70dvh, 720px);
+  }
+
+  body.p1-shorts-mode .p1-shorts-slide .shop-rail {
+    max-height: min(70dvh, 720px);
+    margin-top: 0;
+    width: var(--rail-width);
+  }
+}
