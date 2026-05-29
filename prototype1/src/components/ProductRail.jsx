@@ -1,18 +1,30 @@
 import ThumbnailImage from "./ThumbnailImage.jsx";
 import { formatMoney } from "../lib/format.js";
 
-export default function ProductRail({
-  post,
-  activeProductId,
-  pulseProductId,
-  onAdd,
-  onOpenLink,
-  onCardTap,
-  listRef,
-  railId = "shopRail",
-}) {
+import { forwardRef } from "react";
+
+const ProductRail = forwardRef(function ProductRail(
+  {
+    post,
+    isOpen = true,
+    activeProductId,
+    pulseProductId,
+    onAdd,
+    onOpenLink,
+    onCardTap,
+    listRef,
+    railId = "shopRail",
+  },
+  ref
+) {
   return (
-    <aside className="shop-rail" id={railId} aria-label="Shoppable ingredients">
+    <aside
+      ref={ref}
+      className={`shop-rail p1-shop-rail${isOpen ? " p1-shop-rail--open" : ""}`}
+      id={railId}
+      aria-label="Shoppable ingredients"
+      hidden={!isOpen}
+    >
       <div className="shop-rail-header">
         <h2>In this recipe</h2>
         <p className="shop-rail-hint">Ingredients appear on the video while it plays — save items or open affiliate links.</p>
@@ -68,4 +80,6 @@ export default function ProductRail({
       </ul>
     </aside>
   );
-}
+});
+
+export default ProductRail;

@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import CartDrawer from "../components/CartDrawer.jsx";
-import PrototypeBadge from "../components/PrototypeBadge.jsx";
 import RecipeShortSlide from "../components/RecipeShortSlide.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { CREATOR, getDefaultPost, getPostById, getPostsForCreator, POSTS } from "../data/posts.js";
 import { useToast } from "../hooks/useToast.js";
-
-const WAITLIST_URL = "https://forms.gle/Ut8bRDfcMP9fZYTN6";
+import { hasPostText } from "../lib/postMeta.js";
 
 export default function PostPage() {
   const { id: paramId } = useParams();
@@ -114,34 +112,21 @@ export default function PostPage() {
   return (
     <div className="app p1-shorts-app" id="app">
       <header className="top-bar p1-shorts-top">
-        <Link to={backHref} className="back-feed-link back-feed-link--icon" aria-label="Back to feed">
+        <Link to={backHref} className="back-feed-link back-feed-link--icon p1-shorts-back" aria-label="Back to feed">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </Link>
-        <Link to="/" className="logo logo-link top-bar-logo">
-          Crave
-        </Link>
-        <div className="top-bar-actions">
-          <PrototypeBadge />
-          <a
-            className="btn-marketing btn-marketing--primary btn-waitlist-sm"
-            href={WAITLIST_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Join the waitlist"
-          >
-            <span className="waitlist-cta__long">Join the waitlist</span>
-            <span className="waitlist-cta__short" aria-hidden="true">
-              List
-            </span>
-          </a>
+        <h1 className="p1-shorts-top-title" title={activePost?.title}>
+          {hasPostText(activePost?.title) ? activePost.title : "Recipe"}
+        </h1>
+        <div className="p1-shorts-top-actions">
           <button
             type="button"
             className="cart-trigger"
             aria-expanded={cartOpen}
             aria-controls="cartDrawer"
-            aria-label="Saved items"
+            aria-label="Saved for later"
             onClick={() => setCartOpen((o) => !o)}
           >
             <span className="cart-icon" aria-hidden="true">

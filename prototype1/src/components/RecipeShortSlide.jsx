@@ -1,15 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import IngredientPopup from "./IngredientPopup.jsx";
 import ProductRail from "./ProductRail.jsx";
-import VideoMeta from "./VideoMeta.jsx";
 import YoutubePlayer from "./YoutubePlayer.jsx";
 import { useCart } from "../context/CartContext.jsx";
+import { getProductShopUrl, openShopUrl } from "../lib/shopLinks.js";
 import { useTimedIngredients } from "../hooks/useTimedIngredients.js";
 
 export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
   const { addToCart } = useCart();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [shopOpen, setShopOpen] = useState(false);
+  const railRef = useRef(null);
 
   const { activeProductId, popupProduct, popupVisible, popupExiting, pulseProductId, pulseProduct } = useTimedIngredients(
     post,
@@ -17,16 +19,27 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     isActive ? duration : 0
   );
 
+  useEffect(() => {
+    if (!isActive) setShopOpen(false);
+  }, [isActive]);
+
+  const openShopRail = useCallback(() => {
+    setShopOpen(true);
+    requestAnimationFrame(() => {
+      railRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }, []);
+
   const openProductShopUrl = useCallback(
     (productId) => {
       const p = post.products.find((x) => x.id === productId);
       if (!p) return;
-      const url = p.affiliateUrl || post.shopUrl;
+      const url = getProductShopUrl(post, p);
       if (!url) {
-        onToast?.("No link for this product yet — add it in posts config");
+        onToast?.("No link for this product yet");
         return;
       }
-      window.open(url, "_blank", "noopener,noreferrer");
+      openShopUrl(url);
     },
     [post, onToast]
   );
@@ -42,17 +55,6 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     [addToCart, post.id, onToast, pulseProduct]
   );
 
-  const handleShopAll = useCallback(() => {
-    if (post.shopUrl) {
-      window.open(post.shopUrl, "_blank", "noopener,noreferrer");
-      onToast?.("Opening…");
-      return;
-    }
-    document.getElementById(`shopRail-${post.id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    const first = post.products[0];
-    if (first) pulseProduct(first.id);
-  }, [post, onToast, pulseProduct]);
-
   return (
     <article className="p1-shorts-slide" data-post-id={post.id} aria-label={post.title}>
       <main className="main p1-shorts-slide-main">
@@ -64,12 +66,12 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
                 variant="short"
                 playing={isActive}
                 muted={muted}
-              onProgress={(t) => {
-                if (isActive) setCurrentTime(t);
-              }}
-              onDuration={(d) => {
-                if (isActive) setDuration(d);
-              }}
+                onProgress={(t) => {
+                  if (isActive) setCurrentTime(t);
+                }}
+                onDuration={(d) => {
+                  if (isActive) setDuration(d);
+                }}
               />
             </div>
             <div className="video-gradient" aria-hidden="true" />
@@ -87,18 +89,18 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
               />
             </div>
 
-            <VideoMeta post={post} />
-
             <div className="video-actions">
-              <button type="button" className="action-pill" onClick={handleShopAll}>
-                {post.shopUrl ? "Shop Now" : "Shop ingredients"}
+              <button type="button" className="action-pill" onClick={openShopRail} aria-expanded={shopOpen}>
+                View ingredients
               </button>
             </div>
           </div>
         </section>
 
         <ProductRail
+          ref={railRef}
           post={post}
+          isOpen={shopOpen}
           activeProductId={isActive ? activeProductId : null}
           pulseProductId={pulseProductId}
           onAdd={handleAdd}

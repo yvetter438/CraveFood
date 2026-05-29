@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { getPostById } from "../data/posts.js";
 import { formatMoney } from "../lib/format.js";
-
-const SAVED_STORAGE_KEY = "craveSavedItemsPrototype1";
+import { getProductShopUrl } from "../lib/shopLinks.js";
+import { readSavedCartObject, writeSavedCartObject } from "../lib/savedStorage.js";
 
 const CartContext = createContext(null);
 
@@ -27,22 +27,16 @@ function resolveCartLine(key, getPost = getPostById) {
 }
 
 function loadCartFromStorage() {
-  try {
-    const raw = localStorage.getItem(SAVED_STORAGE_KEY);
-    if (!raw) return new Map();
-    const data = JSON.parse(raw);
-    if (typeof data !== "object" || data === null) return new Map();
-    const cart = new Map();
-    Object.entries(data).forEach(([k, v]) => {
-      const qty = Number(v);
-      if (!Number.isFinite(qty) || qty <= 0) return;
-      if (!resolveCartLine(k)) return;
-      cart.set(k, Math.floor(qty));
-    });
-    return cart;
-  } catch {
-    return new Map();
-  }
+  const data = readSavedCartObject();
+  if (!data) return new Map();
+  const cart = new Map();
+  Object.entries(data).forEach(([k, v]) => {
+    const qty = Number(v);
+    if (!Number.isFinite(qty) || qty <= 0) return;
+    if (!resolveCartLine(k)) return;
+    cart.set(k, Math.floor(qty));
+  });
+  return cart;
 }
 
 export function CartProvider({ children }) {
@@ -53,11 +47,7 @@ export function CartProvider({ children }) {
     next.forEach((qty, key) => {
       if (qty > 0) obj[key] = qty;
     });
-    try {
-      localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(obj));
-    } catch {
-      /* ignore */
-    }
+    writeSavedCartObject(obj);
   }, []);
 
   const updateCart = useCallback(
@@ -126,6 +116,15 @@ export function CartProvider({ children }) {
     return t;
   }, [cart]);
 
+  const openLineShopUrl = useCallback((lineKey) => {
+    const resolved = resolveCartLine(lineKey);
+    if (!resolved) return false;
+    const url = getProductShopUrl(resolved.post, resolved.product);
+    if (!url) return false;
+    window.open(url, "_blank", "noopener,noreferrer");
+    return true;
+  }, []);
+
   const openSavedAffiliateLinks = useCallback(() => {
     const seen = new Set();
     const urls = [];
@@ -155,8 +154,9 @@ export function CartProvider({ children }) {
       cartSubtotal: formatMoney(cartSubtotal),
       cartSubtotalRaw: cartSubtotal,
       openSavedAffiliateLinks,
+      openLineShopUrl,
     }),
-    [cart, addToCart, decrementLine, incrementLine, cartItemCount, cartSubtotal, openSavedAffiliateLinks]
+    [cart, addToCart, decrementLine, incrementLine, cartItemCount, cartSubtotal, openSavedAffiliateLinks, openLineShopUrl]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

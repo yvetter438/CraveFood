@@ -153,6 +153,62 @@ body.p1-shorts-mode {
   z-index: 40;
   background: rgba(255, 251, 247, 0.92);
   backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.p1-shorts-top.top-bar {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.p1-shorts-back {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.p1-shorts-top-title {
+  grid-column: 2;
+  margin: 0;
+  min-width: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+
+.p1-shorts-top-actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+body.p1-shorts-mode .p1-shorts-top .cart-label {
+  display: none;
+}
+
+body.p1-shorts-mode .p1-shorts-top .cart-trigger {
+  padding: 0.4rem 0.55rem;
+}
+
+body.page-post.p1-shorts-mode .p1-shorts-top.top-bar {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-logo,
+body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
+  display: none;
 }
 
 .p1-shorts-hint {
@@ -220,10 +276,81 @@ body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
   max-width: min(100%, 420px);
 }
 
-body.p1-shorts-mode .p1-shorts-slide .shop-rail {
+body.p1-shorts-mode .p1-shop-rail {
   flex-shrink: 0;
   max-height: min(34dvh, 300px);
   margin-top: 0.5rem;
+}
+
+body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
+  animation: p1-rail-in 0.28s ease;
+}
+
+@keyframes p1-rail-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Timed ingredient card — bottom of video, not top (avoids header clip) */
+body.p1-shorts-mode .p1-video-shell--short .ingredient-popup {
+  top: auto;
+  bottom: 3.75rem;
+  right: 0.7rem;
+  left: 0.7rem;
+  max-width: none;
+  transform-origin: bottom center;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .ingredient-popup.is-enter {
+  animation-name: p1-popup-in-bottom;
+}
+
+@keyframes p1-popup-in-bottom {
+  from {
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.p1-cart-persist-hint {
+  margin: 0;
+  padding: 0 1rem 0.65rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.cart-line--clickable {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 44px 1fr auto auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  color: inherit;
+}
+
+.cart-line--clickable:hover:not(:disabled) {
+  background: rgba(255, 180, 140, 0.12);
+}
+
+.cart-line--clickable:disabled {
+  cursor: default;
+  opacity: 0.85;
 }
 
 /* Override global mobile contain/cap rules for Shorts embed */
@@ -302,7 +429,7 @@ body.p1-shorts-mode .p1-video-shell--short .action-pill {
     max-width: min(100%, 420px);
   }
 
-  body.p1-shorts-mode .p1-shorts-slide .shop-rail {
+  body.p1-shorts-mode .p1-shop-rail {
     max-height: min(70dvh, 720px);
     margin-top: 0;
     width: var(--rail-width);

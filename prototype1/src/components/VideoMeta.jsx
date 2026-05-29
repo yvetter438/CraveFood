@@ -1,7 +1,7 @@
 import { hasPostText } from "../lib/postMeta.js";
 
-export default function VideoMeta({ post }) {
-  const showTitle = hasPostText(post.title);
+export default function VideoMeta({ post, hideTitle = false }) {
+  const showTitle = !hideTitle && hasPostText(post.title);
   const showAuthor = hasPostText(post.author);
   const showBlurb = hasPostText(post.blurb);
   const showMacros = hasPostText(post.macros);
