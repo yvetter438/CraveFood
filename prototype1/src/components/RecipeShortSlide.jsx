@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import IngredientPopup from "./IngredientPopup.jsx";
 import ProductRail from "./ProductRail.jsx";
+import VideoMeta from "./VideoMeta.jsx";
 import YoutubePlayer from "./YoutubePlayer.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { useTimedIngredients } from "../hooks/useTimedIngredients.js";
@@ -56,18 +57,21 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     <article className="p1-shorts-slide" data-post-id={post.id} aria-label={post.title}>
       <main className="main p1-shorts-slide-main">
         <section className="stage" aria-label="Recipe video">
-          <div className="video-shell p1-video-shell">
-            <YoutubePlayer
-              youtubeUrl={post.youtubeUrl}
-              playing={isActive}
-              muted={muted}
+          <div className="video-shell p1-video-shell p1-video-shell--short">
+            <div className="p1-yt-cover" aria-hidden="true">
+              <YoutubePlayer
+                youtubeUrl={post.youtubeUrl}
+                variant="short"
+                playing={isActive}
+                muted={muted}
               onProgress={(t) => {
                 if (isActive) setCurrentTime(t);
               }}
               onDuration={(d) => {
                 if (isActive) setDuration(d);
               }}
-            />
+              />
+            </div>
             <div className="video-gradient" aria-hidden="true" />
 
             <div className="video-overlay" aria-live="polite">
@@ -83,12 +87,7 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
               />
             </div>
 
-            <div className="video-meta">
-              <p className="recipe-title">{post.title}</p>
-              <p className="recipe-author">{post.author}</p>
-              <p className="recipe-blurb">{post.blurb}</p>
-              <p className="recipe-macros">{post.macros}</p>
-            </div>
+            <VideoMeta post={post} />
 
             <div className="video-actions">
               <button type="button" className="action-pill" onClick={handleShopAll}>

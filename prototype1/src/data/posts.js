@@ -18,32 +18,13 @@ const SHORT_URLS = [
   "https://www.youtube.com/shorts/a_DxrtG5gxU",
 ];
 
+/** Per-short copy; leave `blurb` / `macros` empty to hide those lines on the player. */
 const SHORT_META = [
-  {
-    title: "Chef John's quick tip",
-    blurb: "Classic Food Wishes style — technique and flavor in a short format.",
-    macros: "—",
-  },
-  {
-    title: "Weeknight dinner idea",
-    blurb: "Simple ingredients, big flavor — save items below to shop later.",
-    macros: "—",
-  },
-  {
-    title: "Comfort food short",
-    blurb: "Watch for timed ingredient callouts on the video.",
-    macros: "—",
-  },
-  {
-    title: "Kitchen essential",
-    blurb: "Affiliate demo links stand in for real partner URLs in this prototype.",
-    macros: "—",
-  },
-  {
-    title: "Food Wishes short",
-    blurb: "Embedded from YouTube — no re-hosted video on Crave.",
-    macros: "—",
-  },
+  { title: "Chef John's quick tip", blurb: "", macros: "" },
+  { title: "Weeknight dinner idea", blurb: "", macros: "" },
+  { title: "Comfort food short", blurb: "", macros: "" },
+  { title: "Kitchen essential", blurb: "", macros: "" },
+  { title: "Food Wishes short", blurb: "", macros: "" },
 ];
 
 function buildTimedCuesSec(productIds) {

@@ -6,11 +6,13 @@ export default function YoutubePlayer({
   youtubeUrl,
   playing = true,
   muted = true,
+  variant = "default",
   onProgress,
   onDuration,
   onSeek,
   className = "p1-youtube-player",
 }) {
+  const isShort = variant === "short";
   const playerRef = useRef(null);
   const watchUrl = shortsToWatchUrl(youtubeUrl);
 
@@ -37,6 +39,8 @@ export default function YoutubePlayer({
             modestbranding: 1,
             rel: 0,
             fs: 0,
+            iv_load_policy: 3,
+            ...(isShort ? { controls: 0, disablekb: 1 } : {}),
           },
         },
       }}

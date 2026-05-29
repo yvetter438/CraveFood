@@ -59,6 +59,48 @@ body {
   height: 100% !important;
 }
 
+/* 9:16 Shorts frame — same aspect as YouTube Shorts, fills stage without letterboxing */
+.p1-video-shell--short {
+  aspect-ratio: 9 / 16;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin-inline: auto;
+  background: #000;
+  box-shadow: var(--shadow), var(--shadow-warm), 0 0 0 1px rgba(180, 100, 60, 0.12);
+}
+
+.p1-yt-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+/* react-player defaults to 16:9 padding; Shorts need a vertical fill */
+.p1-video-shell--short .p1-youtube-player,
+.p1-video-shell--short .p1-youtube-player > div {
+  padding-top: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/*
+ * YouTube’s iframe is 16:9; Shorts video is 9:16 centered with side bars.
+ * Scale width so the vertical video covers the 9:16 shell (object-fit: cover).
+ */
+.p1-video-shell--short .p1-youtube-player iframe {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 315% !important;
+  height: 100% !important;
+  max-width: none !important;
+  transform: translate(-50%, -50%);
+  border: 0;
+}
+
 .top-bar-actions .p1-prototype-badge {
   display: none;
 }
@@ -162,20 +204,85 @@ body.p1-shorts-mode .p1-shorts-slide-main {
 body.p1-shorts-mode .p1-shorts-slide .stage {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  padding: 0 0.15rem;
 }
 
-body.p1-shorts-mode .p1-shorts-slide .video-shell {
-  max-height: min(52dvh, 520px);
-  width: 100%;
+body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
+  flex: 0 1 auto;
+  align-self: center;
+  height: 100%;
+  max-height: 100%;
+  width: auto;
+  max-width: min(100%, 420px);
 }
 
 body.p1-shorts-mode .p1-shorts-slide .shop-rail {
   flex-shrink: 0;
   max-height: min(34dvh, 300px);
   margin-top: 0.5rem;
+}
+
+/* Override global mobile contain/cap rules for Shorts embed */
+@media (max-width: 768px) {
+  body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
+    max-height: 100%;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Video overlay copy — tighter type & alignment for Shorts shell */
+body.p1-shorts-mode .p1-video-shell--short .video-meta {
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: 3.65rem;
+  max-width: none;
+  text-align: left;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .video-meta--compact {
+  bottom: 3.5rem;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .recipe-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .recipe-author {
+  margin: 0.12rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+body.p1-shorts-mode .p1-video-shell--short .recipe-blurb {
+  margin: 0.28rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .recipe-macros {
+  margin: 0.2rem 0 0;
+  font-size: 0.625rem;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .video-actions {
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: 0.65rem;
+}
+
+body.p1-shorts-mode .p1-video-shell--short .action-pill {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8125rem;
 }
 
 @media (min-width: 769px) {
@@ -189,8 +296,10 @@ body.p1-shorts-mode .p1-shorts-slide .shop-rail {
     flex: 1;
   }
 
-  body.p1-shorts-mode .p1-shorts-slide .video-shell {
-    max-height: min(70dvh, 720px);
+  body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
+    height: 100%;
+    max-height: min(72dvh, 780px);
+    max-width: min(100%, 420px);
   }
 
   body.p1-shorts-mode .p1-shorts-slide .shop-rail {

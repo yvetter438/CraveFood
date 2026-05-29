@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PrototypeBadge from "../components/PrototypeBadge.jsx";
 import { CREATOR, getPostsForCreator } from "../data/posts.js";
+import { hasPostText } from "../lib/postMeta.js";
 
 const WAITLIST_URL = "https://forms.gle/Ut8bRDfcMP9fZYTN6";
 const posts = getPostsForCreator(CREATOR.id);
@@ -71,7 +72,7 @@ export default function FeedPage() {
                   </svg>
                 </span>
               </div>
-              <p className="feed-tile-title">{post.title}</p>
+              {hasPostText(post.title) ? <p className="feed-tile-title">{post.title}</p> : null}
             </Link>
           </li>
         ))}
