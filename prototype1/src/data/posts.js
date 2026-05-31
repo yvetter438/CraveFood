@@ -1,4 +1,5 @@
 import { AFFILIATE_PLACEHOLDER, cloneDemoProducts } from "./demoProducts.js";
+import { SHORT_URLS } from "./foodwishes-shorts.generated.js";
 import { youtubeIdFromUrl, youtubeThumbUrl } from "./youtube.js";
 
 export const CREATOR = {
@@ -7,25 +8,12 @@ export const CREATOR = {
   displayName: "Food Wishes",
   avatarInitials: "FW",
   bio: "YouTube recipe shorts · shop ingredients from each post",
-  youtubeChannel: "https://www.youtube.com/@FoodWishes",
+  youtubeChannel: "https://www.youtube.com/@foodwishes/shorts",
 };
 
-const SHORT_URLS = [
-  "https://www.youtube.com/shorts/KCnkc3Y0AOU",
-  "https://www.youtube.com/shorts/d54NanBJV4w",
-  "https://www.youtube.com/shorts/vgZ3SGKPv2o",
-  "https://www.youtube.com/shorts/CA976Ydz3aM",
-  "https://www.youtube.com/shorts/a_DxrtG5gxU",
-];
-
-/** Per-short copy; leave `blurb` / `macros` empty to hide those lines on the player. */
-const SHORT_META = [
-  { title: "Chef John's quick tip", blurb: "", macros: "" },
-  { title: "Weeknight dinner idea", blurb: "", macros: "" },
-  { title: "Comfort food short", blurb: "", macros: "" },
-  { title: "Kitchen essential", blurb: "", macros: "" },
-  { title: "Food Wishes short", blurb: "", macros: "" },
-];
+function metaForIndex(index) {
+  return { title: `Recipe ${index + 1}`, blurb: "", macros: "" };
+}
 
 function buildTimedCuesSec(productIds) {
   const seg = 3.15;
@@ -38,7 +26,7 @@ function buildTimedCuesSec(productIds) {
 
 function buildPost(shortUrl, index) {
   const videoId = youtubeIdFromUrl(shortUrl);
-  const meta = SHORT_META[index] || SHORT_META[SHORT_META.length - 1];
+  const meta = metaForIndex(index);
   const products = cloneDemoProducts();
   const timedCuesSec = buildTimedCuesSec(products.map((p) => p.id));
 

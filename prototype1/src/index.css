@@ -79,12 +79,8 @@ body {
   background: #000;
 }
 
-/* Block direct taps on the iframe so YouTube doesn’t show pause + giant title overlay */
-.p1-youtube-player--shielded iframe {
-  pointer-events: none !important;
-}
-
-.p1-yt-shield {
+/* Tap layer: pause/play without forcing restart via YouTube chrome */
+.p1-yt-tap {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -92,7 +88,7 @@ body {
   padding: 0;
   border: none;
   background: transparent;
-  cursor: default;
+  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 

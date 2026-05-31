@@ -11,7 +11,12 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [shopOpen, setShopOpen] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
   const railRef = useRef(null);
+
+  useEffect(() => {
+    if (isActive) setUserPaused(false);
+  }, [isActive, post.id]);
 
   const { activeProductId, popupProduct, popupVisible, popupExiting, pulseProductId, pulseProduct } = useTimedIngredients(
     post,
@@ -62,14 +67,17 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
           <section className="stage p1-stage" aria-label="Recipe video">
             <div className="video-shell p1-video-shell p1-video-shell--short">
             <div className="p1-yt-cover">
+              <button
+                type="button"
+                className="p1-yt-tap"
+                aria-label={userPaused ? "Play video" : "Pause video"}
+                onClick={() => setUserPaused((p) => !p)}
+              />
               <YoutubePlayer
                 youtubeUrl={post.youtubeUrl}
                 variant="short"
-                playing={isActive}
+                playing={isActive && !userPaused}
                 muted={muted}
-                onShieldTap={() => {
-                  if (muted) onToast?.("Tap Unmute in the header for sound");
-                }}
                 onProgress={(t) => {
                   if (isActive) setCurrentTime(t);
                 }}
