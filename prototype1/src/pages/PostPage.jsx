@@ -12,6 +12,8 @@ import {
 } from "../data/posts.js";
 import { creatorHubPath, recipePath } from "../data/urlScheme.js";
 import { useToast } from "../hooks/useToast.js";
+import { useRobotsMeta } from "../hooks/useRobotsMeta.js";
+import { postAllowsSearchIndexing } from "../lib/seoIndexing.js";
 import { hasPostText } from "../lib/postMeta.js";
 
 /** Only mount YouTube iframes near the active slide (avoids loading 90+ embeds). */
@@ -45,6 +47,7 @@ export default function PostPage() {
   const { cartItemCount } = useCart();
 
   const activePost = posts[activeIndex] || posts[0];
+  useRobotsMeta(postAllowsSearchIndexing(activePost));
 
   const scrollToIndexInstant = useCallback((index) => {
     const slide = slideRefs.current[index];

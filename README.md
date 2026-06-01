@@ -40,6 +40,7 @@ If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove ol
 - **`docs/DEMO_ROLLOUT.md`** — creator URLs, PostHog, and a lightweight demo-creation + follow-up workflow.
 - **`docs/SEO-CLAIM-GTM-PLAN.md`** — living checklist: claim-first GTM, SEO per recipe, outreach, and MVP milestones.
 - **`docs/URL-SCHEME.md`** — locked canonical URLs (`/c/{creatorId}/{recipeSlug}` on crave.food).
+- **`docs/UNCLAIMED-INDEXING-POLICY.md`** — `noindex, follow` on unclaimed demos; when to allow search indexing.
 
 ## Deploy
 

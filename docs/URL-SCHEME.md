@@ -2,7 +2,7 @@
 
 **Domain:** [https://crave.food](https://crave.food)  
 **Status:** Locked 2026-05-29 — change only with intent (redirects, sitemap updates).  
-**Related:** [SEO-CLAIM-GTM-PLAN.md](./SEO-CLAIM-GTM-PLAN.md)
+**Related:** [SEO-CLAIM-GTM-PLAN.md](./SEO-CLAIM-GTM-PLAN.md), [UNCLAIMED-INDEXING-POLICY.md](./UNCLAIMED-INDEXING-POLICY.md)
 
 ---
 

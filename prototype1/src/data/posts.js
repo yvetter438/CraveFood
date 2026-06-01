@@ -9,6 +9,8 @@ export const CREATOR = {
   avatarInitials: "FW",
   bio: "YouTube recipe shorts · shop ingredients from each post",
   youtubeChannel: "https://www.youtube.com/@foodwishes/shorts",
+  /** Creator-level claim; when true, hub + all posts may index (unless overridden per post). */
+  claimed: false,
 };
 
 function buildTimedCuesSec(productIds) {
@@ -40,6 +42,8 @@ function buildPost(shortUrl, index) {
     shopUrl: AFFILIATE_PLACEHOLDER,
     products,
     timedCuesSec,
+    claimed: meta.claimed === true,
+    hasUniqueShopCopy: meta.hasUniqueShopCopy === true,
   };
 }
 

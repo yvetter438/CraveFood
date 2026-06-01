@@ -59,6 +59,8 @@ function enrichMetaWithSlugs(meta, urlList) {
       videoId: videoId || entry.videoId || null,
       blurb: entry.blurb ?? "",
       macros: entry.macros ?? "",
+      claimed: entry.claimed === true,
+      hasUniqueShopCopy: entry.hasUniqueShopCopy === true,
     };
   });
 }

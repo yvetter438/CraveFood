@@ -3,12 +3,18 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import PrototypeBadge from "../components/PrototypeBadge.jsx";
 import { CREATOR, getPostsForCreator } from "../data/posts.js";
 import { recipePath } from "../data/urlScheme.js";
+import { useRobotsMeta } from "../hooks/useRobotsMeta.js";
+import { creatorHubAllowsSearchIndexing } from "../lib/seoIndexing.js";
 import { hasPostText } from "../lib/postMeta.js";
 
 const WAITLIST_URL = "https://forms.gle/Ut8bRDfcMP9fZYTN6";
 
 export default function FeedPage() {
   const { creatorId } = useParams();
+  const isPilotCreator = creatorId === CREATOR.id;
+  const posts = isPilotCreator ? getPostsForCreator(CREATOR.id) : [];
+
+  useRobotsMeta(isPilotCreator && creatorHubAllowsSearchIndexing(CREATOR, posts));
 
   useEffect(() => {
     document.body.className = "feed-page";
@@ -18,11 +24,9 @@ export default function FeedPage() {
     };
   }, []);
 
-  if (creatorId !== CREATOR.id) {
+  if (!isPilotCreator) {
     return <Navigate to={`/c/${CREATOR.id}`} replace />;
   }
-
-  const posts = getPostsForCreator(CREATOR.id);
 
   return (
     <div className="feed-app">

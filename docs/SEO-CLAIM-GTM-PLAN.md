@@ -41,7 +41,7 @@ Related docs: [PRODUCT_VISION.md](./PRODUCT_VISION.md), [DEMO_ROLLOUT.md](./DEMO
   - Creator hub: `https://crave.food/c/foodwishes`
   - Recipe: `https://crave.food/c/foodwishes/how-to-slice-onions-with-fewer-tears`
   - `youtubeVideoId` in `SHORT_META` for deduping/embeds; `slug` is the public URL
-- [ ] **Unclaimed indexing policy** — Default: `noindex, follow` on demo profiles until claim **or** until page has unique shop copy
+- [x] **Unclaimed indexing policy** — Default: `noindex, follow` — see **[UNCLAIMED-INDEXING-POLICY.md](./UNCLAIMED-INDEXING-POLICY.md)**
 - [ ] **Affiliate policy** — No platform-tag monetization pre-claim; track clicks only; creator tags after claim
 - [ ] **Disclaimer copy** — Unclaimed line, e.g. “Demo profile · Not affiliated with creator · Claim to manage”
 - [ ] **Pilot creator** — Food Wishes as first full SEO + outreach pilot
@@ -50,6 +50,7 @@ Related docs: [PRODUCT_VISION.md](./PRODUCT_VISION.md), [DEMO_ROLLOUT.md](./DEMO
 
 ```
 2026-05-29 — Domain crave.food. Canonical paths /c/{creatorId}/{recipeSlug}. Slugs in import + prototype routes. Vercel rewrites /c/foodwishes/* → prototype1. Full spec: docs/URL-SCHEME.md.
+2026-05-29 — Unclaimed demos: noindex,follow by default; claimed / hasUniqueShopCopy flips to index. docs/UNCLAIMED-INDEXING-POLICY.md.
 ```
 
 ---
@@ -220,6 +221,7 @@ Do not index 93 thin pages on day one. Google deprioritizes title + embed only.
 |------|----------------|
 | 93 Food Wishes URLs + YouTube titles + **slugs** (`foodwishes-shorts.generated.js`) | Static HTML at canonical URLs (Phase 1) |
 | Locked URL scheme + prototype `/c/foodwishes/{slug}` + Vercel rewrites | `docs/URL-SCHEME.md` |
+| `noindex, follow` on unclaimed Food Wishes pages + indexing flags | `docs/UNCLAIMED-INDEXING-POLICY.md` |
 | Prototype profile + vertical viewer (`/prototype1/`) | Static HTML per recipe |
 | Import script with oEmbed titles | Slugs in import output |
 | — | `sitemap.xml`, `robots.txt`, GSC |
