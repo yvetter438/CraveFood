@@ -44,6 +44,7 @@ If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove ol
 - **`docs/UNCLAIMED-AFFILIATE-POLICY.md`** — pre-claim shop click tracking only; creator affiliate URLs after claim.
 - **`docs/UNCLAIMED-DISCLAIMER-POLICY.md`** — demo / not affiliated / claim CTA copy on unclaimed profiles.
 - **`docs/PILOT-CREATOR-FOODWISHES.md`** — Food Wishes pilot: URLs, inventory, outreach checklist.
+- **`docs/PHASE-1-SEO-INFRA.md`** — import + static SEO page generator (`npm run generate:seo`).
 
 ## Deploy
 

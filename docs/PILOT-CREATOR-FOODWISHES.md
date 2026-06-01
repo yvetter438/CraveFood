@@ -37,8 +37,9 @@ Recipe URLs use **slugs from YouTube titles**, not internal ids like `foodwishes
 | Generated URLs + meta | `prototype1/src/data/foodwishes-shorts.generated.js` |
 | App posts + creator | `prototype1/src/data/posts.js` |
 | Pilot id constant | `prototype1/src/data/pilotCreator.js` |
-| Import / refresh | `node scripts/import-youtube-shorts.mjs prototype1/data/foodwishes-shorts.txt --write prototype1/src/data/foodwishes-shorts.generated.js` |
-| Slugs only (offline) | Add `--no-titles` to keep existing titles |
+| Import / refresh | `npm run import:shorts` |
+| Static SEO HTML | `npm run generate:seo` → `public/c/foodwishes/` |
+| Full build | `npm run build` |
 
 **Scale:** 93 unique shorts (after dedup in import).
 

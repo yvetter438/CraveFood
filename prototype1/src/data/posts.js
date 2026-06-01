@@ -45,6 +45,7 @@ function buildPost(shortUrl, index) {
     youtubeVideoId: videoId || meta.videoId || null,
     feedThumb: videoId ? youtubeThumbUrl(videoId) : "/assets/feed-tile-fallback.jpg",
     title: meta.title,
+    description: meta.description || meta.blurb || "",
     author: CREATOR.displayName,
     blurb: meta.blurb,
     macros: meta.macros,

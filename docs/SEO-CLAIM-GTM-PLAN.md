@@ -62,60 +62,49 @@ Related docs: [PRODUCT_VISION.md](./PRODUCT_VISION.md), [DEMO_ROLLOUT.md](./DEMO
 
 ### Data pipeline
 
-- [ ] Extend `scripts/import-youtube-shorts.mjs` to output per video:
-  - `slug`, `title`, `description`, `videoId`, `thumbnailUrl`, `creatorId`, `claimed` (boolean)
-- [ ] Slug rules: lowercase, hyphens, dedupe collisions (`-2`, `-3`), max length ~80 chars
-- [ ] Regenerate data module from `prototype1/data/foodwishes-shorts.txt`
+- [x] Extend `scripts/import-youtube-shorts.mjs` — see **[PHASE-1-SEO-INFRA.md](./PHASE-1-SEO-INFRA.md)**
+- [x] Slug rules (`lib/url-scheme.mjs`)
+- [x] Regenerate via `npm run import:shorts`
 
 ### Static, crawlable pages (not SPA-only)
 
-Current gap: production `/p/index.html` and prototype React routes set `document.title` in JS; crawlers see a thin shell.
-
-- [ ] **Build-time HTML generator** — One file per recipe + one creator hub from generated data
-- [ ] Each recipe page includes in **initial HTML**:
-  - [ ] `<title>` — `{Recipe} · {Creator} · Crave`
-  - [ ] `<meta name="description">`
-  - [ ] `<link rel="canonical">` (absolute URL)
-  - [ ] `<h1>` — recipe title
-  - [ ] Unique body block (summary + ingredients/products)
-  - [ ] YouTube embed or prominent “Watch on YouTube” link
-  - [ ] Shop / affiliate section + FTC disclosure
-  - [ ] Claim CTA
-- [ ] Creator hub lists all recipes linking to canonical URLs
-- [ ] React/player hydrates on top for interactivity; crawlers must not depend on JS for core content
+- [x] `scripts/generate-seo-pages.mjs` → `public/c/foodwishes/` (+ 93 recipe folders)
+- [x] Recipe pages: title, description, canonical, h1, body, embed, shop, FTC, claim CTA
+- [x] Creator hub lists all recipes
+- [x] Interactive app linked at `/prototype1/c/foodwishes/...` (canonical URL = static HTML)
 
 ### Discovery files
 
-- [ ] `public/robots.txt` — Allow public recipe paths; `Sitemap:` directive
-- [ ] `public/sitemap.xml` — Auto-generated (indexed URLs only, or split sitemaps)
-- [ ] Optional: `sitemap-creators.xml` + `sitemap-recipes.xml` at scale
+- [x] `public/robots.txt`
+- [x] `public/sitemap.xml` (indexable URLs only; empty while unclaimed)
+- [ ] Optional split sitemaps at scale
 
 ### Structured data (JSON-LD)
 
-- [ ] `VideoObject` — name, description, thumbnailUrl, embedUrl, author
-- [ ] `BreadcrumbList` — Home → Creator → Recipe
-- [ ] Later: `Recipe` when ingredients/steps exist
+- [x] `VideoObject` + `BreadcrumbList` on recipes
+- [ ] `Recipe` schema when ingredients/steps exist
 
 ### Social / sharing
 
-- [ ] `og:title`, `og:description`, `og:image`, `og:url` on every recipe page
-- [ ] Twitter card tags (optional)
+- [x] Open Graph + Twitter cards on generated pages
 
 ### Analytics (outreach proof, not ranking)
 
-- [ ] Events: `recipe_page_view`, `shop_product_click`, `claim_cta_click` (PostHog or existing `analytics.js`)
-- [ ] UTM params on any paid traffic tests
+- [x] `recipe_page_view` on static recipe pages
+- [x] `shop_link_click` / `claim_cta_click` on prototype (existing)
+- [ ] UTM params on paid tests (manual)
 
 ### Google Search Console
 
-- [ ] Verify domain
-- [ ] Submit sitemap
-- [ ] Monitor Coverage, Core Web Vitals, manual actions
+- [ ] Verify domain (manual)
+- [ ] Submit sitemap (manual, after indexable URLs exist)
+- [ ] Monitor Coverage (manual)
 
 **Implementation notes**
 
 ```
-Paths / scripts:
+npm run import:shorts && npm run generate:seo
+Docs: docs/PHASE-1-SEO-INFRA.md
 ```
 
 ---
@@ -222,7 +211,8 @@ Do not index 93 thin pages on day one. Google deprioritizes title + embed only.
 
 | Done | Still needed |
 |------|----------------|
-| 93 Food Wishes URLs + YouTube titles + **slugs** (`foodwishes-shorts.generated.js`) | Static HTML at canonical URLs (Phase 1) |
+| 93 shorts + slugs + SEO meta in `foodwishes-shorts.generated.js` | — |
+| Static HTML at `/c/foodwishes/{slug}/` (93 + hub), robots, sitemap | `npm run generate:seo` |
 | Locked URL scheme + prototype `/c/foodwishes/{slug}` + Vercel rewrites | `docs/URL-SCHEME.md` |
 | `noindex, follow` on unclaimed Food Wishes pages + indexing flags | `docs/UNCLAIMED-INDEXING-POLICY.md` |
 | Pre-claim affiliate: track clicks only, no outbound URLs | `docs/UNCLAIMED-AFFILIATE-POLICY.md` |

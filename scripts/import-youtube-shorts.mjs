@@ -1,21 +1,25 @@
 #!/usr/bin/env node
 /**
- * Paste YouTube Shorts URLs (one per line) → JSON snippet or generated module.
+ * Paste YouTube Shorts URLs (one per line) → generated module for app + SEO build.
  *
  * Usage:
  *   node scripts/import-youtube-shorts.mjs prototype1/data/foodwishes-shorts.txt
  *   node scripts/import-youtube-shorts.mjs prototype1/data/foodwishes-shorts.txt --write prototype1/src/data/foodwishes-shorts.generated.js
- *   node scripts/import-youtube-shorts.mjs … --write … --no-titles   # keep titles in output file; refresh slugs only
+ *   node scripts/import-youtube-shorts.mjs … --write … --no-titles
+ *   node scripts/import-youtube-shorts.mjs … --write … --creator foodwishes
  */
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { uniqueSlug } from "../lib/url-scheme.mjs";
 
+const DEFAULT_CREATOR_ID = "foodwishes";
+
 const args = process.argv.slice(2);
 const writePath = args.includes("--write") ? args[args.indexOf("--write") + 1] : null;
 const skipTitles = args.includes("--no-titles");
-const inputPath = args.find((a) => a && !a.startsWith("--") && a !== writePath) || null;
+const creatorFlag = args.includes("--creator") ? args[args.indexOf("--creator") + 1] : DEFAULT_CREATOR_ID;
+const inputPath = args.find((a) => a && !a.startsWith("--") && a !== writePath && a !== creatorFlag) || null;
 
 const input = inputPath ? fs.readFileSync(inputPath, "utf8") : fs.readFileSync(0, "utf8");
 
@@ -41,23 +45,38 @@ function videoIdFromUrl(url) {
   return m ? m[1] : null;
 }
 
+function youtubeThumbUrl(videoId) {
+  return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+}
+
+function defaultDescription(title, creatorDisplayName = "Food Wishes") {
+  const t = title || "this recipe";
+  return `Shop ingredients for ${t} — a ${creatorDisplayName} short on Crave. Watch the video and explore shoppable ingredients.`;
+}
+
 async function loadExistingMeta(filePath) {
   const mod = await import(pathToFileURL(path.resolve(filePath)).href);
   if (!Array.isArray(mod.SHORT_META)) return null;
   return mod.SHORT_META;
 }
 
-function enrichMetaWithSlugs(meta, urlList) {
+function enrichMeta(meta, urlList, creatorId) {
   const used = new Map();
   return meta.map((entry, i) => {
     const videoId = videoIdFromUrl(urlList[i]);
     const title = entry.title || `Recipe ${i + 1}`;
     const slug = uniqueSlug(title, used);
+    const blurb = entry.blurb ?? entry.description ?? "";
+    const description = (entry.description ?? blurb) || defaultDescription(title);
+
     return {
+      creatorId: entry.creatorId || creatorId,
       title,
       slug,
+      description,
       videoId: videoId || entry.videoId || null,
-      blurb: entry.blurb ?? "",
+      thumbnailUrl: videoId ? youtubeThumbUrl(videoId) : entry.thumbnailUrl || null,
+      blurb,
       macros: entry.macros ?? "",
       claimed: entry.claimed === true,
       hasUniqueShopCopy: entry.hasUniqueShopCopy === true,
@@ -111,37 +130,41 @@ if (writePath) {
   if (skipTitles && fs.existsSync(writePath)) {
     const existing = await loadExistingMeta(writePath);
     if (existing && existing.length === unique.length) {
-      process.stderr.write(`Keeping ${existing.length} titles from ${writePath}; refreshing slugs…\n`);
-      meta = enrichMetaWithSlugs(existing, unique);
+      process.stderr.write(`Keeping ${existing.length} titles from ${writePath}; refreshing slugs + SEO fields…\n`);
+      meta = enrichMeta(existing, unique, creatorFlag);
     } else if (existing) {
       process.stderr.write(`warn: URL count (${unique.length}) ≠ existing meta (${existing.length}); fetching titles…\n`);
       meta = await fetchTitlesForUrls(unique);
-      meta = enrichMetaWithSlugs(meta, unique);
+      meta = enrichMeta(meta, unique, creatorFlag);
     } else {
-      meta = enrichMetaWithSlugs(
+      meta = enrichMeta(
         unique.map((_, i) => ({ title: `Recipe ${i + 1}`, blurb: "", macros: "" })),
-        unique
+        unique,
+        creatorFlag
       );
     }
   } else if (skipTitles) {
-    meta = enrichMetaWithSlugs(
+    meta = enrichMeta(
       unique.map((_, i) => ({ title: `Recipe ${i + 1}`, blurb: "", macros: "" })),
-      unique
+      unique,
+      creatorFlag
     );
   } else {
     process.stderr.write(`Fetching ${unique.length} titles from YouTube oEmbed…\n`);
     meta = await fetchTitlesForUrls(unique);
-    meta = enrichMetaWithSlugs(meta, unique);
+    meta = enrichMeta(meta, unique, creatorFlag);
   }
 
   const relInput = inputPath || "…";
-  const body = `/** Auto-generated — do not edit. Run: node scripts/import-youtube-shorts.mjs ${relInput} --write ${writePath} */
+  const body = `/** Auto-generated — do not edit. Run: node scripts/import-youtube-shorts.mjs ${relInput} --write ${writePath} --creator ${creatorFlag} */
+export const CREATOR_ID = ${JSON.stringify(creatorFlag)};
+
 export const SHORT_URLS = ${JSON.stringify(unique, null, 2)};
 
 export const SHORT_META = ${JSON.stringify(meta, null, 2)};
 `;
   fs.writeFileSync(writePath, body, "utf8");
-  console.error(`Wrote ${unique.length} unique shorts + slugs → ${writePath}`);
+  console.error(`Wrote ${unique.length} shorts → ${writePath} (creator: ${creatorFlag})`);
 } else {
   console.log(`// ${unique.length} shorts\n`);
   console.log("const SHORT_URLS = [");
@@ -149,7 +172,7 @@ export const SHORT_META = ${JSON.stringify(meta, null, 2)};
   console.log("];\n");
   console.log("const SHORT_META = [");
   unique.forEach((_, i) => {
-    console.log(`  { title: "Recipe ${i + 1}", slug: "recipe-${i + 1}", blurb: "", macros: "" },`);
+    console.log(`  { title: "Recipe ${i + 1}", slug: "recipe-${i + 1}", creatorId: "${creatorFlag}", blurb: "", macros: "" },`);
   });
   console.log("];");
 }
