@@ -11,6 +11,48 @@ body {
   flex-wrap: wrap;
 }
 
+.p1-unclaimed-disclaimer {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(61, 47, 72, 0.08);
+  border-bottom: 1px solid rgba(61, 47, 72, 0.12);
+}
+
+.p1-unclaimed-disclaimer--compact {
+  flex-shrink: 0;
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(61, 47, 72, 0.1);
+}
+
+.p1-unclaimed-disclaimer__text {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted, #5c4d52);
+  font-weight: 500;
+}
+
+.p1-unclaimed-disclaimer--compact .p1-unclaimed-disclaimer__text {
+  font-size: 0.68rem;
+}
+
+.p1-unclaimed-disclaimer__sep {
+  margin: 0 0.2rem;
+  opacity: 0.55;
+}
+
+.p1-unclaimed-disclaimer__cta {
+  color: var(--accent, #c45c3e);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.p1-unclaimed-disclaimer__cta:hover {
+  color: var(--text, #2a1f18);
+}
+
 .p1-prototype-badge {
   font-size: 0.62rem;
   font-weight: 700;

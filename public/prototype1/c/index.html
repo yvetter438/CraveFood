@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Crave · Creator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="feed-page">
+    <div class="feed-app">
+      <header class="feed-top">
+        <div class="feed-brand">
+          <a href="../index.html" class="logo logo-link">Crave</a>
+        </div>
+        <a
+          class="btn-marketing btn-marketing--primary btn-waitlist-sm js-waitlist-cta"
+          data-cta-location="creator_feed_header"
+          href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Join the waitlist"
+          ><span class="waitlist-cta__long">Join the waitlist</span
+          ><span class="waitlist-cta__short" aria-hidden="true">Waitlist</span></a
+        >
+      </header>
+
+      <section class="feed-profile" aria-label="Creator profile">
+        <div class="feed-avatar" aria-hidden="true">
+          <span class="feed-avatar-inner">·</span>
+        </div>
+        <div class="feed-profile-text">
+          <h1 class="feed-handle">@creator</h1>
+          <p class="feed-bio">Loading…</p>
+        </div>
+      </section>
+
+      <nav class="feed-tabs" aria-label="Content">
+        <span class="feed-tab is-active" aria-current="page">Posts</span>
+      </nav>
+
+      <ul class="feed-grid" id="feedGrid" aria-label="Recipe posts"></ul>
+    </div>
+
+    <script>
+      window.CRAVE_DEFER_FEED = true;
+    </script>
+    <script src="../config.js"></script>
+    <script src="../posts-config.js"></script>
+    <script src="../creators-config.js"></script>
+    <script src="../feed.js"></script>
+    <script src="creator-feed.js"></script>
+    <script src="../analytics-config.js"></script>
+    <script src="../analytics.js"></script>
+    <script src="../waitlist-cta.js"></script>
+  </body>
+</html>

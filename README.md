@@ -41,6 +41,9 @@ If you ever ran Next here, delete stale artifacts: `rm -rf .next`, and remove ol
 - **`docs/SEO-CLAIM-GTM-PLAN.md`** — living checklist: claim-first GTM, SEO per recipe, outreach, and MVP milestones.
 - **`docs/URL-SCHEME.md`** — locked canonical URLs (`/c/{creatorId}/{recipeSlug}` on crave.food).
 - **`docs/UNCLAIMED-INDEXING-POLICY.md`** — `noindex, follow` on unclaimed demos; when to allow search indexing.
+- **`docs/UNCLAIMED-AFFILIATE-POLICY.md`** — pre-claim shop click tracking only; creator affiliate URLs after claim.
+- **`docs/UNCLAIMED-DISCLAIMER-POLICY.md`** — demo / not affiliated / claim CTA copy on unclaimed profiles.
+- **`docs/PILOT-CREATOR-FOODWISHES.md`** — Food Wishes pilot: URLs, inventory, outreach checklist.
 
 ## Deploy
 

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Crave · Recipe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="page-post">
+    <div class="app" id="app">
+      <header class="top-bar">
+        <a href="../feed.html" class="back-feed-link back-feed-link--icon" aria-label="Back to feed">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </a>
+        <a href="../index.html" class="logo logo-link top-bar-logo">Crave</a>
+        <div class="top-bar-actions">
+          <a
+            class="btn-marketing btn-marketing--primary btn-waitlist-sm js-waitlist-cta"
+            data-cta-location="post_top_bar"
+            href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join the waitlist"
+            ><span class="waitlist-cta__long">Join the waitlist</span
+            ><span class="waitlist-cta__short" aria-hidden="true">List</span></a
+          >
+          <button type="button" class="cart-trigger" id="cartTrigger" aria-expanded="false" aria-controls="cartDrawer" aria-label="Saved items">
+            <span class="cart-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6h15l-1.5 9h-12z" />
+                <circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none" />
+                <path d="M6 6L5 3H2" />
+              </svg>
+            </span>
+            <span class="cart-label">Saved</span>
+            <span class="cart-badge" id="cartBadge" hidden>0</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="stage" aria-label="Recipe video">
+          <div class="video-shell">
+            <video
+              id="mainVideo"
+              class="video"
+              playsinline
+              muted
+              loop
+              autoplay
+              preload="auto"
+            ></video>
+            <div class="video-gradient" aria-hidden="true"></div>
+
+            <div class="video-overlay" id="videoOverlay" aria-live="polite">
+              <div class="ingredient-popup" id="ingredientPopup" hidden>
+                <img class="ingredient-popup-thumb" id="ingredientPopupThumb" alt="" width="48" height="48" />
+                <div class="ingredient-popup-text">
+                  <p class="ingredient-popup-label" id="ingredientPopupLabel"></p>
+                  <p class="ingredient-popup-name" id="ingredientPopupName"></p>
+                  <p class="ingredient-popup-price" id="ingredientPopupPrice"></p>
+                </div>
+                <button type="button" class="btn-add-mini" id="ingredientPopupAdd">Save</button>
+              </div>
+            </div>
+
+            <div class="video-meta">
+              <p class="recipe-title" id="recipeTitle">Recipe</p>
+              <p class="recipe-author" id="recipeAuthor">@creator</p>
+              <p class="recipe-blurb" id="recipeBlurb"></p>
+              <p class="recipe-macros" id="recipeMacros"></p>
+            </div>
+
+            <div class="video-actions">
+              <button type="button" class="action-pill" id="shopAllBtn" aria-controls="shopRail">
+                Shop ingredients
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="shop-rail" id="shopRail" aria-label="Shoppable ingredients">
+          <div class="shop-rail-header">
+            <h2>In this recipe</h2>
+            <p class="shop-rail-hint">Ingredients appear on the video while it plays — save items or open affiliate links.</p>
+          </div>
+          <ul class="product-list" id="productList"></ul>
+        </aside>
+      </main>
+
+      <div
+        class="cart-drawer"
+        id="cartDrawer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cartDrawerTitle"
+        hidden
+      >
+        <div class="cart-drawer-backdrop" id="cartBackdrop" tabindex="-1"></div>
+        <div class="cart-drawer-panel">
+          <div class="cart-drawer-head">
+            <h2 id="cartDrawerTitle">Saved items</h2>
+            <button type="button" class="icon-btn" id="closeCart" aria-label="Close saved list">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+          <ul class="cart-lines" id="cartLines"></ul>
+          <div class="cart-empty" id="cartEmpty">Nothing saved yet — tap Save on an ingredient.</div>
+          <footer class="cart-footer">
+            <div class="cart-total-row">
+              <span>Est. subtotal</span>
+              <strong id="cartSubtotal">$0.00</strong>
+            </div>
+            <p class="cart-footer-hint">Prices are estimates; opens affiliate links in new tabs.</p>
+            <button type="button" class="btn-primary" id="checkoutBtn">Shop Now</button>
+          </footer>
+        </div>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    </div>
+
+    <script>
+      window.CRAVE_POST_ASSET_PREFIX = "../";
+    </script>
+    <script src="../config.js"></script>
+    <script src="../posts-config.js"></script>
+    <script src="../app.js"></script>
+    <script src="../analytics-config.js"></script>
+    <script src="../analytics.js"></script>
+    <script src="../waitlist-cta.js"></script>
+  </body>
+</html>

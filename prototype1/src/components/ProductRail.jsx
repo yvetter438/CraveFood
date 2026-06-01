@@ -1,5 +1,7 @@
 import ThumbnailImage from "./ThumbnailImage.jsx";
 import { formatMoney } from "../lib/format.js";
+import { postAllowsAffiliateOutbound } from "../lib/affiliatePolicy.js";
+import { shopLinkAriaLabel, shopLinkButtonLabel } from "../lib/shopLinks.js";
 
 import { forwardRef } from "react";
 
@@ -27,11 +29,15 @@ const ProductRail = forwardRef(function ProductRail(
     >
       <div className="shop-rail-header">
         <h2>In this recipe</h2>
-        <p className="shop-rail-hint">Ingredients appear on the video while it plays — save items or open affiliate links.</p>
+        <p className="shop-rail-hint">
+          {postAllowsAffiliateOutbound(post)
+            ? "Ingredients appear on the video while it plays — save items or open affiliate links."
+            : "Demo profile — save items and log shop interest; affiliate links activate when the creator claims."}
+        </p>
       </div>
       <ul className="product-list" id="productList" ref={listRef}>
         {post.products.map((p) => {
-          const canOpen = Boolean(p.affiliateUrl || post.shopUrl);
+          const canOpen = true;
           const classes = ["product-card"];
           if (activeProductId === p.id) classes.push("is-cue-active");
           if (pulseProductId === p.id) classes.push("is-pulse");
@@ -56,12 +62,13 @@ const ProductRail = forwardRef(function ProductRail(
                   type="button"
                   className="btn-link-open"
                   disabled={!canOpen}
+                  aria-label={shopLinkAriaLabel(post)}
                   onClick={(e) => {
                     e.stopPropagation();
                     onOpenLink(p.id);
                   }}
                 >
-                  Open link
+                  {shopLinkButtonLabel(post)}
                 </button>
                 <button
                   type="button"

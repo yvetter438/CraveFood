@@ -2,7 +2,7 @@
 
 **Status:** Living document — edit as strategy evolves.  
 **Last updated:** 2026-05-29  
-**Pilot creator:** Food Wishes (`foodwishes`, 93 Shorts in `prototype1/data/foodwishes-shorts.txt`)
+**Pilot creator:** Food Wishes — see [PILOT-CREATOR-FOODWISHES.md](./PILOT-CREATOR-FOODWISHES.md)
 
 This plan combines:
 
@@ -42,15 +42,18 @@ Related docs: [PRODUCT_VISION.md](./PRODUCT_VISION.md), [DEMO_ROLLOUT.md](./DEMO
   - Recipe: `https://crave.food/c/foodwishes/how-to-slice-onions-with-fewer-tears`
   - `youtubeVideoId` in `SHORT_META` for deduping/embeds; `slug` is the public URL
 - [x] **Unclaimed indexing policy** — Default: `noindex, follow` — see **[UNCLAIMED-INDEXING-POLICY.md](./UNCLAIMED-INDEXING-POLICY.md)**
-- [ ] **Affiliate policy** — No platform-tag monetization pre-claim; track clicks only; creator tags after claim
-- [ ] **Disclaimer copy** — Unclaimed line, e.g. “Demo profile · Not affiliated with creator · Claim to manage”
-- [ ] **Pilot creator** — Food Wishes as first full SEO + outreach pilot
+- [x] **Affiliate policy** — No outbound links pre-claim; track `shop_link_click` only — **[UNCLAIMED-AFFILIATE-POLICY.md](./UNCLAIMED-AFFILIATE-POLICY.md)**
+- [x] **Disclaimer copy** — **[UNCLAIMED-DISCLAIMER-POLICY.md](./UNCLAIMED-DISCLAIMER-POLICY.md)**
+- [x] **Pilot creator** — Food Wishes — **[PILOT-CREATOR-FOODWISHES.md](./PILOT-CREATOR-FOODWISHES.md)**
 
 **Notes / decisions log**
 
 ```
 2026-05-29 — Domain crave.food. Canonical paths /c/{creatorId}/{recipeSlug}. Slugs in import + prototype routes. Vercel rewrites /c/foodwishes/* → prototype1. Full spec: docs/URL-SCHEME.md.
 2026-05-29 — Unclaimed demos: noindex,follow by default; claimed / hasUniqueShopCopy flips to index. docs/UNCLAIMED-INDEXING-POLICY.md.
+2026-05-29 — Pre-claim: no affiliate tab opens; shop_link_click tracking. docs/UNCLAIMED-AFFILIATE-POLICY.md.
+2026-05-29 — Demo disclaimer on hub + recipe pages; claim_cta_click. docs/UNCLAIMED-DISCLAIMER-POLICY.md.
+2026-05-29 — Pilot creator: Food Wishes (foodwishes). docs/PILOT-CREATOR-FOODWISHES.md.
 ```
 
 ---
@@ -222,6 +225,9 @@ Do not index 93 thin pages on day one. Google deprioritizes title + embed only.
 | 93 Food Wishes URLs + YouTube titles + **slugs** (`foodwishes-shorts.generated.js`) | Static HTML at canonical URLs (Phase 1) |
 | Locked URL scheme + prototype `/c/foodwishes/{slug}` + Vercel rewrites | `docs/URL-SCHEME.md` |
 | `noindex, follow` on unclaimed Food Wishes pages + indexing flags | `docs/UNCLAIMED-INDEXING-POLICY.md` |
+| Pre-claim affiliate: track clicks only, no outbound URLs | `docs/UNCLAIMED-AFFILIATE-POLICY.md` |
+| Unclaimed disclaimer + claim CTA on prototype pages | `docs/UNCLAIMED-DISCLAIMER-POLICY.md` |
+| Pilot locked: Food Wishes (`foodwishes`, 93 shorts) | `docs/PILOT-CREATOR-FOODWISHES.md` |
 | Prototype profile + vertical viewer (`/prototype1/`) | Static HTML per recipe |
 | Import script with oEmbed titles | Slugs in import output |
 | — | `sitemap.xml`, `robots.txt`, GSC |

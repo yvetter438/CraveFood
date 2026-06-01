@@ -1,9 +1,10 @@
-import { AFFILIATE_PLACEHOLDER, cloneDemoProducts } from "./demoProducts.js";
+import { cloneDemoProducts } from "./demoProducts.js";
 import { SHORT_META, SHORT_URLS } from "./foodwishes-shorts.generated.js";
+import { PILOT_CREATOR_ID } from "./pilotCreator.js";
 import { youtubeIdFromUrl, youtubeThumbUrl } from "./youtube.js";
 
 export const CREATOR = {
-  id: "foodwishes",
+  id: PILOT_CREATOR_ID,
   handle: "Food Wishes",
   displayName: "Food Wishes",
   avatarInitials: "FW",
@@ -12,6 +13,10 @@ export const CREATOR = {
   /** Creator-level claim; when true, hub + all posts may index (unless overridden per post). */
   claimed: false,
 };
+
+export function isUnclaimedDemoCreator(creator = CREATOR) {
+  return Boolean(creator && !creator.claimed);
+}
 
 function buildTimedCuesSec(productIds) {
   const seg = 3.15;
@@ -25,7 +30,11 @@ function buildTimedCuesSec(productIds) {
 function buildPost(shortUrl, index) {
   const videoId = youtubeIdFromUrl(shortUrl);
   const meta = SHORT_META[index] ?? { title: `Recipe ${index + 1}`, blurb: "", macros: "" };
-  const products = cloneDemoProducts();
+  const claimed = CREATOR.claimed || meta.claimed === true;
+  const products = cloneDemoProducts().map((p) => ({
+    ...p,
+    affiliateUrl: claimed ? p.affiliateUrl : null,
+  }));
   const timedCuesSec = buildTimedCuesSec(products.map((p) => p.id));
 
   return {
@@ -39,7 +48,7 @@ function buildPost(shortUrl, index) {
     author: CREATOR.displayName,
     blurb: meta.blurb,
     macros: meta.macros,
-    shopUrl: AFFILIATE_PLACEHOLDER,
+    shopUrl: claimed ? meta.shopUrl || null : null,
     products,
     timedCuesSec,
     claimed: meta.claimed === true,

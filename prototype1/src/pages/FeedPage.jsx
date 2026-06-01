@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import PrototypeBadge from "../components/PrototypeBadge.jsx";
+import UnclaimedDisclaimer from "../components/UnclaimedDisclaimer.jsx";
 import { CREATOR, getPostsForCreator } from "../data/posts.js";
 import { recipePath } from "../data/urlScheme.js";
 import { useRobotsMeta } from "../hooks/useRobotsMeta.js";
@@ -50,6 +51,8 @@ export default function FeedPage() {
           </span>
         </a>
       </header>
+
+      <UnclaimedDisclaimer creator={CREATOR} variant="banner" />
 
       <section className="feed-profile" aria-label="Creator profile">
         <div className="feed-avatar" aria-hidden="true">

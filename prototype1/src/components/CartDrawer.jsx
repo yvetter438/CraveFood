@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import ThumbnailImage from "./ThumbnailImage.jsx";
 import { useCart } from "../context/CartContext.jsx";
-import { getProductShopUrl } from "../lib/shopLinks.js";
+import { getOutboundShopUrl, postAllowsAffiliateOutbound } from "../lib/affiliatePolicy.js";
+import { DEMO_SHOP_TOAST } from "../lib/shopLinks.js";
 
 export default function CartDrawer({ open, onClose, onToast }) {
-  const { cart, resolveCartLine, decrementLine, incrementLine, cartSubtotal, openSavedAffiliateLinks, openLineShopUrl } =
+  const { cart, resolveCartLine, decrementLine, incrementLine, cartSubtotal, openLineShopUrl, trackAllSavedShopIntents } =
     useCart();
 
   useEffect(() => {
@@ -27,27 +28,23 @@ export default function CartDrawer({ open, onClose, onToast }) {
       onToast?.("Nothing saved yet");
       return;
     }
-    const urls = openSavedAffiliateLinks();
-    if (urls.length === 0) {
-      onToast?.("No shop links configured yet");
+    const { tracked, opened } = trackAllSavedShopIntents();
+    if (opened > 0) {
+      onToast?.(`Opening ${opened} link${opened === 1 ? "" : "s"}…`);
+      onClose();
       return;
     }
-    urls.forEach((url, i) => {
-      setTimeout(() => window.open(url, "_blank", "noopener,noreferrer"), i * 450);
-    });
-    onToast?.(`Opening ${urls.length} link${urls.length === 1 ? "" : "s"}…`);
-    onClose();
+    if (tracked > 0) {
+      onToast?.(DEMO_SHOP_TOAST);
+      return;
+    }
+    onToast?.("No shop links configured yet");
   };
 
   const handleLineClick = (line) => {
-    const url = getProductShopUrl(line.post, line.product);
-    if (!url) {
-      onToast?.("No link for this item");
-      return;
-    }
-    if (openLineShopUrl(line.key)) {
-      onToast?.(`Opening · ${line.product.name}`);
-    }
+    const { opened } = openLineShopUrl(line.key);
+    if (opened) onToast?.(`Opening · ${line.product.name}`);
+    else onToast?.(DEMO_SHOP_TOAST);
   };
 
   return (
@@ -65,14 +62,13 @@ export default function CartDrawer({ open, onClose, onToast }) {
         <p className="p1-cart-persist-hint">Stays on this device when you leave or come back (about 30 days).</p>
         <ul className="cart-lines" hidden={lines.length === 0}>
           {lines.map(({ key, qty, post, product }) => {
-            const shopUrl = getProductShopUrl(post, product);
+            const hasOutbound = Boolean(getOutboundShopUrl(post, product));
             return (
               <li key={key}>
                 <button
                   type="button"
                   className="cart-line cart-line--clickable"
                   onClick={() => handleLineClick({ key, post, product })}
-                  disabled={!shopUrl}
                 >
                   <ThumbnailImage className="product-thumb" src={product.image} alt={product.name} width={44} height={44} loading="lazy" />
                   <div className="cart-line-info">
@@ -80,7 +76,7 @@ export default function CartDrawer({ open, onClose, onToast }) {
                     <div className="cart-line-recipe">{post.title}</div>
                     <div className="cart-line-qty">
                       Saved ×{qty}
-                      {shopUrl ? " · Tap to shop" : ""}
+                      {hasOutbound ? " · Tap to shop" : " · Tap to log interest (demo)"}
                     </div>
                   </div>
                   <div className="cart-line-actions" onClick={(e) => e.stopPropagation()}>
@@ -109,9 +105,13 @@ export default function CartDrawer({ open, onClose, onToast }) {
             <span>Est. subtotal</span>
             <strong>{cartSubtotal}</strong>
           </div>
-          <p className="cart-footer-hint">Tap any item to open its shop link. Your list stays saved after you close this.</p>
+          <p className="cart-footer-hint">
+            {lines.length > 0 && postAllowsAffiliateOutbound(lines[0].post)
+              ? "Tap any item to open its shop link. Your list stays saved after you close this."
+              : "Demo profile — taps log shop interest for outreach. Affiliate links open after the creator claims."}
+          </p>
           <button type="button" className="btn-primary" onClick={handleOpenAll}>
-            Open all saved links
+            {lines.length > 0 && postAllowsAffiliateOutbound(lines[0].post) ? "Open all saved links" : "Log interest for all saved"}
           </button>
         </footer>
       </div>

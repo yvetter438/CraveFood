@@ -1,0 +1,41 @@
+CraveLinkInBio — transfer checklist
+===================================
+
+What this is
+------------
+Static HTML/CSS/JavaScript. No build step, no npm. Upload the folder contents to
+your host’s document root (or a subpath — see “If you deploy under a subfolder”).
+
+Quick move
+----------
+1. Run ./package-for-transfer.sh (creates a dated .zip on your Desktop).
+   Or zip the project yourself; exclude .git if you don’t need history.
+2. On the new host, unzip so index.html is served at your landing URL.
+3. Edit the files in “After upload” below if URLs or copy change.
+
+After upload — files people usually touch
+------------------------------------------
+• index.html — marketing copy; waitlist links (search for forms.gle).
+• config.js — window.CRAVE_WAITLIST_FORM_URL (keep in sync if you use it in JS later).
+• creators-config.js — creator slug, display name, handle, bio.
+• posts-config.js — posts, videoFile paths, titles, shopUrl, affiliate links.
+• media/<slug>/ — optional layout for videos (see media/README.txt). Right now demo
+  videos live as .mp4 files in the project root; videoFile in posts-config.js must
+  match those paths from the site root.
+
+Paths that must stay relative
+-----------------------------
+• /c/index.html?slug=… — creator pages
+• /p/index.html?id=… — single recipe (paths use ../ for shared JS/CSS)
+• feed.html, post.html, app.js, styles.css at root
+
+If you deploy under a subfolder (e.g. example.com/demo/)
+--------------------------------------------------------
+Some hosts need a trailing slash on the folder. If links break, you may need to
+adjust relative hrefs or use a host that rewrites paths; this project assumes
+root deployment by default.
+
+Optional: code-only archive
+---------------------------
+If MP4s are huge, SKIP_MP4=1 ./package-for-transfer.sh skips video files; copy
+them separately and keep the same filenames/paths as in posts-config.js.

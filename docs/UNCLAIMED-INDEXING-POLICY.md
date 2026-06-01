@@ -2,7 +2,7 @@
 
 **Status:** Active (2026-05-29)  
 **Scope:** Food Wishes pilot (`/c/foodwishes`, `/c/foodwishes/{recipeSlug}`) served by the prototype app.  
-**Related:** [SEO-CLAIM-GTM-PLAN.md](./SEO-CLAIM-GTM-PLAN.md) Phase 0, [URL-SCHEME.md](./URL-SCHEME.md)
+**Related:** [SEO-CLAIM-GTM-PLAN.md](./SEO-CLAIM-GTM-PLAN.md) Phase 0, [URL-SCHEME.md](./URL-SCHEME.md), [UNCLAIMED-AFFILIATE-POLICY.md](./UNCLAIMED-AFFILIATE-POLICY.md)
 
 ---
 

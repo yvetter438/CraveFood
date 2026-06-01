@@ -10,16 +10,34 @@
 
   function inferPage() {
     var p = (location.pathname || "").toLowerCase();
+    if (/\/c\/[^/]+\/[^/]+/.test(p)) return "post";
     if (p.indexOf("/p/") >= 0 || p.indexOf("p/index") >= 0) return "post";
     if (p.indexOf("/c/") >= 0) return "creator";
+    if (p.indexOf("/prototype1/") >= 0 && /\/c\/[^/]+\/[^/]+/.test(p)) return "post";
     if (p.indexOf("feed") >= 0) return "feed";
-    if (p === "/" || p === "/index.html" || p.endsWith("/index.html") && p.indexOf("/c/") < 0 && p.indexOf("/p/") < 0) return "marketing";
+    if (p === "/" || p === "/index.html" || (p.endsWith("/index.html") && p.indexOf("/c/") < 0 && p.indexOf("/p/") < 0))
+      return "marketing";
     return "other";
   }
 
   function registerContext(p) {
     var q = new URLSearchParams(location.search);
     var creator_slug = q.get("slug") || "";
+    var recipe_slug = q.get("recipe") || "";
+    var post_id = q.get("id") || "";
+
+    var recipePath = (location.pathname || "").match(/\/c\/([^/]+)\/([^/]+)\/?$/);
+    if (recipePath && recipePath[1] && recipePath[2] && recipePath[2] !== "index.html") {
+      try {
+        creator_slug = creator_slug || decodeURIComponent(recipePath[1]);
+        recipe_slug = recipe_slug || decodeURIComponent(recipePath[2]);
+      } catch (e0) {
+        creator_slug = creator_slug || recipePath[1];
+        recipe_slug = recipe_slug || recipePath[2];
+      }
+      post_id = post_id || recipe_slug;
+    }
+
     if (!creator_slug) {
       var cm = (location.pathname || "").match(/\/c\/([^/]+)\/?$/);
       if (cm && cm[1] && cm[1] !== "index.html" && cm[1] !== "index") {
@@ -30,7 +48,6 @@
         }
       }
     }
-    var post_id = q.get("id") || "";
     if (!post_id) {
       var pm = (location.pathname || "").match(/\/p\/([^/]+)\/?$/);
       if (pm && pm[1] && pm[1] !== "index.html" && pm[1] !== "index") {
@@ -44,6 +61,7 @@
     p.register({
       crave_page: inferPage(),
       creator_slug: creator_slug,
+      recipe_slug: recipe_slug,
       post_id: post_id,
     });
   }

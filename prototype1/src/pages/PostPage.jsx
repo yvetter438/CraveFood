@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CartDrawer from "../components/CartDrawer.jsx";
+import UnclaimedDisclaimer from "../components/UnclaimedDisclaimer.jsx";
 import RecipeShortSlide from "../components/RecipeShortSlide.jsx";
 import ShortSlidePlaceholder from "../components/ShortSlidePlaceholder.jsx";
 import { useCart } from "../context/CartContext.jsx";
@@ -181,6 +182,8 @@ export default function PostPage() {
           </button>
         </div>
       </header>
+
+      <UnclaimedDisclaimer creator={CREATOR} variant="compact" />
 
       <p className="p1-shorts-hint" aria-hidden="true">
         Swipe up for next · {activeIndex + 1} / {posts.length}

@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { getPostById } from "../data/posts.js";
 import { formatMoney } from "../lib/format.js";
-import { getProductShopUrl } from "../lib/shopLinks.js";
+import { getOutboundShopUrl } from "../lib/affiliatePolicy.js";
+import { attemptShopLinkOpen } from "../lib/shopLinks.js";
 import { readSavedCartObject, writeSavedCartObject } from "../lib/savedStorage.js";
 
 const CartContext = createContext(null);
@@ -118,11 +119,8 @@ export function CartProvider({ children }) {
 
   const openLineShopUrl = useCallback((lineKey) => {
     const resolved = resolveCartLine(lineKey);
-    if (!resolved) return false;
-    const url = getProductShopUrl(resolved.post, resolved.product);
-    if (!url) return false;
-    window.open(url, "_blank", "noopener,noreferrer");
-    return true;
+    if (!resolved) return { opened: false, tracked: false };
+    return attemptShopLinkOpen(resolved.post, resolved.product, { source: "cart_line" });
   }, []);
 
   const openSavedAffiliateLinks = useCallback(() => {
@@ -133,13 +131,31 @@ export function CartProvider({ children }) {
       const resolved = resolveCartLine(key);
       if (!resolved) return;
       const { post, product } = resolved;
-      const u = product.affiliateUrl || post.shopUrl;
+      const u = getOutboundShopUrl(post, product);
       if (u && !seen.has(u)) {
         seen.add(u);
         urls.push(u);
       }
     });
     return urls;
+  }, [cart]);
+
+  const trackAllSavedShopIntents = useCallback(() => {
+    let tracked = 0;
+    let opened = 0;
+    const seen = new Set();
+    cart.forEach((qty, key) => {
+      if (qty <= 0) return;
+      const resolved = resolveCartLine(key);
+      if (!resolved) return;
+      const dedupe = `${resolved.post.id}:${resolved.product.id}`;
+      if (seen.has(dedupe)) return;
+      seen.add(dedupe);
+      const result = attemptShopLinkOpen(resolved.post, resolved.product, { source: "cart_open_all" });
+      if (result.tracked) tracked += 1;
+      if (result.opened) opened += 1;
+    });
+    return { tracked, opened };
   }, [cart]);
 
   const value = useMemo(
@@ -155,8 +171,19 @@ export function CartProvider({ children }) {
       cartSubtotalRaw: cartSubtotal,
       openSavedAffiliateLinks,
       openLineShopUrl,
+      trackAllSavedShopIntents,
     }),
-    [cart, addToCart, decrementLine, incrementLine, cartItemCount, cartSubtotal, openSavedAffiliateLinks, openLineShopUrl]
+    [
+      cart,
+      addToCart,
+      decrementLine,
+      incrementLine,
+      cartItemCount,
+      cartSubtotal,
+      openSavedAffiliateLinks,
+      openLineShopUrl,
+      trackAllSavedShopIntents,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
