@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import ThumbnailImage from "./ThumbnailImage.jsx";
 import { useCart } from "../context/CartContext.jsx";
-import { getOutboundShopUrl, postAllowsAffiliateOutbound } from "../lib/affiliatePolicy.js";
-import { DEMO_SHOP_TOAST } from "../lib/shopLinks.js";
 
 export default function CartDrawer({ open, onClose, onToast }) {
   const { cart, resolveCartLine, decrementLine, incrementLine, cartSubtotal, openLineShopUrl, trackAllSavedShopIntents } =
@@ -28,23 +26,16 @@ export default function CartDrawer({ open, onClose, onToast }) {
       onToast?.("Nothing saved yet");
       return;
     }
-    const { tracked, opened } = trackAllSavedShopIntents();
+    const { opened } = trackAllSavedShopIntents();
     if (opened > 0) {
       onToast?.(`Opening ${opened} link${opened === 1 ? "" : "s"}…`);
       onClose();
-      return;
     }
-    if (tracked > 0) {
-      onToast?.(DEMO_SHOP_TOAST);
-      return;
-    }
-    onToast?.("No shop links configured yet");
   };
 
   const handleLineClick = (line) => {
     const { opened } = openLineShopUrl(line.key);
     if (opened) onToast?.(`Opening · ${line.product.name}`);
-    else onToast?.(DEMO_SHOP_TOAST);
   };
 
   return (
@@ -62,7 +53,6 @@ export default function CartDrawer({ open, onClose, onToast }) {
         <p className="p1-cart-persist-hint">Stays on this device when you leave or come back (about 30 days).</p>
         <ul className="cart-lines" hidden={lines.length === 0}>
           {lines.map(({ key, qty, post, product }) => {
-            const hasOutbound = Boolean(getOutboundShopUrl(post, product));
             return (
               <li key={key}>
                 <button
@@ -76,7 +66,7 @@ export default function CartDrawer({ open, onClose, onToast }) {
                     <div className="cart-line-recipe">{post.title}</div>
                     <div className="cart-line-qty">
                       Saved ×{qty}
-                      {hasOutbound ? " · Tap to shop" : " · Tap to log interest (demo)"}
+                      {" · Tap to shop"}
                     </div>
                   </div>
                   <div className="cart-line-actions" onClick={(e) => e.stopPropagation()}>
@@ -106,12 +96,10 @@ export default function CartDrawer({ open, onClose, onToast }) {
             <strong>{cartSubtotal}</strong>
           </div>
           <p className="cart-footer-hint">
-            {lines.length > 0 && postAllowsAffiliateOutbound(lines[0].post)
-              ? "Tap any item to open its shop link. Your list stays saved after you close this."
-              : "Demo profile — taps log shop interest for outreach. Affiliate links open after the creator claims."}
+            Tap any item to shop. Your list stays saved on this device after you close this.
           </p>
           <button type="button" className="btn-primary" onClick={handleOpenAll}>
-            {lines.length > 0 && postAllowsAffiliateOutbound(lines[0].post) ? "Open all saved links" : "Log interest for all saved"}
+            Shop all saved
           </button>
         </footer>
       </div>

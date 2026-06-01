@@ -3,7 +3,7 @@ import IngredientPopup from "./IngredientPopup.jsx";
 import ProductRail from "./ProductRail.jsx";
 import YoutubePlayer from "./YoutubePlayer.jsx";
 import { useCart } from "../context/CartContext.jsx";
-import { attemptShopLinkOpen, DEMO_SHOP_TOAST } from "../lib/shopLinks.js";
+import { attemptShopLinkOpen } from "../lib/shopLinks.js";
 import { useTimedIngredients } from "../hooks/useTimedIngredients.js";
 
 export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
@@ -39,8 +39,7 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     (productId) => {
       const p = post.products.find((x) => x.id === productId);
       if (!p) return;
-      const { opened } = attemptShopLinkOpen(post, p, { source: "product_rail" });
-      if (!opened) onToast?.(DEMO_SHOP_TOAST);
+      attemptShopLinkOpen(post, p, { source: "product_rail" });
     },
     [post, onToast]
   );

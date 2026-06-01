@@ -31,8 +31,8 @@ const ProductRail = forwardRef(function ProductRail(
         <h2>In this recipe</h2>
         <p className="shop-rail-hint">
           {postAllowsAffiliateOutbound(post)
-            ? "Ingredients appear on the video while it plays — save items or open affiliate links."
-            : "Demo profile — save items and log shop interest; affiliate links activate when the creator claims."}
+            ? "Ingredients appear on the video while it plays — save items or shop affiliate links."
+            : "Save items while you watch. Shop taps are tracked on this demo; creator links go live after claim."}
         </p>
       </div>
       <ul className="product-list" id="productList" ref={listRef}>

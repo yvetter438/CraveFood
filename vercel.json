@@ -3,7 +3,7 @@
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "installCommand": "npm install",
+  "installCommand": "npm install && npm install --prefix prototype1 --include=dev",
   "rewrites": [
     { "source": "/c/:slug", "destination": "/c/index.html?slug=:slug" },
     { "source": "/p/:id", "destination": "/p/index.html?id=:id" },

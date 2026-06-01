@@ -36,14 +36,14 @@ export function attemptShopLinkOpen(post, product, { source = "unknown" } = {}) 
   return { opened: openShopUrl(url), tracked: true };
 }
 
-export function shopLinkButtonLabel(post) {
-  return postAllowsAffiliateOutbound(post) ? "Open link" : "Log interest";
+export function shopLinkButtonLabel() {
+  return "Shop";
 }
 
 export function shopLinkAriaLabel(post) {
   return postAllowsAffiliateOutbound(post)
-    ? "Open affiliate shop link"
-    : "Log shop interest on demo profile (no affiliate link yet)";
+    ? "Open affiliate shop link in a new tab"
+    : "Shop — tracked on demo profile; creator affiliate link goes live after claim";
 }
 
 export { DEMO_SHOP_TOAST };
