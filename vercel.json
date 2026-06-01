@@ -5,6 +5,8 @@
   "outputDirectory": "public",
   "installCommand": "npm install",
   "rewrites": [
+    { "source": "/c/foodwishes/:recipeSlug", "destination": "/prototype1/index.html" },
+    { "source": "/c/foodwishes", "destination": "/prototype1/index.html" },
     { "source": "/c/:slug", "destination": "/c/index.html?slug=:slug" },
     { "source": "/p/:id", "destination": "/p/index.html?id=:id" },
     {

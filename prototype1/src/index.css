@@ -79,6 +79,39 @@ body {
   background: #000;
 }
 
+.p1-yt-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #0d060f;
+  transition: opacity 0.2s ease;
+}
+
+.p1-yt-poster--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.p1-yt-poster--solo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.p1-video-shell--short .p1-youtube-player {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.p1-shorts-slide--placeholder .p1-shorts-slide-main {
+  pointer-events: none;
+}
+
 /* Tap layer: pause/play without forcing restart via YouTube chrome */
 .p1-yt-tap {
   position: absolute;
@@ -242,7 +275,7 @@ body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
 }

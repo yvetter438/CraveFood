@@ -1,37 +1,63 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CartDrawer from "../components/CartDrawer.jsx";
 import RecipeShortSlide from "../components/RecipeShortSlide.jsx";
+import ShortSlidePlaceholder from "../components/ShortSlidePlaceholder.jsx";
 import { useCart } from "../context/CartContext.jsx";
-import { CREATOR, getDefaultPost, getPostById, getPostsForCreator, POSTS } from "../data/posts.js";
+import {
+  CREATOR,
+  getDefaultPost,
+  getPostByCreatorAndSlug,
+  getPostsForCreator,
+} from "../data/posts.js";
+import { creatorHubPath, recipePath } from "../data/urlScheme.js";
 import { useToast } from "../hooks/useToast.js";
 import { hasPostText } from "../lib/postMeta.js";
 
+/** Only mount YouTube iframes near the active slide (avoids loading 90+ embeds). */
+const PLAYER_RADIUS = 3;
+
+function indexForRecipeSlug(posts, recipeSlug) {
+  const idx = posts.findIndex((p) => p.slug === recipeSlug);
+  return idx >= 0 ? idx : 0;
+}
+
 export default function PostPage() {
-  const { id: paramId } = useParams();
-  const [searchParams] = useSearchParams();
+  const { creatorId, recipeSlug } = useParams();
   const navigate = useNavigate();
-  const creatorSlug = searchParams.get("creator");
 
   const posts = useMemo(() => {
-    if (creatorSlug === CREATOR.id || !creatorSlug) return getPostsForCreator(CREATOR.id);
-    return POSTS;
-  }, [creatorSlug]);
+    if (creatorId === CREATOR.id) return getPostsForCreator(CREATOR.id);
+    return [];
+  }, [creatorId]);
 
   const scrollRef = useRef(null);
   const slideRefs = useRef([]);
-  const [activeIndex, setActiveIndex] = useState(() => {
-    const idx = posts.findIndex((p) => p.id === paramId);
-    return idx >= 0 ? idx : 0;
-  });
+  const scrollLockRef = useRef(false);
+  const initialJumpDoneRef = useRef(false);
+  const lastRecipeSlugRef = useRef(recipeSlug);
+
+  const [activeIndex, setActiveIndex] = useState(() => indexForRecipeSlug(posts, recipeSlug));
   const [muted, setMuted] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
-  const skipParamScrollSync = useRef(false);
 
   const { message: toastMessage, visible: toastVisible, showToast } = useToast();
   const { cartItemCount } = useCart();
 
   const activePost = posts[activeIndex] || posts[0];
+
+  const scrollToIndexInstant = useCallback((index) => {
+    const slide = slideRefs.current[index];
+    const container = scrollRef.current;
+    if (!slide || !container) return;
+    scrollLockRef.current = true;
+    container.scrollTop = slide.offsetTop;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollLockRef.current = false;
+      });
+    });
+  }, []);
 
   useEffect(() => {
     document.body.className = "page-post p1-shorts-mode";
@@ -41,32 +67,27 @@ export default function PostPage() {
   }, []);
 
   useEffect(() => {
-    if (paramId && getPostById(paramId)) return;
-    const def = posts[0] || getDefaultPost();
-    navigate(`/p/${def.id}${creatorSlug ? `?creator=${creatorSlug}` : ""}`, { replace: true });
-  }, [paramId, creatorSlug, navigate, posts]);
-
-  const scrollToIndex = useCallback((index, behavior = "auto") => {
-    const slide = slideRefs.current[index];
-    const container = scrollRef.current;
-    if (!slide || !container) return;
-    if (behavior === "smooth") {
-      slide.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      container.scrollTop = slide.offsetTop;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (skipParamScrollSync.current) {
-      skipParamScrollSync.current = false;
+    if (creatorId !== CREATOR.id) {
+      navigate(`/c/${CREATOR.id}`, { replace: true });
       return;
     }
-    const idx = posts.findIndex((p) => p.id === paramId);
-    if (idx < 0) return;
+    if (!recipeSlug || !getPostByCreatorAndSlug(CREATOR.id, recipeSlug)) {
+      const def = posts[0] || getDefaultPost();
+      navigate(recipePath(CREATOR.id, def.slug), { replace: true });
+    }
+  }, [creatorId, recipeSlug, navigate, posts]);
+
+  useLayoutEffect(() => {
+    if (lastRecipeSlugRef.current !== recipeSlug) {
+      initialJumpDoneRef.current = false;
+      lastRecipeSlugRef.current = recipeSlug;
+    }
+
+    const idx = indexForRecipeSlug(posts, recipeSlug);
     setActiveIndex(idx);
-    requestAnimationFrame(() => scrollToIndex(idx));
-  }, [paramId, posts, scrollToIndex]);
+    scrollToIndexInstant(idx);
+    initialJumpDoneRef.current = true;
+  }, [recipeSlug, posts, scrollToIndexInstant]);
 
   useEffect(() => {
     if (!activePost) return;
@@ -74,6 +95,7 @@ export default function PostPage() {
   }, [activePost]);
 
   const syncActiveFromScroll = useCallback(() => {
+    if (scrollLockRef.current) return;
     const container = scrollRef.current;
     if (!container) return;
     const mid = container.scrollTop + container.clientHeight / 2;
@@ -94,20 +116,23 @@ export default function PostPage() {
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-    syncActiveFromScroll();
     container.addEventListener("scroll", syncActiveFromScroll, { passive: true });
     return () => container.removeEventListener("scroll", syncActiveFromScroll);
-  }, [syncActiveFromScroll, posts.length]);
+  }, [syncActiveFromScroll]);
 
   useEffect(() => {
+    if (!initialJumpDoneRef.current) return;
     const post = posts[activeIndex];
-    if (!post || post.id === paramId) return;
-    skipParamScrollSync.current = true;
-    const qs = creatorSlug ? `?creator=${encodeURIComponent(creatorSlug)}` : "";
-    navigate(`/p/${post.id}${qs}`, { replace: true });
-  }, [activeIndex, posts, paramId, creatorSlug, navigate]);
+    if (!post || post.slug === recipeSlug) return;
+    navigate(recipePath(post.creatorId, post.slug), { replace: true });
+  }, [activeIndex, posts, recipeSlug, navigate]);
 
-  const backHref = creatorSlug === CREATOR.id || !creatorSlug ? "/" : "/";
+  const shouldMountPlayer = useCallback(
+    (i) => Math.abs(i - activeIndex) <= PLAYER_RADIUS,
+    [activeIndex]
+  );
+
+  const backHref = creatorHubPath(creatorId || CREATOR.id);
 
   return (
     <div className="app p1-shorts-app" id="app">
@@ -167,7 +192,11 @@ export default function PostPage() {
             }}
             className="p1-shorts-slide-wrap"
           >
-            <RecipeShortSlide post={post} isActive={activeIndex === i} muted={muted} onToast={showToast} />
+            {shouldMountPlayer(i) ? (
+              <RecipeShortSlide post={post} isActive={activeIndex === i} muted={muted} onToast={showToast} />
+            ) : (
+              <ShortSlidePlaceholder post={post} />
+            )}
           </div>
         ))}
       </div>

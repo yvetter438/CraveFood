@@ -1,27 +1,36 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import PrototypeBadge from "../components/PrototypeBadge.jsx";
 import { CREATOR, getPostsForCreator } from "../data/posts.js";
+import { recipePath } from "../data/urlScheme.js";
 import { hasPostText } from "../lib/postMeta.js";
 
 const WAITLIST_URL = "https://forms.gle/Ut8bRDfcMP9fZYTN6";
-const posts = getPostsForCreator(CREATOR.id);
 
 export default function FeedPage() {
+  const { creatorId } = useParams();
+
   useEffect(() => {
     document.body.className = "feed-page";
+    document.title = `${CREATOR.displayName} · Crave`;
     return () => {
       document.body.className = "";
     };
   }, []);
 
+  if (creatorId !== CREATOR.id) {
+    return <Navigate to={`/c/${CREATOR.id}`} replace />;
+  }
+
+  const posts = getPostsForCreator(CREATOR.id);
+
   return (
     <div className="feed-app">
       <header className="feed-top">
         <div className="feed-brand">
-          <Link to="/" className="logo logo-link">
+          <a href="https://crave.food/" className="logo logo-link">
             Crave
-          </Link>
+          </a>
           <PrototypeBadge />
         </div>
         <a
@@ -62,7 +71,7 @@ export default function FeedPage() {
       <ul className="feed-grid" aria-label="Recipe posts">
         {posts.map((post) => (
           <li key={post.id} className="feed-cell">
-            <Link className="feed-tile" to={`/p/${post.id}?creator=${CREATOR.id}`}>
+            <Link className="feed-tile" to={recipePath(CREATOR.id, post.slug)}>
               <div className="feed-tile-media">
                 <img className="feed-tile-img" src={post.feedThumb} alt="" width={360} height={640} loading="lazy" decoding="async" />
                 <div className="feed-tile-shade" aria-hidden="true" />

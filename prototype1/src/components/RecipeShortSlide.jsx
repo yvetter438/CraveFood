@@ -75,6 +75,7 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
               />
               <YoutubePlayer
                 youtubeUrl={post.youtubeUrl}
+                posterUrl={post.feedThumb}
                 variant="short"
                 playing={isActive && !userPaused}
                 muted={muted}

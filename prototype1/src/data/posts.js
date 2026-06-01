@@ -1,5 +1,5 @@
 import { AFFILIATE_PLACEHOLDER, cloneDemoProducts } from "./demoProducts.js";
-import { SHORT_URLS } from "./foodwishes-shorts.generated.js";
+import { SHORT_META, SHORT_URLS } from "./foodwishes-shorts.generated.js";
 import { youtubeIdFromUrl, youtubeThumbUrl } from "./youtube.js";
 
 export const CREATOR = {
@@ -10,10 +10,6 @@ export const CREATOR = {
   bio: "YouTube recipe shorts · shop ingredients from each post",
   youtubeChannel: "https://www.youtube.com/@foodwishes/shorts",
 };
-
-function metaForIndex(index) {
-  return { title: `Recipe ${index + 1}`, blurb: "", macros: "" };
-}
 
 function buildTimedCuesSec(productIds) {
   const seg = 3.15;
@@ -26,15 +22,16 @@ function buildTimedCuesSec(productIds) {
 
 function buildPost(shortUrl, index) {
   const videoId = youtubeIdFromUrl(shortUrl);
-  const meta = metaForIndex(index);
+  const meta = SHORT_META[index] ?? { title: `Recipe ${index + 1}`, blurb: "", macros: "" };
   const products = cloneDemoProducts();
   const timedCuesSec = buildTimedCuesSec(products.map((p) => p.id));
 
   return {
     id: `foodwishes_${index + 1}`,
     creatorId: CREATOR.id,
+    slug: meta.slug || `recipe-${index + 1}`,
     youtubeUrl: shortUrl,
-    youtubeVideoId: videoId,
+    youtubeVideoId: videoId || meta.videoId || null,
     feedThumb: videoId ? youtubeThumbUrl(videoId) : "/assets/feed-tile-fallback.jpg",
     title: meta.title,
     author: CREATOR.displayName,
@@ -50,6 +47,10 @@ export const POSTS = SHORT_URLS.map(buildPost);
 
 export function getPostById(id) {
   return POSTS.find((p) => p.id === id) || null;
+}
+
+export function getPostByCreatorAndSlug(creatorId, slug) {
+  return POSTS.find((p) => p.creatorId === creatorId && p.slug === slug) || null;
 }
 
 export function getDefaultPost() {
