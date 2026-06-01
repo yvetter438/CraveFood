@@ -62,6 +62,9 @@ export function trackShopLinkClick({
 
   captureWhenReady(SHOP_EVENT, payload);
   dispatchCraveEvent("crave:shop_link_click", payload);
+  if (typeof window !== "undefined" && window.craveGtagEvent) {
+    window.craveGtagEvent(SHOP_EVENT, payload);
+  }
 }
 
 export function trackClaimCtaClick({ creatorId, location }) {
@@ -71,6 +74,9 @@ export function trackClaimCtaClick({ creatorId, location }) {
   };
   captureWhenReady(CLAIM_EVENT, payload);
   dispatchCraveEvent("crave:claim_cta_click", payload);
+  if (typeof window !== "undefined" && window.craveGtagEvent) {
+    window.craveGtagEvent(CLAIM_EVENT, payload);
+  }
 }
 
 /** True when PostHog is configured (key present) — init may still be in flight. */

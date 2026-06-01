@@ -16,6 +16,7 @@ import {
   prototypeRecipePath,
   recipePath,
 } from "../lib/url-scheme.mjs";
+import { ANALYTICS_SCRIPT_TAGS } from "./lib/analytics-boot-snippet.mjs";
 import { escapeHtml, hubIndexable, jsonLdScript, postIndexable, robotsContent } from "./lib/seo-html.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,8 +41,7 @@ function pageShell({ title, description, canonical, robots, ogImage, jsonLd, bod
   const canonicalEsc = escapeHtml(canonical);
 
   const analyticsBoot = `
-    <script src="/analytics-config.js"></script>
-    <script src="/analytics.js"></script>
+    ${ANALYTICS_SCRIPT_TAGS}
     <script>
       (function () {
         var props = {
@@ -50,12 +50,18 @@ function pageShell({ title, description, canonical, robots, ogImage, jsonLd, bod
           recipe_slug: ${JSON.stringify(recipeSlug || "")},
         };
         function capture() {
-          if (!window.posthog || !window.posthog.capture) return false;
-          window.posthog.register(props);
-          if (${JSON.stringify(pageType)} === "post") {
-            window.posthog.capture("recipe_page_view", props);
+          var done = false;
+          if (window.posthog && window.posthog.capture) {
+            window.posthog.register(props);
+            if (${JSON.stringify(pageType)} === "post") {
+              window.posthog.capture("recipe_page_view", props);
+            }
+            done = true;
           }
-          return true;
+          if (${JSON.stringify(pageType)} === "post" && window.craveGtagEvent) {
+            window.craveGtagEvent("recipe_page_view", props);
+          }
+          return done;
         }
         if (!capture()) {
           var n = 0;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/inject-analytics-config.mjs && node scripts/generate-seo-pages.mjs && npm run build --prefix prototype1",
+    "build": "node scripts/inject-analytics-config.mjs && node scripts/generate-seo-pages.mjs && node scripts/patch-html-gtag.mjs && npm run build --prefix prototype1",
     "generate:seo": "node scripts/generate-seo-pages.mjs",
     "import:shorts": "node scripts/import-youtube-shorts.mjs prototype1/data/foodwishes-shorts.txt --write prototype1/src/data/foodwishes-shorts.generated.js --no-titles",
     "build:prototype1": "npm run build --prefix prototype1",
