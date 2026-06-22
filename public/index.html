@@ -21,7 +21,7 @@
       rel="stylesheet"
     />
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260622" />
   </head>
   <body class="marketing-page">
     <!-- Gradient Blobs -->
@@ -52,9 +52,9 @@
       <section class="brutalist-hero" aria-labelledby="hero-heading">
         <div class="brutalist-hero-content">
           <h1 id="hero-heading" class="brutalist-hero-headline animate-entrance">
-            <span>Your Videos</span>
-            <span class="animate-entrance animate-entrance-delay-1">Your Links</span>
-            <span class="animate-entrance animate-entrance-delay-2">Your Money</span>
+            <span class="brutalist-hero-line">Your <span class="hero-accent hero-accent--orange">Videos</span></span>
+            <span class="brutalist-hero-line animate-entrance animate-entrance-delay-1">Your <span class="hero-accent hero-accent--orange">Links</span></span>
+            <span class="brutalist-hero-line animate-entrance animate-entrance-delay-2">Your <span class="hero-accent hero-accent--green">Earnings</span></span>
           </h1>
           <p class="brutalist-hero-subtext animate-entrance animate-entrance-delay-3">
             Turn recipe videos into affiliate revenue. Shoppable ingredients synced to your content—your tags, your commissions.
@@ -77,12 +77,15 @@
         </div>
         <div class="brutalist-hero-video animate-entrance animate-entrance-delay-3">
           <div class="brutalist-video-shell">
-            <div class="brutalist-video-placeholder">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-              </svg>
-              <span>Video Demo</span>
-            </div>
+            <video
+              class="brutalist-video"
+              src="media/cravefooddemo.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              aria-label="Crave product demo"
+            ></video>
           </div>
         </div>
       </section>
