@@ -5,169 +5,189 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
-      content="Crave — Watch recipe videos and shop ingredients in one place, or build a shoppable link-in-bio as a food creator."
+      content="Crave — Turn your recipe videos into revenue. Shoppable links synced to your content, your affiliate tags, your earnings."
     />
-    <meta property="og:title" content="Crave · Watch &amp; shop recipe videos" />
+    <meta property="og:title" content="Crave · Your Videos. Your Links. Your Money." />
     <meta
       property="og:description"
-      content="For viewers: shop ingredients while the video plays. For creators: a video-first link-in-bio with your affiliate links."
+      content="A video-first link-in-bio for cooking creators. Shoppable ingredients synced to each video. Keep 100% of your affiliate commissions."
     />
     <meta property="og:type" content="website" />
-    <title>Crave · Watch &amp; shop recipe videos</title>
+    <title>Crave · Your Videos. Your Links. Your Money.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
       rel="stylesheet"
     />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="marketing-page">
+    <!-- Gradient Blobs -->
+    <div class="gradient-blob gradient-blob--1" aria-hidden="true"></div>
+    <div class="gradient-blob gradient-blob--2" aria-hidden="true"></div>
+    <div class="gradient-blob gradient-blob--3" aria-hidden="true"></div>
+
     <header class="site-header">
       <div class="site-header-inner">
         <a href="index.html" class="logo logo-link">Crave</a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="#watch" class="site-nav-link">Watch &amp; Shop</a>
-          <a href="#creators" class="site-nav-link site-nav-link--accent">For Creators</a>
-          <a href="prototype1/" class="site-nav-link">Try demo</a>
+          <a href="prototype1/" class="site-nav-link">Demo</a>
+          <a href="pricing.html" class="site-nav-link">Pricing</a>
           <a
             href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
             target="_blank"
             rel="noopener noreferrer"
             class="btn-marketing btn-marketing--primary btn-marketing--nav js-waitlist-cta"
             data-cta-location="nav"
-            >Join waitlist</a
+            ><span>Join Waitlist</span></a
           >
         </nav>
       </div>
     </header>
 
     <main class="marketing-main">
-      <section class="home-hub" aria-labelledby="home-hub-heading">
-        <h1 id="home-hub-heading" class="home-hub-title">Recipe videos you can actually shop from</h1>
-        <p class="home-hub-lede">
-          Crave sits behind a creator’s link in bio—watch short recipe videos, save ingredients, and open shop links
-          without leaving the moment. Built for high-intent viewers and the creators who earn from every click.
-        </p>
-
-        <div class="audience-split">
-          <a href="#watch" class="audience-card audience-card--watch">
-            <span class="audience-card-label">Watch &amp; Shop</span>
-            <span class="audience-card-title">I’m watching a recipe</span>
-            <span class="audience-card-copy">Ingredients show up on the video—tap to save or shop while you watch.</span>
-            <span class="audience-card-cta">See how it works →</span>
-          </a>
-          <a href="#creators" class="audience-card audience-card--creators">
-            <span class="audience-card-label">For Creators</span>
-            <span class="audience-card-title">I make recipe videos</span>
-            <span class="audience-card-copy"
-              >A video-first link-in-bio with timed ingredients and your affiliate links—not another link list.</span
+      <!-- SECTION 1: Hero -->
+      <section class="brutalist-hero" aria-labelledby="hero-heading">
+        <div class="brutalist-hero-content">
+          <h1 id="hero-heading" class="brutalist-hero-headline animate-entrance">
+            <span>Your Videos</span>
+            <span class="animate-entrance animate-entrance-delay-1">Your Links</span>
+            <span class="animate-entrance animate-entrance-delay-2">Your Money</span>
+          </h1>
+          <p class="brutalist-hero-subtext animate-entrance animate-entrance-delay-3">
+            Turn recipe videos into affiliate revenue. Shoppable ingredients synced to your content—your tags, your commissions.
+          </p>
+          <div class="brutalist-hero-cta animate-entrance animate-entrance-delay-4">
+            <a
+              href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-brutalist btn-brutalist--large js-waitlist-cta"
+              data-cta-location="hero"
             >
-            <span class="audience-card-cta">Grow your revenue →</span>
-          </a>
-        </div>
-      </section>
-
-      <section id="watch" class="audience-section audience-section--watch" aria-labelledby="watch-heading">
-        <p class="hero-eyebrow">Watch &amp; Shop</p>
-        <h2 id="watch-heading" class="audience-section-title">Watch the recipe. Tap what you need. Buy in the moment.</h2>
-        <p class="audience-section-lede">
-          You clicked a link in someone’s bio—you’re ready to cook or buy, not hunt through a static menu. Crave keeps
-          you in the video while ingredients appear on screen. Save items for later or open shop links when you’re
-          ready—no app install.
-        </p>
-
-        <ul class="feature-list audience-features">
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">▶</div>
-            <h3 class="feature-title">Vertical video, like you expect</h3>
-            <p class="feature-copy">Scroll through shorts or open one recipe—feels like the platform you came from.</p>
-          </li>
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">✦</div>
-            <h3 class="feature-title">Ingredients on the video</h3>
-            <p class="feature-copy">Timed callouts highlight what’s in the recipe while it plays—no pausing to read a list.</p>
-          </li>
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">↗</div>
-            <h3 class="feature-title">Save &amp; shop when you’re ready</h3>
-            <p class="feature-copy">Tap an ingredient to open the creator’s shop link, or save for later on this device.</p>
-          </li>
-        </ul>
-
-        <div class="audience-cta-row">
-          <a href="prototype1/" class="btn-marketing btn-marketing--primary btn-marketing--large js-demo-cta" data-cta-location="watch_section"
-            >Try the demo</a
-          >
-          <a href="feed.html" class="btn-marketing btn-marketing--ghost btn-marketing--large js-demo-cta" data-cta-location="watch_section_alt"
-            >See a creator page</a
-          >
-        </div>
-        <p class="hero-cta-note audience-cta-note">Demo pages use sample affiliate links for illustration.</p>
-      </section>
-
-      <section id="creators" class="audience-section audience-section--creators" aria-labelledby="creators-heading">
-        <p class="hero-eyebrow">For Creators</p>
-        <h2 id="creators-heading" class="audience-section-title">Your link in bio should sell the recipe—not bury it</h2>
-        <p class="audience-section-lede">
-          Generic link trees weren’t built for recipe video. Crave is a focused home for your vertical posts: a profile
-          grid, full-screen playback, and shoppable ingredients synced to each video. Wire your own affiliate tags and
-          keep every commission—Crave is the storefront, not the middleman.
-        </p>
-
-        <ul class="feature-list audience-features">
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">📹</div>
-            <h3 class="feature-title">Video-first profile</h3>
-            <p class="feature-copy">A grid of posts that looks like your TikTok or Reels—fans pick the recipe, then shop in context.</p>
-          </li>
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">⏱</div>
-            <h3 class="feature-title">Timed ingredient highlights</h3>
-            <p class="feature-copy">Pop-ups appear when each ingredient is on screen—higher intent than a link list below the fold.</p>
-          </li>
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">🔗</div>
-            <h3 class="feature-title">Your affiliate links, your earnings</h3>
-            <p class="feature-copy">Amazon, DTC, or any partner URL per item. You keep 100% of commissions; we charge for the tool.</p>
-          </li>
-          <li class="feature-item">
-            <div class="feature-icon" aria-hidden="true">📊</div>
-            <h3 class="feature-title">Built for link-in-bio traffic</h3>
-            <p class="feature-copy">Optimized for mobile visitors from Instagram, TikTok, and YouTube—where your highest-intent fans land.</p>
-          </li>
-        </ul>
-
-        <section class="social-proof audience-social" aria-label="Platforms">
-          <p class="social-proof-label">Where your audience finds you</p>
-          <div class="social-proof-badges">
-            <span class="badge">TikTok</span>
-            <span class="badge">Instagram</span>
-            <span class="badge">YouTube</span>
-            <span class="badge">Facebook</span>
+              <span>Join the Waitlist</span>
+            </a>
+            <a href="prototype1/" class="btn-brutalist btn-brutalist--ghost js-demo-cta" data-cta-location="hero">
+              <span>See Demo</span>
+              <span class="btn-arrow">→</span>
+            </a>
           </div>
-        </section>
-
-        <div class="cta-final audience-cta-final">
-          <div class="cta-final-inner">
-            <h3 class="cta-final-title">Join the creator waitlist</h3>
-            <p class="cta-final-copy">
-              We’re onboarding food &amp; recipe creators in batches. Get early access, a personalized demo page, and
-              first notice when you can claim your profile and plug in your own affiliate tags.
-            </p>
-            <div class="audience-cta-row audience-cta-row--center">
-              <a
-                href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-marketing btn-marketing--primary btn-marketing--xl js-waitlist-cta"
-                data-cta-location="creators_cta"
-                >Join the waitlist</a
-              >
-              <a href="pricing.html" class="btn-marketing btn-marketing--ghost btn-marketing--large">See pricing</a>
+        </div>
+        <div class="brutalist-hero-video animate-entrance animate-entrance-delay-3">
+          <div class="brutalist-video-shell">
+            <div class="brutalist-video-placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+              </svg>
+              <span>Video Demo</span>
             </div>
-            <p class="hero-cta-note">Early access · Onboarding in batches · No spam</p>
           </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: How It Works -->
+      <section class="brutalist-section" aria-labelledby="workflow-heading">
+        <div class="brutalist-section-inner">
+          <h2 id="workflow-heading" class="brutalist-section-title">
+            Followers tap.<br />Products pop.<br />You get paid.
+          </h2>
+          <p class="brutalist-section-copy">
+            A viewer clicks your link in bio, watches your recipe video, and taps ingredients as they appear on screen. Each tap opens your affiliate link. Every purchase earns you commission.
+          </p>
+
+          <div class="brutalist-workflow">
+            <div class="brutalist-workflow-step">
+              <span class="brutalist-workflow-number">01</span>
+              <h3 class="brutalist-workflow-title">Link In Bio</h3>
+              <p class="brutalist-workflow-copy">
+                Follower taps your link in bio from TikTok, Instagram, or YouTube. They land on your Crave profile.
+              </p>
+            </div>
+            <div class="brutalist-workflow-step">
+              <span class="brutalist-workflow-number">02</span>
+              <h3 class="brutalist-workflow-title">Watch & Tap</h3>
+              <p class="brutalist-workflow-copy">
+                They browse your videos and watch. As ingredients appear on screen, a shoppable card pops up.
+              </p>
+            </div>
+            <div class="brutalist-workflow-step">
+              <span class="brutalist-workflow-number">03</span>
+              <h3 class="brutalist-workflow-title">Shop & Earn</h3>
+              <p class="brutalist-workflow-copy">
+                One tap opens your affiliate link. They buy, you earn commission. Simple.
+              </p>
+            </div>
+          </div>
+
+          <div class="brutalist-workflow-visual" style="margin-top: 4rem;">
+            Workflow Diagram Coming Soon
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Features -->
+      <section class="brutalist-section" style="padding-top: 0;">
+        <div class="brutalist-section-inner">
+          <h2 class="brutalist-section-title">
+            Built for<br />Recipe Creators
+          </h2>
+          <p class="brutalist-section-copy">
+            Not another link list. A video-first storefront that turns your content into conversions.
+          </p>
+
+          <div class="brutalist-features">
+            <div class="brutalist-feature">
+              <div class="brutalist-feature-icon">📹</div>
+              <h3 class="brutalist-feature-title">Video-First Profile</h3>
+              <p class="brutalist-feature-copy">
+                A grid of posts that looks like your TikTok or Reels. Fans pick the recipe, then shop in context.
+              </p>
+            </div>
+            <div class="brutalist-feature">
+              <div class="brutalist-feature-icon">⏱</div>
+              <h3 class="brutalist-feature-title">Timed Ingredient Pops</h3>
+              <p class="brutalist-feature-copy">
+                Shoppable cards appear when each ingredient is on screen. Higher intent than a link list below the fold.
+              </p>
+            </div>
+            <div class="brutalist-feature">
+              <div class="brutalist-feature-icon">🔗</div>
+              <h3 class="brutalist-feature-title">Your Links, Your Earnings</h3>
+              <p class="brutalist-feature-copy">
+                Amazon, DTC, or any partner URL per item. You keep 100% of commissions—we charge for the tool.
+              </p>
+            </div>
+            <div class="brutalist-feature">
+              <div class="brutalist-feature-icon">📱</div>
+              <h3 class="brutalist-feature-title">Mobile Optimized</h3>
+              <p class="brutalist-feature-copy">
+                Built for link-in-bio traffic from Instagram, TikTok, and YouTube—where your highest-intent fans land.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: CTA -->
+      <section class="brutalist-cta-section" aria-labelledby="cta-heading">
+        <div class="brutalist-cta-inner">
+          <h2 id="cta-heading" class="brutalist-cta-title">
+            Ready to<br />Monetize?
+          </h2>
+          <p class="brutalist-cta-copy">
+            We're onboarding food & recipe creators in batches. Get early access and a personalized demo page.
+          </p>
+          <a
+            href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-brutalist btn-brutalist--inverted btn-brutalist--large js-waitlist-cta"
+            data-cta-location="bottom_cta"
+          >
+            <span>Join the Waitlist</span>
+          </a>
         </div>
       </section>
     </main>
@@ -176,18 +196,32 @@
       <div class="site-footer-inner">
         <div class="footer-brand">
           <span class="logo">Crave</span>
-          <p class="footer-tagline">Watch &amp; shop recipe videos · Built for creators</p>
+          <p class="footer-tagline">Turn your recipe videos into revenue.</p>
         </div>
-        <nav class="footer-links" aria-label="Footer">
-          <a href="#watch">Watch &amp; Shop</a>
-          <a href="#creators">For Creators</a>
-          <a href="prototype1/">Demo</a>
-          <a href="about.html">About</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="blog/index.html">Blog</a>
-          <a href="blog/updates/index.html">Updates</a>
-        </nav>
-        <p class="footer-legal">© 2026 Crave · Early access</p>
+        <div class="footer-column">
+          <p class="footer-column-title">Product</p>
+          <nav class="footer-links">
+            <a href="prototype1/">Demo</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="about.html">About</a>
+          </nav>
+        </div>
+        <div class="footer-column">
+          <p class="footer-column-title">Resources</p>
+          <nav class="footer-links">
+            <a href="blog/index.html">Blog</a>
+            <a href="blog/updates/index.html">Updates</a>
+          </nav>
+        </div>
+        <div class="footer-column">
+          <p class="footer-column-title">Get Started</p>
+          <nav class="footer-links">
+            <a href="https://forms.gle/Ut8bRDfcMP9fZYTN6" target="_blank" rel="noopener noreferrer" class="js-waitlist-cta" data-cta-location="footer">Join Waitlist</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-legal">© 2026 Crave · Early access</p>
+        </div>
       </div>
     </footer>
     <script src="analytics-config.js"></script>
@@ -209,15 +243,6 @@
             window.posthog.capture("demo_cta_clicked", {
               cta_location: link.dataset.ctaLocation || "unknown",
               href: link.getAttribute("href"),
-            });
-          }
-        });
-      });
-      document.querySelectorAll('.audience-card[href^="#"]').forEach(function (card) {
-        card.addEventListener("click", function () {
-          if (window.posthog) {
-            window.posthog.capture("audience_path_selected", {
-              path: card.classList.contains("audience-card--creators") ? "creators" : "watch",
             });
           }
         });
