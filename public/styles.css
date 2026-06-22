@@ -1318,28 +1318,201 @@ body.marketing-page .site-header .logo {
   max-width: 340px;
   aspect-ratio: 9 / 16;
   background: #1E1E1E;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
   transform: translateZ(0);
   border-radius: 40px;
   box-shadow: 0 40px 80px rgba(30, 30, 30, 0.25);
 }
 
+.brutalist-video-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  overflow: hidden;
+  z-index: 0;
+}
+
 .brutalist-video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 40px;
+  z-index: 1;
 }
 
 .brutalist-video-shell video,
 .brutalist-video-shell iframe {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 40px;
+  z-index: 1;
+}
+
+/* Hero product popup overlays */
+.hero-popup {
+  position: absolute;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.hero-popup--top {
+  top: 15%;
+  left: -20px;
+}
+
+.hero-popup--bottom {
+  bottom: 18%;
+  right: -20px;
+}
+
+.hero-popup-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(30, 30, 30, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(30, 30, 30, 0.18),
+    0 2px 8px rgba(30, 30, 30, 0.08);
+  animation: popup-shimmy 3s ease-in-out infinite;
+}
+
+@keyframes popup-shimmy {
+  0%, 100% {
+    transform: translateX(0);
+    box-shadow: 
+      0 8px 32px rgba(30, 30, 30, 0.18),
+      0 2px 8px rgba(30, 30, 30, 0.08);
+  }
+  25% {
+    transform: translateX(3px);
+  }
+  50% {
+    transform: translateX(0);
+    box-shadow: 
+      0 8px 32px rgba(219, 74, 43, 0.25),
+      0 2px 8px rgba(219, 74, 43, 0.12),
+      0 0 0 2px rgba(219, 74, 43, 0.15);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+.hero-popup--bottom .hero-popup-inner {
+  animation-delay: 1.5s;
+}
+
+.hero-popup-thumb {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%);
+  border: 1px solid rgba(30, 30, 30, 0.06);
+}
+
+.hero-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.hero-popup-label {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.hero-popup-title {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.hero-popup-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.hero-popup-add:hover {
+  background: #c43d20;
+  transform: scale(1.08);
+}
+
+/* Fade transition for product cycling */
+.hero-popup-inner.is-transitioning {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-popup-inner.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .hero-popup--top {
+    left: -10px;
+    top: 12%;
+  }
+  
+  .hero-popup--bottom {
+    right: -10px;
+    bottom: 15%;
+  }
+  
+  .hero-popup-inner {
+    padding: 0.5rem 0.6rem;
+    gap: 0.5rem;
+  }
+  
+  .hero-popup-thumb {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .hero-popup-title {
+    font-size: 0.75rem;
+  }
+  
+  .hero-popup-add {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+  }
 }
 
 .brutalist-video-placeholder {

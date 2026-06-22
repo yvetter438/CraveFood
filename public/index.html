@@ -21,7 +21,7 @@
       rel="stylesheet"
     />
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260622" />
+    <link rel="stylesheet" href="styles.css?v=20260622b" />
   </head>
   <body class="marketing-page">
     <!-- Gradient Blobs -->
@@ -86,6 +86,29 @@
               playsinline
               aria-label="Crave product demo"
             ></video>
+            
+            <!-- Product popup overlays -->
+            <div class="hero-popup hero-popup--top" id="heroPopupTop">
+              <div class="hero-popup-inner">
+                <div class="hero-popup-thumb"></div>
+                <div class="hero-popup-content">
+                  <span class="hero-popup-label">Ingredient</span>
+                  <span class="hero-popup-title">Olive Oil</span>
+                </div>
+                <button class="hero-popup-add" aria-label="Add to cart">+</button>
+              </div>
+            </div>
+            
+            <div class="hero-popup hero-popup--bottom" id="heroPopupBottom">
+              <div class="hero-popup-inner">
+                <div class="hero-popup-thumb"></div>
+                <div class="hero-popup-content">
+                  <span class="hero-popup-label">Ingredient</span>
+                  <span class="hero-popup-title">Sea Salt</span>
+                </div>
+                <button class="hero-popup-add" aria-label="Add to cart">+</button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -250,6 +273,56 @@
           }
         });
       });
+
+      // Hero popup product cycling
+      (function() {
+        var topProducts = [
+          { title: "Olive Oil", label: "Ingredient" },
+          { title: "Garlic Cloves", label: "Ingredient" },
+          { title: "Fresh Basil", label: "Ingredient" }
+        ];
+        
+        var bottomProducts = [
+          { title: "Sea Salt", label: "Ingredient" },
+          { title: "Black Pepper", label: "Seasoning" },
+          { title: "Parmesan", label: "Ingredient" }
+        ];
+        
+        var topIndex = 0;
+        var bottomIndex = 0;
+        
+        var topPopup = document.getElementById("heroPopupTop");
+        var bottomPopup = document.getElementById("heroPopupBottom");
+        
+        function updatePopup(popup, products, index) {
+          if (!popup) return;
+          var inner = popup.querySelector(".hero-popup-inner");
+          var title = popup.querySelector(".hero-popup-title");
+          var label = popup.querySelector(".hero-popup-label");
+          
+          inner.classList.add("is-transitioning");
+          inner.classList.remove("is-visible");
+          
+          setTimeout(function() {
+            title.textContent = products[index].title;
+            label.textContent = products[index].label;
+            inner.classList.remove("is-transitioning");
+            inner.classList.add("is-visible");
+          }, 200);
+        }
+        
+        // Cycle top popup every 3.5s
+        setInterval(function() {
+          topIndex = (topIndex + 1) % topProducts.length;
+          updatePopup(topPopup, topProducts, topIndex);
+        }, 3500);
+        
+        // Cycle bottom popup every 4s (offset timing)
+        setInterval(function() {
+          bottomIndex = (bottomIndex + 1) % bottomProducts.length;
+          updatePopup(bottomPopup, bottomProducts, bottomIndex);
+        }, 4000);
+      })();
     </script>
   </body>
 </html>
