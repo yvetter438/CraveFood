@@ -57,7 +57,7 @@
             <span class="brutalist-hero-line animate-entrance animate-entrance-delay-2">Your <span class="hero-accent hero-accent--green">Earnings</span></span>
           </h1>
           <p class="brutalist-hero-subtext animate-entrance animate-entrance-delay-3">
-            Turn recipe videos into affiliate revenue. Shoppable ingredients synced to your content—your tags, your commissions.
+            Turn your cooking videos into affiliate revenue. Shoppable products synced to your content.
           </p>
           <div class="brutalist-hero-cta animate-entrance animate-entrance-delay-4">
             <a
@@ -92,8 +92,8 @@
               <div class="hero-popup-inner">
                 <div class="hero-popup-thumb"></div>
                 <div class="hero-popup-content">
-                  <span class="hero-popup-label">Ingredient</span>
-                  <span class="hero-popup-title">Olive Oil</span>
+                  <span class="hero-popup-label">Product</span>
+                  <span class="hero-popup-title">Airfryer</span>
                 </div>
                 <button class="hero-popup-add" aria-label="Add to cart">+</button>
               </div>
@@ -104,7 +104,7 @@
                 <div class="hero-popup-thumb"></div>
                 <div class="hero-popup-content">
                   <span class="hero-popup-label">Ingredient</span>
-                  <span class="hero-popup-title">Sea Salt</span>
+                  <span class="hero-popup-title">Noodles</span>
                 </div>
                 <button class="hero-popup-add" aria-label="Add to cart">+</button>
               </div>
@@ -203,7 +203,7 @@
             Ready to<br />Monetize?
           </h2>
           <p class="brutalist-cta-copy">
-            We're onboarding food & recipe creators in batches. Get early access and a personalized demo page.
+            We're onboarding food creators in batches. Get early access and a personalized demo page.
           </p>
           <a
             href="https://forms.gle/Ut8bRDfcMP9fZYTN6"
@@ -277,15 +277,15 @@
       // Hero popup product cycling
       (function() {
         var topProducts = [
+          { title: "Airfryer", label: "Product" },
           { title: "Olive Oil", label: "Ingredient" },
-          { title: "Garlic Cloves", label: "Ingredient" },
-          { title: "Fresh Basil", label: "Ingredient" }
+          { title: "Knife", label: "Product" }
         ];
         
         var bottomProducts = [
-          { title: "Sea Salt", label: "Ingredient" },
-          { title: "Black Pepper", label: "Seasoning" },
-          { title: "Parmesan", label: "Ingredient" }
+          { title: "Noodles", label: "Ingredient" },
+          { title: "Chopsticks", label: "Product" },
+          { title: "Sriracha Sauce", label: "Ingredient" }
         ];
         
         var topIndex = 0;
@@ -311,17 +311,17 @@
           }, 200);
         }
         
-        // Cycle top popup every 3.5s
+        // Cycle top popup every 8s
         setInterval(function() {
           topIndex = (topIndex + 1) % topProducts.length;
           updatePopup(topPopup, topProducts, topIndex);
-        }, 3500);
+        }, 8000);
         
-        // Cycle bottom popup every 4s (offset timing)
+        // Cycle bottom popup every 13s
         setInterval(function() {
           bottomIndex = (bottomIndex + 1) % bottomProducts.length;
           updatePopup(bottomPopup, bottomProducts, bottomIndex);
-        }, 4000);
+        }, 13000);
       })();
     </script>
   </body>
