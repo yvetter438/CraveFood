@@ -1205,6 +1205,12 @@ body.marketing-page {
   --header-offset: 5.5rem;
 }
 
+body.marketing-page .marketing-main,
+body.marketing-page .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
 body.marketing-page .site-header .logo {
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -1384,11 +1390,11 @@ body.marketing-page .site-header .logo {
   box-shadow: 
     0 8px 32px rgba(30, 30, 30, 0.18),
     0 2px 8px rgba(30, 30, 30, 0.08);
-  animation: popup-shimmy 3s ease-in-out infinite;
+  animation: popup-glow 3s ease-in-out infinite;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition: box-shadow 0.15s ease;
 }
 
 .hero-popup-inner:hover {
@@ -1397,25 +1403,17 @@ body.marketing-page .site-header .logo {
     0 2px 8px rgba(30, 30, 30, 0.1);
 }
 
-@keyframes popup-shimmy {
+@keyframes popup-glow {
   0%, 100% {
-    transform: translateX(0);
     box-shadow: 
       0 8px 32px rgba(30, 30, 30, 0.18),
       0 2px 8px rgba(30, 30, 30, 0.08);
   }
-  25% {
-    transform: translateX(3px);
-  }
   50% {
-    transform: translateX(0);
     box-shadow: 
       0 8px 32px rgba(219, 74, 43, 0.25),
       0 2px 8px rgba(219, 74, 43, 0.12),
       0 0 0 2px rgba(219, 74, 43, 0.15);
-  }
-  75% {
-    transform: translateX(-3px);
   }
 }
 
@@ -1430,6 +1428,7 @@ body.marketing-page .site-header .logo {
   object-fit: cover;
   background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%);
   border: 1px solid rgba(30, 30, 30, 0.06);
+  transform: translateZ(0);
 }
 
 .hero-popup-content {
@@ -1483,14 +1482,12 @@ body.marketing-page .site-header .logo {
 /* Fade transition for product cycling */
 .hero-popup-inner.is-transitioning {
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .hero-popup-inner.is-visible {
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 /* Responsive adjustments */
@@ -1550,13 +1547,14 @@ body.marketing-page .site-header .logo {
 
 /* Animated gradient blobs */
 .gradient-blob {
-  position: absolute;
+  position: fixed;
   width: 60vw;
   height: 60vw;
   border-radius: 50%;
   filter: blur(140px);
   mix-blend-mode: multiply;
   pointer-events: none;
+  z-index: 0;
   animation: blob-pulse 8s ease-in-out infinite alternate;
 }
 
