@@ -89,25 +89,51 @@
             
             <!-- Product popup overlays -->
             <div class="hero-popup hero-popup--top" id="heroPopupTop">
-              <div class="hero-popup-inner">
-                <div class="hero-popup-thumb"></div>
+              <a
+                class="hero-popup-inner is-visible"
+                href="https://amzn.to/4wm3kbe"
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                aria-label="Shop Chefman Air Fryer on Amazon"
+              >
+                <img
+                  class="hero-popup-thumb"
+                  src="https://m.media-amazon.com/images/I/71E3NZ++MTL._SX679_PIbundle-6,TopRight,0,0_AA679SH20_.jpg"
+                  alt="Chefman Air Fryer"
+                  width="42"
+                  height="42"
+                  loading="lazy"
+                />
                 <div class="hero-popup-content">
                   <span class="hero-popup-label">Product</span>
-                  <span class="hero-popup-title">Airfryer</span>
+                  <span class="hero-popup-title">Air Fryer</span>
                 </div>
-                <button class="hero-popup-add" aria-label="Add to cart">+</button>
-              </div>
+                <span class="hero-popup-add" aria-hidden="true">+</span>
+              </a>
             </div>
             
             <div class="hero-popup hero-popup--bottom" id="heroPopupBottom">
-              <div class="hero-popup-inner">
-                <div class="hero-popup-thumb"></div>
+              <a
+                class="hero-popup-inner is-visible"
+                href="https://amzn.to/4eSM9qH"
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                aria-label="Shop KA-ME Udon Noodles on Amazon"
+              >
+                <img
+                  class="hero-popup-thumb"
+                  src="https://m.media-amazon.com/images/I/71Mu4+sWUfL._AC_SL1500_.jpg"
+                  alt="KA-ME Udon Stir-Fry Noodles"
+                  width="42"
+                  height="42"
+                  loading="lazy"
+                />
                 <div class="hero-popup-content">
                   <span class="hero-popup-label">Ingredient</span>
                   <span class="hero-popup-title">Noodles</span>
                 </div>
-                <button class="hero-popup-add" aria-label="Add to cart">+</button>
-              </div>
+                <span class="hero-popup-add" aria-hidden="true">+</span>
+              </a>
             </div>
           </div>
         </div>
@@ -277,51 +303,104 @@
       // Hero popup product cycling
       (function() {
         var topProducts = [
-          { title: "Airfryer", label: "Product" },
-          { title: "Olive Oil", label: "Ingredient" },
-          { title: "Knife", label: "Product" }
+          {
+            title: "Air Fryer",
+            label: "Product",
+            image: "https://m.media-amazon.com/images/I/71E3NZ++MTL._SX679_PIbundle-6,TopRight,0,0_AA679SH20_.jpg",
+            url: "https://amzn.to/4wm3kbe",
+            alt: "Chefman Air Fryer",
+          },
+          {
+            title: "Olive Oil",
+            label: "Ingredient",
+            image: "https://m.media-amazon.com/images/I/71upLTcF8WL._SY879_.jpg",
+            url: "https://amzn.to/4p3rVPM",
+            alt: "Graza Sizzle Extra Virgin Olive Oil",
+          },
+          {
+            title: "Chef's Knife",
+            label: "Product",
+            image: "https://m.media-amazon.com/images/I/71wspcvc4QL._AC_SL1500_.jpg",
+            url: "https://amzn.to/4bpA7UL",
+            alt: "imarku Japanese Chef Knife",
+          },
         ];
-        
+
         var bottomProducts = [
-          { title: "Noodles", label: "Ingredient" },
-          { title: "Chopsticks", label: "Product" },
-          { title: "Sriracha Sauce", label: "Ingredient" }
+          {
+            title: "Noodles",
+            label: "Ingredient",
+            image: "https://m.media-amazon.com/images/I/71Mu4+sWUfL._AC_SL1500_.jpg",
+            url: "https://amzn.to/4eSM9qH",
+            alt: "KA-ME Udon Stir-Fry Noodles",
+          },
+          {
+            title: "Chopsticks",
+            label: "Product",
+            image: "https://m.media-amazon.com/images/I/51+5AdFaguL._AC_SX679_.jpg",
+            url: "https://amzn.to/4gf2CrH",
+            alt: "HIWARE Fiberglass Chopsticks",
+          },
+          {
+            title: "Sriracha",
+            label: "Ingredient",
+            image: "https://m.media-amazon.com/images/I/61B8G+eOpaL._SY879_PIbundle-2,TopRight,0,0_SX271SY879SH20_.jpg",
+            url: "https://amzn.to/4vLeIh9",
+            alt: "Huy Fong Sriracha Hot Chili Sauce",
+          },
         ];
-        
+
         var topIndex = 0;
         var bottomIndex = 0;
-        
+
         var topPopup = document.getElementById("heroPopupTop");
         var bottomPopup = document.getElementById("heroPopupBottom");
-        
+
         function updatePopup(popup, products, index) {
           if (!popup) return;
           var inner = popup.querySelector(".hero-popup-inner");
           var title = popup.querySelector(".hero-popup-title");
           var label = popup.querySelector(".hero-popup-label");
-          
+          var thumb = popup.querySelector(".hero-popup-thumb");
+          var product = products[index];
+
           inner.classList.add("is-transitioning");
           inner.classList.remove("is-visible");
-          
+
           setTimeout(function() {
-            title.textContent = products[index].title;
-            label.textContent = products[index].label;
+            title.textContent = product.title;
+            label.textContent = product.label;
+            thumb.src = product.image;
+            thumb.alt = product.alt;
+            inner.href = product.url;
+            inner.setAttribute("aria-label", "Shop " + product.title + " on Amazon");
             inner.classList.remove("is-transitioning");
             inner.classList.add("is-visible");
           }, 200);
         }
-        
+
         // Cycle top popup every 8s
         setInterval(function() {
           topIndex = (topIndex + 1) % topProducts.length;
           updatePopup(topPopup, topProducts, topIndex);
         }, 8000);
-        
+
         // Cycle bottom popup every 13s
         setInterval(function() {
           bottomIndex = (bottomIndex + 1) % bottomProducts.length;
           updatePopup(bottomPopup, bottomProducts, bottomIndex);
         }, 13000);
+
+        document.querySelectorAll(".hero-popup-inner").forEach(function(link) {
+          link.addEventListener("click", function() {
+            if (window.posthog) {
+              window.posthog.capture("hero_popup_clicked", {
+                product_title: link.querySelector(".hero-popup-title").textContent,
+                affiliate_url: link.href,
+              });
+            }
+          });
+        });
       })();
     </script>
   </body>

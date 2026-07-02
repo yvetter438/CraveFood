@@ -1385,6 +1385,16 @@ body.marketing-page .site-header .logo {
     0 8px 32px rgba(30, 30, 30, 0.18),
     0 2px 8px rgba(30, 30, 30, 0.08);
   animation: popup-shimmy 3s ease-in-out infinite;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.hero-popup-inner:hover {
+  box-shadow:
+    0 10px 36px rgba(30, 30, 30, 0.22),
+    0 2px 8px rgba(30, 30, 30, 0.1);
 }
 
 @keyframes popup-shimmy {
@@ -1417,6 +1427,7 @@ body.marketing-page .site-header .logo {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
+  object-fit: cover;
   background: linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%);
   border: 1px solid rgba(30, 30, 30, 0.06);
 }
@@ -1460,11 +1471,11 @@ body.marketing-page .site-header .logo {
   font-size: 1.1rem;
   font-weight: 600;
   line-height: 1;
-  cursor: pointer;
+  pointer-events: none;
   transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.hero-popup-add:hover {
+.hero-popup-inner:hover .hero-popup-add {
   background: #c43d20;
   transform: scale(1.08);
 }
