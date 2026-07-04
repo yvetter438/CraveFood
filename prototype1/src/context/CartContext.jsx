@@ -99,6 +99,15 @@ export function CartProvider({ children }) {
     [updateCart]
   );
 
+  const removeLine = useCallback(
+    (lineKey) => {
+      updateCart((c) => {
+        c.delete(lineKey);
+      });
+    },
+    [updateCart]
+  );
+
   const cartItemCount = useMemo(() => {
     let n = 0;
     cart.forEach((q) => {
@@ -166,6 +175,7 @@ export function CartProvider({ children }) {
       addToCart,
       decrementLine,
       incrementLine,
+      removeLine,
       cartItemCount,
       cartSubtotal: formatMoney(cartSubtotal),
       cartSubtotalRaw: cartSubtotal,
@@ -178,6 +188,7 @@ export function CartProvider({ children }) {
       addToCart,
       decrementLine,
       incrementLine,
+      removeLine,
       cartItemCount,
       cartSubtotal,
       openSavedAffiliateLinks,
