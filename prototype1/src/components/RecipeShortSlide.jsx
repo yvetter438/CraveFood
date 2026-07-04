@@ -20,8 +20,9 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
 
   const { activeProductId, popupProduct, popupVisible, popupExiting, pulseProductId, pulseProduct } = useTimedIngredients(
     post,
-    isActive ? currentTime : 0,
-    isActive ? duration : 0
+    currentTime,
+    duration,
+    isActive
   );
 
   const popupProductNumber = useMemo(() => {
@@ -101,10 +102,10 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
                   playing={isActive && !userPaused && !shopOpen}
                   muted={muted}
                   onProgress={(t) => {
-                    if (isActive) setCurrentTime(t);
+                    setCurrentTime(t);
                   }}
                   onDuration={(d) => {
-                    if (isActive) setDuration(d);
+                    setDuration(d);
                   }}
                 />
               </div>

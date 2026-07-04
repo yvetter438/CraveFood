@@ -18,7 +18,11 @@ export default function IngredientPopup({ visible, exiting, product, productNumb
         onClick?.(e);
       }}
     >
-      {productNumber != null ? <span className="ingredient-popup-number">{productNumber}</span> : null}
+      {productNumber != null ? (
+        <span key={product?.id ?? productNumber} className="ingredient-popup-number">
+          {productNumber}
+        </span>
+      ) : null}
     </button>
   );
 }
