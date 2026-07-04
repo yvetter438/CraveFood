@@ -110,15 +110,15 @@ body {
   max-height: var(--p1-short-max-h);
   max-width: 100%;
   margin-inline: auto;
-  background: #000;
-  box-shadow: var(--shadow), var(--shadow-warm), 0 0 0 1px rgba(180, 100, 60, 0.12);
+  background: #fff;
+  box-shadow: none;
 }
 
 .p1-yt-cover {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #000;
+  background: #fff;
 }
 
 .p1-yt-poster {
@@ -129,7 +129,7 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  background: #0d060f;
+  background: #fff;
   transition: opacity 0.2s ease;
 }
 
@@ -177,18 +177,31 @@ body {
 
 /*
  * YouTube iframe is 16:9; Shorts video is 9:16 inside it (side pillarbox).
- * Fill shell height, let width overflow — clip sides, keep top/bottom (title UI not cropped).
+ * Scale up and shift slightly to crop the title/channel chrome at the top.
  */
 .p1-video-shell--short .p1-youtube-player iframe {
   position: absolute !important;
-  top: 0 !important;
+  top: 50% !important;
   left: 50% !important;
-  height: 100% !important;
+  height: 118% !important;
   width: auto !important;
   aspect-ratio: 16 / 9;
   max-width: none !important;
-  transform: translateX(-50%);
+  transform: translate(-50%, -53%);
   border: 0;
+}
+
+/* Mask any remaining title text at the top edge of the embed */
+.p1-video-shell--short .p1-yt-cover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.92) 45%, transparent 100%);
 }
 
 .top-bar-actions .p1-prototype-badge {
@@ -228,6 +241,8 @@ body {
 
 body.p1-shorts-mode {
   overflow: hidden;
+  background: #fff;
+  --bg: #fff;
 }
 
 .p1-shorts-app {
@@ -236,12 +251,13 @@ body.p1-shorts-mode {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: #fff;
 }
 
 .p1-shorts-top {
   flex-shrink: 0;
   z-index: 40;
-  background: rgba(255, 251, 247, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
