@@ -311,6 +311,12 @@ body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .p1-shorts-hint {
+    display: none;
+  }
+}
+
 .p1-shorts-scroll {
   flex: 1;
   min-height: 0;
@@ -334,6 +340,7 @@ body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .p1-shorts-slide-main {
@@ -345,8 +352,9 @@ body.page-post.p1-shorts-mode .p1-shorts-top .top-bar-actions {
 
 body.p1-shorts-mode .p1-shorts-slide-main {
   flex-direction: column;
-  padding-left: 0.65rem;
-  padding-right: 0.65rem;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
 }
 
 body.p1-shorts-mode .p1-media-row {
@@ -355,77 +363,152 @@ body.p1-shorts-mode .p1-media-row {
   min-height: 0;
   min-width: 0;
   width: 100%;
-  gap: 0.75rem;
-  align-items: flex-start;
+  gap: 0;
+  align-items: stretch;
   justify-content: center;
 }
 
 body.p1-shorts-mode .p1-stage.stage {
-  flex: 0 1 auto;
+  flex: 1;
   min-height: 0;
   min-width: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   padding: 0;
 }
 
-body.p1-shorts-mode .p1-shop-rail.shop-rail {
-  align-self: flex-start;
-}
-
 body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
   flex: none;
-  align-self: flex-start;
-  height: auto;
-  width: min(100%, 420px, calc(min(52dvh, 520px) * 9 / 16));
-  max-height: min(52dvh, 520px);
+  align-self: center;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short .video-gradient {
+  background: linear-gradient(
+    180deg,
+    transparent 55%,
+    rgba(0, 0, 0, 0.22) 82%,
+    rgba(0, 0, 0, 0.42) 100%
+  );
+}
+
+/* Compact numbered badge — timed ingredient hint */
+body.p1-shorts-mode .ingredient-popup.ingredient-popup--badge {
+  top: auto;
+  bottom: 4.25rem;
+  right: 0.85rem;
+  left: auto;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  margin: 0;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.p1-shorts-mode .ingredient-popup.ingredient-popup--badge:active {
+  transform: scale(0.94);
+}
+
+body.p1-shorts-mode .ingredient-popup-number {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+body.p1-shorts-mode .ingredient-popup.ingredient-popup--badge.is-enter {
+  animation: p1-badge-pop 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.p1-shorts-mode .ingredient-popup.ingredient-popup--badge.is-exit {
+  animation: p1-badge-out 0.2s ease forwards;
+}
+
+@keyframes p1-badge-pop {
+  from {
+    transform: scale(0.55);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes p1-badge-out {
+  to {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+body.p1-shorts-mode .p1-video-shell--short .video-actions {
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+body.p1-shorts-mode .p1-video-shell--short .action-pill {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.78rem;
+  width: auto;
+  max-width: calc(100% - 3rem);
+  background: rgba(30, 30, 30, 0.72);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+
+/* Ingredients bottom sheet (mobile) */
+.p1-ingredients-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(20, 16, 14, 0.48);
+  backdrop-filter: blur(3px);
 }
 
 body.p1-shorts-mode .p1-shop-rail {
-  flex: 0 1 auto;
-  align-self: flex-start;
+  flex: none;
+  align-self: auto;
   width: 100%;
-  max-height: min(34dvh, 300px);
   margin-top: 0;
 }
 
+body.p1-shorts-mode .shop-rail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+body.p1-shorts-mode .shop-rail-header-text {
+  min-width: 0;
+  flex: 1;
+}
+
+body.p1-shorts-mode .shop-rail-close {
+  flex-shrink: 0;
+}
+
 body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
-  animation: p1-rail-in 0.28s ease;
-}
-
-@keyframes p1-rail-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Timed ingredient card — bottom of video, not top (avoids header clip) */
-body.p1-shorts-mode .p1-video-shell--short .ingredient-popup {
-  top: auto;
-  bottom: 3.75rem;
-  right: 0.7rem;
-  left: 0.7rem;
-  max-width: none;
-  transform-origin: bottom center;
-}
-
-body.p1-shorts-mode .p1-video-shell--short .ingredient-popup.is-enter {
-  animation-name: p1-popup-in-bottom;
-}
-
-@keyframes p1-popup-in-bottom {
-  from {
-    transform: translateY(10px) scale(0.96);
-  }
-  to {
-    transform: translateY(0) scale(1);
-  }
+  animation: none;
 }
 
 .p1-cart-persist-hint {
@@ -465,7 +548,47 @@ body.p1-shorts-mode .p1-video-shell--short .ingredient-popup.is-enter {
 @media (max-width: 768px) {
   body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
     max-height: 100%;
-    border-radius: var(--radius-sm);
+    border-radius: 0;
+  }
+
+  body.p1-shorts-mode .p1-shorts-slide {
+    position: relative;
+  }
+
+  body.p1-shorts-mode .p1-shop-rail {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    max-height: min(88dvh, 720px);
+    margin: 0;
+    padding-top: 0.35rem;
+    border-radius: 18px 18px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 0 -12px 40px rgba(20, 16, 14, 0.18);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
+    transform: translateY(0);
+  }
+
+  body.p1-shorts-mode .p1-shop-rail .product-list {
+    max-height: min(58dvh, 480px);
+  }
+
+  body.p1-shorts-mode .p1-shop-rail::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 0.22rem;
+    margin: 0.15rem auto 0.65rem;
+    border-radius: 999px;
+    background: rgba(30, 30, 30, 0.14);
   }
 }
 
@@ -521,21 +644,62 @@ body.p1-shorts-mode .p1-video-shell--short .action-pill {
 }
 
 @media (min-width: 769px) {
+  body.p1-shorts-mode .p1-shorts-slide {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0 0.65rem;
+  }
+
+  body.p1-shorts-mode .p1-shorts-slide-main {
+    flex: 0 1 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   body.p1-shorts-mode .p1-media-row {
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
+    gap: 0.75rem;
+  }
+
+  body.p1-shorts-mode .p1-stage.stage {
+    flex: 0 1 auto;
+    align-items: flex-start;
   }
 
   body.p1-shorts-mode .p1-shorts-slide .video-shell.p1-video-shell--short {
     width: min(420px, calc(min(72dvh, 780px) * 9 / 16));
     max-height: min(72dvh, 780px);
+    height: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow), var(--shadow-warm), 0 0 0 1px rgba(180, 100, 60, 0.12);
   }
 
   body.p1-shorts-mode .p1-shop-rail {
     width: var(--rail-width);
     max-height: min(72dvh, 780px);
     margin-top: 0;
+    position: static;
+    transform: none;
+    border-radius: var(--radius);
+    flex-shrink: 0;
+  }
+
+  body.p1-shorts-mode .p1-shop-rail::before {
+    display: none;
+  }
+
+  body.p1-shorts-mode .p1-ingredients-backdrop {
+    display: none;
+  }
+
+  body.p1-shorts-mode .ingredient-popup.ingredient-popup--badge {
+    top: max(10%, env(safe-area-inset-top));
+    bottom: auto;
+    right: 0.65rem;
   }
 }
 
@@ -543,9 +707,5 @@ body.p1-shorts-mode .p1-video-shell--short .action-pill {
   body.p1-shorts-mode .p1-media-row {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
-    margin-top: 0.5rem;
   }
 }

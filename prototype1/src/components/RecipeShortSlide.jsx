@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import IngredientPopup from "./IngredientPopup.jsx";
 import ProductRail from "./ProductRail.jsx";
 import YoutubePlayer from "./YoutubePlayer.jsx";
@@ -24,15 +24,31 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     isActive ? duration : 0
   );
 
+  const popupProductNumber = useMemo(() => {
+    if (!popupProduct) return null;
+    const index = post.products.findIndex((p) => p.id === popupProduct.id);
+    return index >= 0 ? index + 1 : null;
+  }, [popupProduct, post.products]);
+
   useEffect(() => {
     if (!isActive) setShopOpen(false);
   }, [isActive]);
 
+  useEffect(() => {
+    if (!shopOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setShopOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [shopOpen]);
+
   const openShopRail = useCallback(() => {
     setShopOpen(true);
-    requestAnimationFrame(() => {
-      railRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    });
+  }, []);
+
+  const closeShopRail = useCallback(() => {
+    setShopOpen(false);
   }, []);
 
   const openProductShopUrl = useCallback(
@@ -41,7 +57,7 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
       if (!p) return;
       attemptShopLinkOpen(post, p, { source: "product_rail" });
     },
-    [post, onToast]
+    [post]
   );
 
   const handleAdd = useCallback(
@@ -55,69 +71,77 @@ export default function RecipeShortSlide({ post, isActive, muted, onToast }) {
     [addToCart, post.id, onToast, pulseProduct]
   );
 
+  const handlePopupClick = useCallback(() => {
+    if (!popupProduct) return;
+    openShopRail();
+    pulseProduct(popupProduct.id);
+  }, [popupProduct, openShopRail, pulseProduct]);
+
   return (
     <article className="p1-shorts-slide" data-post-id={post.id} aria-label={post.title}>
+      {shopOpen ? (
+        <div className="p1-ingredients-backdrop" onClick={closeShopRail} aria-hidden="true" />
+      ) : null}
+
       <main className="main p1-shorts-slide-main">
         <div className="p1-media-row">
           <section className="stage p1-stage" aria-label="Recipe video">
             <div className="video-shell p1-video-shell p1-video-shell--short">
-            <div className="p1-yt-cover">
-              <button
-                type="button"
-                className="p1-yt-tap"
-                aria-label={userPaused ? "Play video" : "Pause video"}
-                onClick={() => setUserPaused((p) => !p)}
-              />
-              <YoutubePlayer
-                youtubeUrl={post.youtubeUrl}
-                posterUrl={post.feedThumb}
-                variant="short"
-                playing={isActive && !userPaused}
-                muted={muted}
-                onProgress={(t) => {
-                  if (isActive) setCurrentTime(t);
-                }}
-                onDuration={(d) => {
-                  if (isActive) setDuration(d);
-                }}
-              />
-            </div>
-            <div className="video-gradient" aria-hidden="true" />
+              <div className="p1-yt-cover">
+                <button
+                  type="button"
+                  className="p1-yt-tap"
+                  aria-label={userPaused ? "Play video" : "Pause video"}
+                  onClick={() => setUserPaused((p) => !p)}
+                />
+                <YoutubePlayer
+                  youtubeUrl={post.youtubeUrl}
+                  posterUrl={post.feedThumb}
+                  variant="short"
+                  playing={isActive && !userPaused && !shopOpen}
+                  muted={muted}
+                  onProgress={(t) => {
+                    if (isActive) setCurrentTime(t);
+                  }}
+                  onDuration={(d) => {
+                    if (isActive) setDuration(d);
+                  }}
+                />
+              </div>
+              <div className="video-gradient" aria-hidden="true" />
 
-            <div className="video-overlay" aria-live="polite">
-              <IngredientPopup
-                visible={isActive && popupVisible}
-                exiting={popupExiting}
-                product={popupProduct}
-                onSave={(e) => {
-                  e.stopPropagation();
-                  if (popupProduct) handleAdd(popupProduct.id);
-                }}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
+              <div className="video-overlay" aria-live="polite">
+                <IngredientPopup
+                  visible={isActive && popupVisible && !shopOpen}
+                  exiting={popupExiting}
+                  product={popupProduct}
+                  productNumber={popupProductNumber}
+                  onClick={handlePopupClick}
+                />
+              </div>
 
-            <div className="video-actions">
-              <button type="button" className="action-pill" onClick={openShopRail} aria-expanded={shopOpen}>
-                View ingredients
-              </button>
-            </div>
+              <div className="video-actions">
+                <button type="button" className="action-pill" onClick={openShopRail} aria-expanded={shopOpen}>
+                  View ingredients
+                </button>
+              </div>
             </div>
           </section>
-
-          <ProductRail
-            ref={railRef}
-            post={post}
-            isOpen={shopOpen}
-            activeProductId={isActive ? activeProductId : null}
-            pulseProductId={pulseProductId}
-            onAdd={handleAdd}
-            onOpenLink={openProductShopUrl}
-            onCardTap={pulseProduct}
-            railId={`shopRail-${post.id}`}
-          />
         </div>
       </main>
+
+      <ProductRail
+        ref={railRef}
+        post={post}
+        isOpen={shopOpen}
+        activeProductId={isActive ? activeProductId : null}
+        pulseProductId={pulseProductId}
+        onAdd={handleAdd}
+        onOpenLink={openProductShopUrl}
+        onCardTap={pulseProduct}
+        onClose={closeShopRail}
+        railId={`shopRail-${post.id}`}
+      />
     </article>
   );
 }

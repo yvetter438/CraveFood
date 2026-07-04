@@ -14,6 +14,7 @@ const ProductRail = forwardRef(function ProductRail(
     onAdd,
     onOpenLink,
     onCardTap,
+    onClose,
     listRef,
     railId = "shopRail",
   },
@@ -28,12 +29,21 @@ const ProductRail = forwardRef(function ProductRail(
       hidden={!isOpen}
     >
       <div className="shop-rail-header">
-        <h2>In this recipe</h2>
-        <p className="shop-rail-hint">
+        <div className="shop-rail-header-text">
+          <h2>In this recipe</h2>
+          <p className="shop-rail-hint">
           {postAllowsAffiliateOutbound(post)
             ? "Ingredients appear on the video while it plays — save items or shop affiliate links."
             : "Save items while you watch. Shop taps are tracked on this demo; creator links go live after claim."}
-        </p>
+          </p>
+        </div>
+        {onClose ? (
+          <button type="button" className="icon-btn shop-rail-close" onClick={onClose} aria-label="Close ingredients">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        ) : null}
       </div>
       <ul className="product-list" id="productList" ref={listRef}>
         {post.products.map((p) => {
