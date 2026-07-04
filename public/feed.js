@@ -147,8 +147,9 @@ function renderFeed() {
     const fileUrl = relVideo ? escapeHtml(postLinkPrefix + relVideo) : "";
     const relThumb = typeof post.feedThumb === "string" && post.feedThumb ? post.feedThumb : defThumb;
     const imgSrc = escapeHtml(postLinkPrefix + relThumb);
+    const tileLabel = escapeHtml(post.title || "Watch recipe video");
     li.innerHTML = `
-      <a class="feed-tile" href="${href}">
+      <a class="feed-tile" href="${href}" aria-label="${tileLabel}">
         <div class="feed-tile-media">
           <img class="feed-tile-img" src="${imgSrc}" alt="" width="360" height="640" loading="lazy" decoding="async" />
           <video
@@ -167,7 +168,6 @@ function renderFeed() {
             </svg>
           </span>
         </div>
-        <p class="feed-tile-title">${escapeHtml(post.title)}</p>
       </a>
     `;
     grid.appendChild(li);

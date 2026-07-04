@@ -78,7 +78,11 @@ export default function FeedPage() {
       <ul className="feed-grid" aria-label="Recipe posts">
         {posts.map((post) => (
           <li key={post.id} className="feed-cell">
-            <Link className="feed-tile" to={recipePath(CREATOR.id, post.slug)}>
+            <Link
+              className="feed-tile"
+              to={recipePath(CREATOR.id, post.slug)}
+              aria-label={hasPostText(post.title) ? post.title : "Watch recipe video"}
+            >
               <div className="feed-tile-media">
                 <img className="feed-tile-img" src={post.feedThumb} alt="" width={360} height={640} loading="lazy" decoding="async" />
                 <div className="feed-tile-shade" aria-hidden="true" />
@@ -88,7 +92,6 @@ export default function FeedPage() {
                   </svg>
                 </span>
               </div>
-              {hasPostText(post.title) ? <p className="feed-tile-title">{post.title}</p> : null}
             </Link>
           </li>
         ))}
