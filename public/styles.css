@@ -1763,6 +1763,123 @@ body.marketing-page .site-header .logo {
   color: var(--muted);
 }
 
+/* ——— User flow mockups (landing page) ——— */
+
+.brutalist-userflow {
+  padding-top: 0;
+}
+
+.brutalist-userflow .brutalist-section-inner {
+  max-width: 1400px;
+}
+
+.brutalist-userflow .brutalist-section-title {
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+}
+
+.brutalist-userflow .brutalist-section-copy {
+  max-width: 42rem;
+  font-size: clamp(1.25rem, 2.8vw, 1.625rem);
+  line-height: 1.65;
+}
+
+.userflow-steps {
+  list-style: none;
+  margin: clamp(4rem, 10vw, 6rem) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4rem, 12vw, 8rem);
+}
+
+.userflow-step {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .userflow-step {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+
+  .userflow-step:nth-child(even) .userflow-step-copy {
+    order: 2;
+  }
+
+  .userflow-step:nth-child(even) .userflow-step-phone {
+    order: 1;
+  }
+}
+
+.userflow-step-copy {
+  max-width: 34rem;
+}
+
+.userflow-step-num {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.userflow-step-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.userflow-step-text {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.8vw, 1.625rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.userflow-step-phone {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userflow-step-phone img {
+  display: block;
+  width: min(580px, 98vw);
+  height: auto;
+  filter: drop-shadow(0 28px 56px rgba(30, 30, 30, 0.16));
+}
+
+@media (min-width: 900px) {
+  .userflow-step-phone {
+    justify-content: flex-end;
+  }
+
+  .userflow-step:nth-child(even) .userflow-step-phone {
+    justify-content: flex-start;
+  }
+
+  .userflow-step-phone img {
+    width: min(760px, 100%);
+    max-width: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .userflow-step-phone img {
+    width: min(820px, 100%);
+  }
+}
+
 /* ——— Brutalist CTA Section ——— */
 
 .brutalist-cta-section {
