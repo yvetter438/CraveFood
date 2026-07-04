@@ -951,6 +951,11 @@ a.logo-link:hover {
 
 body.feed-page {
   overflow-x: hidden;
+  background-color: #fff;
+}
+
+html:has(body.feed-page) {
+  background: #fff;
 }
 
 .feed-app {
