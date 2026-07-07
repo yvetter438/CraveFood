@@ -3289,13 +3289,17 @@ body.marketing-page .site-header .logo {
   letter-spacing: 0.08em;
 }
 
+.marketing-main--subpage:has(.update-list) .kitchen-nav {
+  border-bottom: none;
+}
+
 .marketing-main--subpage .update-list {
-  border-top: 1px solid var(--border-strong);
+  border-top: none;
 }
 
 .marketing-main--subpage .update-item {
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--border-strong);
+  padding: 2rem 0 0;
+  border-bottom: none;
 }
 
 .marketing-main--subpage .update-date {
