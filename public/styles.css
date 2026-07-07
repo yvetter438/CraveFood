@@ -3184,6 +3184,18 @@ body.marketing-page .site-header .logo {
   color: #a04a24;
 }
 
+.kitchen-figure {
+  margin: 0 0 2.5rem;
+}
+
+.kitchen-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+}
+
 .blog-nav {
   display: flex;
   flex-wrap: wrap;
