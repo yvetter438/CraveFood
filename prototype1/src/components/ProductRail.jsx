@@ -1,6 +1,4 @@
 import ThumbnailImage from "./ThumbnailImage.jsx";
-import { formatMoney } from "../lib/format.js";
-import { postAllowsAffiliateOutbound } from "../lib/affiliatePolicy.js";
 import { shopLinkAriaLabel, shopLinkButtonLabel } from "../lib/shopLinks.js";
 
 import { forwardRef } from "react";
@@ -31,11 +29,6 @@ const ProductRail = forwardRef(function ProductRail(
       <div className="shop-rail-header">
         <div className="shop-rail-header-text">
           <h2>In this recipe</h2>
-          <p className="shop-rail-hint">
-          {postAllowsAffiliateOutbound(post)
-            ? "Ingredients appear on the video while it plays — save items or shop affiliate links."
-            : "Save items while you watch. Shop taps are tracked on this demo; creator links go live after claim."}
-          </p>
         </div>
         {onClose ? (
           <button type="button" className="icon-btn shop-rail-close" onClick={onClose} aria-label="Close ingredients">
@@ -65,7 +58,6 @@ const ProductRail = forwardRef(function ProductRail(
               <div className="product-body">
                 <p className="product-name">{p.name}</p>
                 <p className="product-meta">{p.detail}</p>
-                <p className="product-price">{formatMoney(p.price)}</p>
               </div>
               <div className="product-actions">
                 <button

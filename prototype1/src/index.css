@@ -558,6 +558,10 @@ body.p1-shorts-mode .p1-shop-rail.p1-shop-rail--open {
   animation: none;
 }
 
+body.p1-shorts-mode .p1-shop-rail .product-card {
+  background: #fff;
+}
+
 .p1-cart-persist-hint {
   margin: 0;
   padding: 0 1rem 0.65rem;
