@@ -47,4 +47,5 @@
   document.title = `${creator.handle} · Crave`;
 
   renderFeed();
+  setupFeedSearch();
 })();

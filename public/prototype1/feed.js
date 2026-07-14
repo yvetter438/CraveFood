@@ -34,6 +34,16 @@ function getPostsForFeed() {
   return POSTS;
 }
 
+function filterPostsBySearch(posts, query) {
+  const q = String(query || "").trim().toLowerCase();
+  if (!q) return posts;
+  return posts.filter((post) =>
+    [post.title, post.slug, post.blurb, post.description]
+      .filter(Boolean)
+      .some((value) => String(value).toLowerCase().includes(q))
+  );
+}
+
 function attachFeedVideoSource(video) {
   const u = video.dataset.feedSrc;
   if (!u || (video.getAttribute("src") && String(video.getAttribute("src")) === u)) {
@@ -119,7 +129,9 @@ function renderFeed() {
   const postLinkPrefix = typeof window.CRAVE_POST_LINK_PREFIX === "string" ? window.CRAVE_POST_LINK_PREFIX : "";
   const defThumb = feedThumbDefault();
 
-  const posts = getPostsForFeed();
+  let posts = getPostsForFeed();
+  posts = filterPostsBySearch(posts, window.CRAVE_FEED_SEARCH_QUERY);
+  const isSearching = String(window.CRAVE_FEED_SEARCH_QUERY || "").trim().length > 0;
   if (feedGridIo) {
     document.querySelectorAll("#feedGrid .feed-tile-video").forEach((n) => {
       try {
@@ -129,7 +141,9 @@ function renderFeed() {
   }
   grid.innerHTML = "";
   if (posts.length === 0) {
-    grid.innerHTML = '<li class="feed-cell feed-cell--empty" role="status">No posts for this creator yet.</li>';
+    grid.innerHTML = isSearching
+      ? '<li class="feed-cell feed-cell--empty" role="status">No videos match your search.</li>'
+      : '<li class="feed-cell feed-cell--empty" role="status">No posts for this creator yet.</li>';
     return;
   }
 
@@ -250,6 +264,35 @@ function renderFeed() {
   });
 }
 
+function setupFeedSearch() {
+  const input = document.getElementById("feedSearch");
+  const meta = document.getElementById("feedSearchMeta");
+  if (!input) return;
+
+  const applySearch = () => {
+    window.CRAVE_FEED_SEARCH_QUERY = input.value;
+    renderFeed();
+    if (meta) {
+      const q = input.value.trim();
+      if (!q) {
+        meta.hidden = true;
+        meta.textContent = "";
+        return;
+      }
+      const count = filterPostsBySearch(getPostsForFeed(), q).length;
+      meta.hidden = false;
+      meta.textContent = `${count} ${count === 1 ? "video" : "videos"}`;
+    }
+  };
+
+  let debounceTimer = null;
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(applySearch, 150);
+  });
+}
+
 if (!window.CRAVE_DEFER_FEED) {
   renderFeed();
+  setupFeedSearch();
 }

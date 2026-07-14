@@ -1050,6 +1050,20 @@ html:has(body.feed-page) {
   line-height: 1.4;
 }
 
+.feed-search {
+  padding: 0 0 0.75rem;
+}
+
+.feed-search-input {
+  font-size: 0.9375rem;
+}
+
+.feed-search-meta {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 .feed-tabs {
   display: flex;
   gap: 1.25rem;
